@@ -1,6 +1,6 @@
 # Maintaining the site
 
-A static, bilingual (English / 中文) personal site: a long-scroll home page and eight equal project
+A static, bilingual (English / 中文) personal site: a long-scroll home page and nine equal project
 case studies. Person first, no sales copy. Live at https://persona.imlibra.org.
 
 ## Commands
@@ -36,7 +36,7 @@ Home (`src/pages/index.astro`):
 1. Hero: the serif name, the logo mark assembling from light, and a WebGL light field that follows the pointer.
    The hero buttons are liquid glass over the field's lower streak.
 2. Intro: who I am, in a few lines, and four areas of work.
-3. Work: an interactive index of the eight projects. On a fine pointer a preview card follows the pointer and
+3. Work: an interactive index of the nine projects. On a fine pointer a preview card follows the pointer and
    carries a glass “Open →” pill; titles morph into the project hero with View Transitions. Filters: All, Apps,
    Systems, Design.
 4. Lab: three live demos: gateway failover (break an upstream, watch the breaker), a stream decoder replaying
@@ -76,7 +76,7 @@ chips, tags and tabs are hairlines. See design.md §materials.
 
 ## Checks and previews
 
-- `npm run verify` (serve `dist/` on :4322 first; it is a heavy job, run it inside the mutex): 55 checks at
+- `npm run verify` (serve `dist/` on :4322 first; it is a heavy job, run it inside the mutex): 67 checks at
   1440 and 390 plus reduced motion, and screenshots `预览/检查-*.png`.
 - `scripts/measure.sh <label>`: Lighthouse mobile, scroll fps, long tasks and JS weight. Results: `预览/性能.md`.
 - `node scripts/record.mjs`: the demo films `预览/演示-首页.mp4` and `预览/演示-手机项目.mp4`.
