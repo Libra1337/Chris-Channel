@@ -1,0 +1,12 @@
+---
+// Liquid glass surface (design.md §materials). One element that refracts what is behind it: in Chromium on desktop
+// through an SVG displacement filter in backdrop-filter (liquid.ts builds the map from the element's size), and as
+// frosted glass everywhere else. Rim light, tint, pointer specular and the press squish come from glass.css.
+//   kind  bar   wide floating chrome (nav, film controls): edge lensing + light frost
+//         lens  morphing indicator: edge lensing + slight magnification of what is under it
+//         btn   floating buttons      pill  small labels      knob  round handles (magnifies like a loupe)
+type Kind = 'bar' | 'lens' | 'btn' | 'pill' | 'knob';
+interface Props { as?: string; kind?: Kind; class?: string; [k: string]: unknown }
+const { as: Tag = 'span', kind = 'btn', class: cls = '', ...rest } = Astro.props;
+---
+<Tag class={`lg lg-${kind} ${cls}`.trim()} data-lg={kind} {...rest}><slot /></Tag>

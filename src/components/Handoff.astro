@@ -1,0 +1,66 @@
+---
+// Desktop → phone hand-off, told by scroll (fx/scroll.ts drives it from [data-handoff]). A task typed on the
+// desktop plans, stops at an approval gate, the request card flies to the phone, you tap Allow, the desktop resumes.
+// Under 960 px or with reduced motion it renders as a static two-device picture with the steps listed.
+import T from './T.astro';
+import Device from './Device.astro';
+import Lumen from './Lumen.astro';
+const steps = [
+  { en: ['One sentence', 'You describe the task on the desktop.'], zh: ['一句话', '在桌面端说清楚要做什么。'] },
+  { en: ['A plan', 'The agent splits it into steps and starts.'], zh: ['一份计划', '智能体拆成几步，开始执行。'] },
+  { en: ['A gate', 'Pushing code needs a human. It stops and asks.'], zh: ['一道闸', '推送代码需要人来确认，它停下来询问。'] },
+  { en: ['To your phone', 'The request travels end-to-end encrypted, with a push.'], zh: ['到你手机上', '请求端到端加密传过去，并推送提醒。'] },
+  { en: ['Allow', 'One tap. The desktop picks up where it stopped.'], zh: ['允许', '点一下，桌面端从停下的地方继续。'] },
+];
+---
+<section class="section tight dark grain" aria-labelledby="ho-t">
+  <div class="wrap head">
+    <p class="t-label"><b>✦</b><span aria-hidden="true">/</span><T en="Hand-off" zh="接力" /></p>
+    <h2 id="ho-t" class="t-h2" data-rv><T en="Leave the desk. Keep the decision." zh="人离开桌子，决定权还在手里。" /></h2>
+    <p class="t-lead" data-rv style="--d:120"><T en="Scroll to follow one task from the desktop to an approval on the phone." zh="向下滚动，跟着一个任务从桌面端走到手机上的确认。" /></p>
+  </div>
+  <div class="handoff" data-handoff>
+    <div class="ho-in">
+      <ol class="ho-steps">
+        {steps.map((s, i) => <li class={i === 0 ? 'on' : ''} data-hstep><b><T en={s.en[0]} zh={s.zh[0]} /></b><span><T en={s.en[1]} zh={s.zh[1]} /></span></li>)}
+      </ol>
+      <div class="ho-scene" aria-hidden="true">
+        <div class="ho-desk">
+          <div class="ho-bar"><i></i><i></i><i></i><span translate="no">Aogiri · lynshen-desktop</span></div>
+          <div class="ho-body">
+            <div class="ho-type"><T en="Cache the session list, test it, then push the branch." zh="给会话列表加缓存，测试通过后推送分支。" /></div>
+            <div class="ho-plan">
+              <p><T en="Plan · 4 steps" zh="计划 · 4 步" /></p>
+              <ol>
+                <li><T en="Read the session store" zh="读会话存储" /></li>
+                <li><T en="Add an LRU cache with a 30 s TTL" zh="加一个 30 秒过期的 LRU 缓存" /></li>
+                <li><T en="Run the tests · 41 passed" zh="跑测试 · 41 项通过" /></li>
+                <li class="wait"><T en="Push feat/session-cache" zh="推送 feat/session-cache" /></li>
+              </ol>
+            </div>
+            <div class="ho-gate"><small><T en="Needs your approval" zh="需要你确认" /></small><span translate="no">$ git push origin feat/session-cache</span></div>
+            <div class="ho-resume" translate="no">✓ pushed · 3 files · 0.8 s</div>
+          </div>
+        </div>
+        <div class="ho-card">
+          <b><T en="Allow this command?" zh="允许执行这条命令？" /></b>
+          <code translate="no">git push origin feat/session-cache</code>
+        </div>
+        <div class="ho-phone">
+          <Device kind="phone">
+            <div class="ho-ps">
+              <div class="ho-ph"><Lumen size="1.1rem" id="ho-lu" /><span translate="no">Aogiri</span></div>
+              <div class="ho-pcard">
+                <b><T en="Desktop asks to run" zh="电脑请求执行" /></b>
+                <code translate="no">git push origin feat/session-cache</code>
+                <div class="ho-pbtns"><span><T en="Deny" zh="拒绝" /></span><span class="ho-allow"><T en="Allow" zh="允许" /></span></div>
+              </div>
+              <div class="ho-done"><T en="Allowed. The desktop is pushing." zh="已允许，电脑正在推送。" /></div>
+            </div>
+          </Device>
+        </div>
+        <div class="ho-prog"><i></i></div>
+      </div>
+    </div>
+  </div>
+</section>

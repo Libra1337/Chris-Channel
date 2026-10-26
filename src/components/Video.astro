@@ -1,0 +1,22 @@
+---
+// Lazy, muted, inline, looping video with a pause control. Plays only while on screen
+// and never autoplays under prefers-reduced-motion (the user can press play).
+// Narrow screens get the small rendition (-sm). At most two clips play at once.
+// eager: first-screen clips paint their poster with the page and fetch metadata at once.
+interface Props { name: string; en: string; zh: string; w: number; h: number; loop?: boolean; eager?: boolean }
+const { name, en, zh, w, h, loop = true, eager = false } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'media/video/';
+---
+<div class="vid" data-vid>
+  <video muted playsinline loop={loop} preload={eager ? 'metadata' : 'none'} width={w} height={h} poster={eager ? `${base}${name}.webp` : undefined} data-poster={`${base}${name}.webp`}
+    aria-label={en} data-aria-en={en} data-aria-zh={zh} disablepictureinpicture>
+    <source src={`${base}${name}-sm.webm`} type='video/webm; codecs="vp9"' media="(max-width: 820px)" />
+    <source src={`${base}${name}-sm.mp4`} type="video/mp4" media="(max-width: 820px)" />
+    <source src={`${base}${name}.webm`} type='video/webm; codecs="vp9"' />
+    <source src={`${base}${name}.mp4`} type="video/mp4" />
+  </video>
+  <button class="vid-btn lg lg-knob" type="button" data-aria-en="Pause or play this video" data-aria-zh="暂停或播放视频" aria-label="Pause or play this video">
+    <svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.4" height="12" rx="1" fill="currentColor"/><rect x="8.6" y="1" width="3.4" height="12" rx="1" fill="currentColor"/></svg>
+    <svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9.5-5.5z" fill="currentColor"/></svg>
+  </button>
+</div>

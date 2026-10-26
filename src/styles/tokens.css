@@ -1,0 +1,49 @@
+/* Design tokens (design.md §4). Sections pick a theme with .dark or .paper; components read tokens only. */
+@font-face { font-family: "Instrument Serif"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("/fonts/instrument-serif-400.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2190-2199, U+2212; }
+@font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; font-display: swap;
+  src: url("/fonts/instrument-serif-400-italic.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2190-2199, U+2212; }
+
+:root {
+  /* Scale (design.md §4.1). Sizes are written as design px / 20 in rem,
+     so 1rem = 20px × z. z runs fluidly from .85 on phones (≤ 760 px) to .7 on desktops (≥ 1440 px).
+     --fz lifts every small text size (plain px sizes and clamps up to 40px) by 1.6px on phones to 2.5px on
+     desktops, so captions and labels shrink less than layout. Body: 16px on phones, 15px on desktops.
+     vw terms in clamp() stay as they are (browser zoom leaves them alone too). */
+  font-size: clamp(87.5%, calc(128.125% - .45vw), 106.25%); /* 14px at ≥ 1440, 17px at ≤ 760 (16px default); follows the reader's font setting */
+  --fz: calc(6.7px - .3rem);
+  --body: clamp(15px, calc(.85rem + var(--fz)), 16px);
+  --serif: "Instrument Serif", "Songti SC", "STSong", "Source Han Serif SC", "Noto Serif SC", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-io: cubic-bezier(.65, 0, .35, 1);
+  --gutter: clamp(1rem, 4vw, 2.4rem);
+  --wrap: min(66rem, 100% - 2 * var(--gutter));
+  --wrap-wide: min(88rem, 100% - 2 * var(--gutter));   /* home: one left edge for hero, work and the paper half */
+  --nav-h: 3.2rem;
+  /* Brand light, theme-independent (marks, Lumen, glows) */
+  --l-amber: #F0A465; --l-amber-hi: #FFE3BC; --l-ember: #D46E3E; --l-teal: #24B3CD; --l-teal-hi: #B5ECF4;
+}
+.dark, :root {
+  --bg: #0B0B0C; --raised: #141416; --text: #F5F5F4;
+  --dim: rgba(245, 245, 244, .64); --faint: rgba(245, 245, 244, .42); --line: rgba(255, 255, 255, .10);
+  --amber: #F0A465; --amber-hi: #FFE3BC; --ember: #D46E3E; --teal: #24B3CD; --teal-hi: #B5ECF4;
+  --ok: #74C196; --bad: #E8695C; --focus: #B5ECF4;
+  --glass-fill: linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.035));
+  --glass-rim: inset 0 1px 0 rgba(255,255,255,.34), inset 0 0 0 1px rgba(255,255,255,.08), inset 0 -1px 0 rgba(255,255,255,.04);
+  --glass-shadow: 0 .5rem 1.5rem -.5rem rgba(0,0,0,.6);
+  --spec: rgba(255,255,255,.22);
+  color-scheme: dark;
+}
+.paper {
+  --bg: #F2F0EB; --raised: #FBFAF7; --text: #141416;
+  --dim: rgba(20, 20, 22, .68); --faint: rgba(20, 20, 22, .46); --line: rgba(0, 0, 0, .11);
+  --amber: #A9521C; --amber-hi: #7A3A12; --ember: #B5582A; --teal: #0B6F82; --teal-hi: #075766;
+  --ok: #2E8A5A; --bad: #C2412F; --focus: #0B6F82;
+  --glass-fill: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.62));
+  --glass-rim: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(0,0,0,.08), inset 0 -1px 0 rgba(0,0,0,.04);
+  --glass-shadow: 0 .5rem 1.5rem -.7rem rgba(0,0,0,.28);
+  --spec: rgba(255,255,255,.9);
+  color-scheme: light;
+}

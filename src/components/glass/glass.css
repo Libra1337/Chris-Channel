@@ -1,0 +1,143 @@
+/* Liquid glass (design.md §materials). Only floating chrome uses it: the nav bar and its two morphing lenses, the
+   hero CTAs, the index preview's Open pill, the compare handle, the film controls. Content-level controls (chips,
+   tags, status, tabs, in-flow buttons) stay quiet in src/styles/materials.css.
+
+   Layers of one .lg element (no filter/opacity on the element itself, so lenses inside it can still see the page):
+     ::before  the glass: backdrop refraction (liquid.ts sets --lg-filter on Chromium desktop) or frosted fallback,
+               a slight tint, an inner glow, and a soft light that follows the pointer (--mx/--my from fx/pointer.ts)
+     content
+     ::after   the rim: a thin, slightly blurred light edge, strong on the top arc facing the light and faint on the
+               opposite bottom arc, brightening near the pointer
+   Light direction: --lgx is where the scene's light enters the top of the viewport (0 left … 1 right). It defaults
+   to .6, the hero beam's entry; on the hero, fx/field.ts writes the live value on .nav and .hero-cta (eased, only
+   while the hero is in view), so every specular sits on the same side as the beam.
+   Press: the element squishes (scale .96) and springs back. */
+
+@property --lg-hot { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --lgx { syntax: '<number>'; inherits: true; initial-value: .6; }
+:root {
+  /* Damped spring (ζ ≈ .42) sampled for linear(): overshoots ~23%, settles in ~.7 s. */
+  --spring: linear(0, 0.041, 0.147, 0.297, 0.469, 0.644, 0.808, 0.95, 1.065, 1.15, 1.204, 1.23, 1.232, 1.216, 1.186, 1.148, 1.108, 1.067, 1.031, 1, 0.976, 0.959, 0.949, 0.946, 0.947, 0.952, 0.96, 0.969, 0.979, 0.988, 0.996, 1.002, 1.007, 1.011, 1.012, 1.013, 1.012, 1.011, 1.009, 1.006, 1.004);
+}
+
+/* Zero-specificity base, so a component's own position/shadow/transition always wins. */
+:where(.lg) { position: relative; border: 0;
+  box-shadow: 0 .5rem 1.5rem -.5rem rgba(0,0,0,.5), 0 2px .3rem -2px rgba(0,0,0,.28);
+  transition: scale .75s var(--spring), --lg-hot .4s var(--ease-out), box-shadow .35s; }
+.lg { isolation: isolate;
+  /* Peak of the top highlight on this element: the light's side, pushed toward the shoulder (≈ 74% at .6). */
+  --lg-sx: calc(clamp(.15, .5 + (var(--lgx) - .5) * 2.4, .85) * 100%);
+  --lg-tint: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+  --lg-glow: inset 0 0 0 .5px rgba(255,255,255,.14), inset 0 1px 1.5px rgba(255,255,255,.2), inset 0 -1px 1.5px rgba(0,0,0,.22), inset 0 0 .9rem rgba(255,255,255,.045);
+  --lg-rim: radial-gradient(var(--lg-arc, 4.5rem) var(--lg-arc-y, 3.5rem) at var(--lg-sx) 0, rgba(255,255,255,.85), rgba(255,255,255,.18) 55%, transparent),
+            radial-gradient(var(--lg-arc, 4.5rem) var(--lg-arc-y, 3.5rem) at calc(100% - var(--lg-sx)) 100%, rgba(255,255,255,.34), transparent 70%),
+            linear-gradient(180deg, rgba(255,255,255,.3), rgba(255,255,255,.05) 45%, rgba(255,255,255,.03) 70%, rgba(255,255,255,.12));
+  --lg-fb: blur(.8rem) saturate(180%);
+  --lg-spot: 255 255 255;
+}
+.lg::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  -webkit-backdrop-filter: var(--lg-fb); backdrop-filter: var(--lg-fb);
+  background: radial-gradient(var(--lg-spot-r, 5.5rem) circle at var(--mx, var(--lg-sx)) var(--my, 0%), rgb(var(--lg-spot) / calc(var(--lg-hot) * var(--lg-spot-a, .16))), transparent 70%), var(--lg-tint);
+  box-shadow: var(--lg-glow);
+}
+.lg.lg-on::before { -webkit-backdrop-filter: var(--lg-filter); backdrop-filter: var(--lg-filter); }
+.lg::after {
+  content: ""; position: absolute; inset: 0; z-index: 4; border-radius: inherit; pointer-events: none; padding: var(--lg-rim-w, 1.25px);
+  background: radial-gradient(var(--lg-hl-r, 3.5rem) circle at var(--mx, var(--lg-sx)) var(--my, 0%), rgb(255 255 255 / calc(var(--lg-hot) * var(--lg-hl-a, .95))), transparent 70%), var(--lg-rim);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  filter: var(--lg-rim-f, blur(.4px)); opacity: var(--lg-rim-o, 1);
+}
+/* Pointer light. Hover only where hover is real (a tap on a phone leaves :hover stuck). Buttons light at the
+   pointer, or at the top centre before the first pointermove. Bars light only while fx/pointer.ts knows where
+   the pointer is (.lg-pt), so the light can never sit at a default position. Lenses never inherit the light. */
+@media (hover: hover) { .lg:hover { --lg-hot: 1; } }
+.lg:focus-visible { --lg-hot: 1; }
+.lg.lg-bar { --lg-hot: 0; }
+.lg.lg-bar.lg-pt { --lg-hot: 1; }
+.lg.lg-lens { --lg-hot: 0; }
+a.lg:active, button.lg:active, .lg-press:active { scale: .96; transition: scale .14s var(--ease-out); }
+
+/* ---- Kinds ---- */
+.lg-bar { --lg-arc: 8rem; --lg-arc-y: 3rem;
+  /* Rim: one crisp hairline. The light is a narrow arc along the top edge, brightest where the scene's light
+     crosses the bar (--lgx of the viewport width; the bar is centred), fading out about half a bar-width either side;
+     a faint even line keeps the shape everywhere else. No soft light inside the bar. */
+  --lg-rim: radial-gradient(48% 1.6rem at calc(var(--lgx) * 100vw - (100vw - 100%) / 2) 0, rgba(255,255,255,.72), rgba(255,255,255,.24) 45%, transparent),
+            linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.035) 50%, rgba(255,255,255,.08));
+  --lg-rim-w: 1px; --lg-rim-f: none;
+  --lg-glow: inset 0 0 0 .5px rgba(255,255,255,.06), inset 0 -1px 1px rgba(0,0,0,.28), inset 0 0 .9rem rgba(255,255,255,.025);
+  /* Pointer light inside the bar: small and faint. */
+  --lg-spot-r: 4.5rem; --lg-spot-a: .05; --lg-hl-r: 3rem; --lg-hl-a: .32; }
+.lg-lens { --my: 0%; --lg-tint: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)); --lg-arc: 2.3rem; --lg-arc-y: 1.7rem;
+  --lg-glow: inset 0 0 0 .5px rgba(255,255,255,.22), inset 0 1px 1px rgba(255,255,255,.3), inset 0 -1px 1px rgba(0,0,0,.25), inset 0 0 .5rem rgba(255,255,255,.06);
+  box-shadow: 0 1px 2px rgba(0,0,0,.4); }
+.lg-knob { --lg-tint: radial-gradient(circle at 50% 30%, rgba(255,255,255,.12), rgba(255,255,255,.02) 70%); --lg-arc: 1.7rem; --lg-arc-y: 1.7rem; color: #fff;
+  box-shadow: 0 .4rem 1.1rem -.3rem rgba(0,0,0,.55), 0 0 0 .5px rgba(0,0,0,.2); }
+.lg-pill { --lg-tint: linear-gradient(180deg, rgba(24,24,27,.42), rgba(10,10,12,.5)); --lg-arc: 2rem; --lg-arc-y: 1.4rem; color: #fff; }
+/* Frosted fallback: lenses must not blur the label under them. */
+.lg-lens:not(.lg-on)::before { -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* ---- Buttons made of glass (hero CTAs) ---- */
+.btn.lg { background: none; color: #fff; font-weight: 500; }
+.btn.lg.solid { --lg-tint: linear-gradient(180deg, rgba(252,184,122,.8), rgba(236,138,66,.74)); --lg-spot: 255 236 214;
+  --lg-glow: inset 0 0 0 .5px rgba(255,214,170,.5), inset 0 1px 1.5px rgba(255,240,220,.65), inset 0 -1px 2px rgba(110,40,0,.35), inset 0 0 .9rem rgba(255,200,150,.18);
+  color: #fff; font-weight: 600; text-shadow: 0 1px 1px rgba(90,34,0,.35);
+  box-shadow: 0 .6rem 1.5rem -.6rem rgba(229,138,71,.7), 0 2px .3rem -2px rgba(0,0,0,.35); }
+.btn.lg.solid:hover { box-shadow: 0 .7rem 1.8rem -.5rem rgba(240,164,101,.8), 0 2px .3rem -2px rgba(0,0,0,.35); }
+
+/* ---- Nav: one floating glass bar; it turns light over paper sections (morph.ts navTheme) ---- */
+.nav { position: fixed; inset: .7rem 0 auto; z-index: 60; pointer-events: none; display: flex; justify-content: center; }
+.nav-bar { pointer-events: auto; display: flex; align-items: center; gap: .2rem; width: var(--wrap); height: 2.7rem; padding: 0 .35rem 0 .9rem; border-radius: 999px;
+  color: #F5F5F4; --focus: #B5ECF4; --nl: rgba(245,245,244,.84); --nl-hi: #fff;
+  --lg-tint: linear-gradient(180deg, rgba(28,28,31,.72), rgba(16,16,18,.78));
+  transition: box-shadow .5s, color .5s; }
+/* Tint is denser across the text band (labels keep ≥ 4.5:1 over white video frames) and clearer over the bezel rows,
+   where the refraction shows. Measured by /tmp/pv/navcontrast.mjs over every 260 px of scroll. */
+.lg-refract .nav-bar { --lg-tint: linear-gradient(180deg, rgba(24,24,27,.4), rgba(18,18,20,.7) 30%, rgba(16,16,18,.72) 70%, rgba(14,14,16,.46)); }
+.nav.light .nav-bar { color: #141416; --focus: #0B6F82; --nl: #2c2c30; --nl-hi: #0b0b0c; --lg-spot: 255 255 255;
+  --lg-tint: linear-gradient(180deg, rgba(255,255,255,.8), rgba(248,247,243,.76));
+  --lg-glow: inset 0 0 0 .5px rgba(0,0,0,.1), inset 0 1px 1.5px rgba(255,255,255,1), inset 0 -1px 1.5px rgba(0,0,0,.06), inset 0 0 .9rem rgba(255,255,255,.5);
+  --lg-rim-o: .9; box-shadow: 0 .5rem 1.5rem -.6rem rgba(40,30,20,.28), 0 2px .3rem -2px rgba(40,30,20,.14); }
+.lg-refract .nav.light .nav-bar { --lg-tint: linear-gradient(180deg, rgba(255,255,255,.5), rgba(250,249,246,.76) 30%, rgba(248,247,243,.76) 70%, rgba(246,245,241,.52)); }
+.nav-brand { display: inline-flex; align-items: center; gap: .5rem; height: 2rem; padding: 0 .3rem; margin-right: auto; border-radius: 999px; text-decoration: none; color: inherit; font: 400 calc(1.1rem + var(--fz))/1 var(--serif); letter-spacing: -.01em; }
+.nav-brand svg { width: .65rem; height: .85rem; flex: none; transition: transform .5s var(--ease-out); }
+.nav-brand:hover svg { transform: translateY(-1px) rotate(-4deg); }
+.nav-sep { display: none; }
+.nav-links { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; gap: 2px; }
+.nav-links a { position: relative; z-index: 1; display: inline-flex; align-items: center; height: 1.9rem; padding: 0 .75rem; border-radius: 999px; font: 500 calc(.675rem + var(--fz))/1 var(--sans); text-decoration: none; color: var(--nl); transition: color .25s, scale .6s var(--spring); }
+html[lang="zh-CN"] .nav-links a { letter-spacing: .04em; }
+.nav-links a:hover, .nav-links a[aria-current="true"] { color: var(--nl-hi); }
+.nav-links a:active { scale: .94; transition-duration: .12s; }
+.nav-links a:focus-visible, .nav-brand:focus-visible, .lang button:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+/* The morphing lens: slides and stretches between links (hover, focus, current section). */
+.nav-lens, .lang-lens { position: absolute; z-index: 3; left: 0; top: 50%; height: 1.9rem; margin-top: -.95rem; width: 2rem; border-radius: 999px; pointer-events: none; opacity: 0; transition: opacity .3s; transform-origin: 50% 50%; }
+.nav-lens.lens-on, .lang-lens.lens-on { opacity: 1; }
+.nav.light .lg-lens { --lg-tint: linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,.2));
+  --lg-glow: inset 0 0 0 .5px rgba(0,0,0,.12), inset 0 1px 1px rgba(255,255,255,1), inset 0 -1px 1px rgba(0,0,0,.08); box-shadow: 0 1px 2px rgba(0,0,0,.16); }
+
+/* Language: a recessed track; the glass lens rides on top and magnifies the chosen label. */
+.lang { position: relative; display: grid; grid-template-columns: 1fr 1fr; height: 2.1rem; padding: 2px; margin-left: .4rem; border-radius: 999px;
+  background: rgba(0,0,0,.22); box-shadow: inset 0 1px 2px rgba(0,0,0,.4), 0 .5px 0 rgba(255,255,255,.08); transition: background .5s; }
+.nav.light .lang { background: rgba(20,20,22,.07); box-shadow: inset 0 1px 2px rgba(0,0,0,.12), 0 .5px 0 rgba(255,255,255,.9); }
+.lang button { all: unset; position: relative; z-index: 1; cursor: pointer; display: grid; place-items: center; min-width: 2.4rem; padding: 0 .5rem; border-radius: 999px; font: 500 calc(.625rem + var(--fz))/1 var(--sans); color: var(--nl); transition: color .3s; }
+.lang button[lang="zh-CN"] { letter-spacing: .06em; padding-top: 1px; }
+.lang button:hover, .lang button[aria-pressed="true"] { color: var(--nl-hi); }
+.lang-lens { height: 1.9rem; margin-top: -.95rem; width: calc(50% - 2px); left: 2px; }
+.lang-lens.lens-js { left: 0; }
+html[lang="zh-CN"] .lang-lens:not(.lens-js) { translate: 100% 0; }
+.lang-lens:not(.lens-js) { opacity: 1; }
+
+@media (max-width: 760px) {
+  .nav { inset: .5rem 0 auto; }
+  .nav-bar { width: calc(100% - 1rem); height: 2.5rem; padding: 0 .25rem 0 .65rem; }
+  .nav-links li.opt { display: none; }
+  .nav-brand { font-size: calc(1rem + var(--fz)); padding: 0 2px; }
+  .nav-links a { padding: 0 .55rem; font-size: calc(.65rem + var(--fz)); height: 1.8rem; }
+  .nav-lens { height: 1.8rem; margin-top: -.9rem; }
+  .lang { height: 2rem; margin-left: .2rem; }
+  .lang-lens { height: 1.8rem; margin-top: -.9rem; }
+  .lang button { min-width: 2.1rem; padding: 0 .4rem; }
+}
+@media (prefers-reduced-motion: reduce) { .lg, .nav-links a { transition: none; } }

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300" fill="#fff" font-family="ui-monospace,Menlo,monospace" font-size="12">
+<text x="10" y="24">fn route(req: Request) -&gt; Stream {</text><text x="300" y="48">let urp = decode(req)?;</text><text x="610" y="24">struct Plan { steps: Vec&lt;Step&gt; }</text>
+<text x="40" y="84">&lt;Lumen state="idle" /&gt;</text><text x="350" y="108">await relay.send(noise.encrypt(frame))</text><text x="20" y="144">@keyframes l-rise { from { transform: translateY(101%) } }</text>
+<text x="520" y="168">SELECT * FROM ledger WHERE epoch = ?</text><text x="80" y="204">swiftc -O -o mdread src/main.swift</text><text x="420" y="228">export const contract = z.object({ … })</text>
+<text x="30" y="264">@SpringBootApplication</text><text x="360" y="288">impl WireEvent for ResponsesSse { … }</text>
+</svg>

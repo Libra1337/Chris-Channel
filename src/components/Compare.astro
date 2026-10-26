@@ -1,0 +1,16 @@
+---
+// Before/after slider. The range input does the work, so it is keyboard and touch accessible.
+import Pic from './Pic.astro';
+import Device from './Device.astro';
+interface Props { before: string; after: string; en: string; zh: string; sizes?: string }
+const { before, after, en, zh, sizes = '320px' } = Astro.props;
+---
+<div class="cmp-wrap"><Device kind="phone"><div class="cmp" data-compare>
+  <Pic name={after} en={`After: ${en}`} zh={`改版后：${zh}`} sizes={sizes} />
+  <div class="cmp-b"><Pic name={before} en={`Before: ${en}`} zh={`改版前：${zh}`} sizes={sizes} /></div>
+  <span class="cmp-line" aria-hidden="true"><span class="cmp-h lg lg-knob" data-lg="knob"><svg viewBox="0 0 20 20"><path d="M7 5 2 10l5 5M13 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+  <span class="cmp-tag l lg lg-pill" aria-hidden="true"><span data-l="en">Before</span><span data-l="zh">改版前</span></span>
+  <span class="cmp-tag r lg lg-pill" aria-hidden="true"><span data-l="en">After</span><span data-l="zh">改版后</span></span>
+  <input type="range" min="0" max="100" value="50" step="1"
+    aria-label={`Before and after: ${en}`} data-aria-en={`Before and after: ${en}`} data-aria-zh={`改版前后对比：${zh}`} />
+</div></Device></div>

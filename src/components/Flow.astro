@@ -1,0 +1,15 @@
+---
+// Architecture as a step flow: connected cards that light up in sequence when scrolled into view.
+type L = { en: string; zh: string };
+interface Props { steps: { t: L; d: L }[]; accent?: 'teal' | 'amber' }
+const { steps, accent = 'teal' } = Astro.props;
+---
+<ol class={`flow ${accent}`} style="list-style:none;padding:0;margin:0 0 clamp(1.6rem,4vw,2.8rem)">
+  {steps.map((s, i) => (
+    <li class="flow-step" style={`--i:${i}`}>
+      <b>STEP {String(i + 1).padStart(2, '0')}</b>
+      <h4><span data-l="en">{s.t.en}</span><span data-l="zh">{s.t.zh}</span></h4>
+      <p><span data-l="en">{s.d.en}</span><span data-l="zh">{s.d.zh}</span></p>
+    </li>
+  ))}
+</ol>

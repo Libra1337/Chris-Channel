@@ -1,0 +1,8 @@
+---
+// Bilingual text. Both languages are in the HTML; CSS hides the inactive one.
+// Props: en, zh (strings; may hold inline HTML when html is set).
+interface Props { en: string; zh: string; html?: boolean }
+const { en, zh, html = false } = Astro.props;
+---
+{html ? <><span data-l="en" set:html={en} /><span data-l="zh" lang="zh-CN" set:html={zh} /></>
+      : <><span data-l="en">{en}</span><span data-l="zh" lang="zh-CN">{zh}</span></>}

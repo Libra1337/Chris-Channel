@@ -1,0 +1,43 @@
+---
+// Section head: mono label, display headline split into words that rise from a mask, optional lead.
+// Mark one accent phrase with *asterisks*; it renders as em.lit (amber italic in English).
+interface L { en: string; zh: string }
+interface Props { n?: string; label: L; en: string; zh: string; lead?: L; id?: string; tag?: 'h1' | 'h2'; size?: 'display' | 'h2'; teal?: boolean; class?: string }
+const { n, label, en, zh, lead, id, tag = 'h2', size = 'display', teal = false, class: cls = '' } = Astro.props;
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function split(s: string, zhMode: boolean) {
+  let lit = false, i = 0;
+  const out: string[] = [];
+  const toks = zhMode ? Array.from(s) : s.split(/(\s+)/);
+  let buf = '';
+  const flush = () => {
+    if (!buf) return;
+    const t = esc(buf);
+    out.push(`<span class="wd"><span style="--i:${i++}">${lit ? `<em class="lit">${t}</em>` : t}</span></span>`);
+    buf = '';
+  };
+  for (const tok of toks) {
+    if (!zhMode && /^\s+$/.test(tok)) { flush(); out.push(' '); continue; }
+    for (const ch of Array.from(tok)) {
+      if (ch === '*') { flush(); lit = !lit; continue; }
+      if (zhMode) {
+        // Keep punctuation with the previous character; group two CJK characters per unit.
+        if (/[，。、；：！？」』）,.;:!?)]/.test(ch) && buf) { buf += ch; flush(); continue; }
+        buf += ch; if (Array.from(buf).length >= 2) flush();
+      } else buf += ch;
+    }
+    if (!zhMode) flush();
+  }
+  flush();
+  return out.join('');
+}
+const Tag = tag;
+---
+<div class={`head ${cls}`}>
+  <p class={`t-label ${teal ? 'teal' : ''}`}>{n && <b>{n}</b>}{n && <span aria-hidden="true">/</span>}<span data-l="en">{label.en}</span><span data-l="zh" lang="zh-CN">{label.zh}</span></p>
+  <Tag id={id} class={`t-${size} rise`} data-rv-text>
+    <span data-l="en" set:html={split(en, false)} /><span data-l="zh" lang="zh-CN" set:html={split(zh, true)} />
+  </Tag>
+  {lead && <p class="t-lead" data-rv style="--d:240"><span data-l="en" set:html={lead.en} /><span data-l="zh" lang="zh-CN" set:html={lead.zh} /></p>}
+  <slot />
+</div>

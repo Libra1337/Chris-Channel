@@ -1,0 +1,18 @@
+---
+// Scroll-scrubbed image sequence drawn on a canvas inside a phone frame.
+import Device from './Device.astro';
+interface Props { prefix: string; count: number; width: number; height: number; en: string; zh: string }
+const { prefix, count, width, height, en, zh } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'media/img/';
+const frames = Array.from({ length: count }, (_, i) => `${base}${prefix}-${String(i).padStart(2, '0')}-${width}.webp`);
+---
+<div class="seq" data-seq-scene>
+  <div class="seq-in">
+    <slot name="text" />
+    <div class="phone-wrap">
+      <Device kind="phone">
+        <canvas width={width} height={height} data-frames={JSON.stringify(frames)} role="img" aria-label={en} data-aria-en={en} data-aria-zh={zh}></canvas>
+      </Device>
+    </div>
+  </div>
+</div>

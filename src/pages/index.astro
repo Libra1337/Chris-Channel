@@ -1,0 +1,150 @@
+---
+// Personal home: first screen (apps playing, every project in a strip) → work (four media panels,
+// then More work) on dark; then one switch to paper: about + timeline → play (slider, Lumen) → three notes → contact.
+// The live demos moved to their project pages; the film to the brand page; the full notes to /notes/.
+import Base from '../layouts/Base.astro';
+import T from '../components/T.astro';
+import Head from '../components/Head.astro';
+import Device from '../components/Device.astro';
+import Video from '../components/Video.astro';
+import Pic from '../components/Pic.astro';
+import Concept from '../components/Concept.astro';
+import { projects } from '../data/projects';
+// Timeline: my own dates (2026-10-23), month level, in order. Brand/film and the libraries are left out.
+const pj = (slug: string) => projects.find((p) => p.slug === slug)!;
+const timeline = [
+  { d: '2026-05', m: { en: 'May 2026', zh: '2026 年 5 月' }, slug: 'armil', en: 'A calculator for traditional calendars.', zh: '一台排传统历法的计算器。' },
+  { d: '2026-06', m: { en: 'Jun 2026', zh: '2026 年 6 月' }, slug: 'aogiri-phone', en: 'Started a companion for the phone.', zh: '开始做一个手机上的伙伴。' },
+  { d: '2026-07', m: { en: 'Jul 2026', zh: '2026 年 7 月' }, slug: 'gateway', en: 'Routing, failover and a console for the gateway.', zh: '给网关做路由、故障切换和控制台。' },
+  { d: '2026-08', m: { en: 'Aug–Sep 2026', zh: '2026 年 8–9 月' }, slug: 'aogiri-desktop', en: 'The desktop workbench and its command-line engine.', zh: '桌面工作台，以及它背后的命令行引擎。' },
+  { d: '2026-10', m: { en: 'Oct 2026', zh: '2026 年 10 月' }, slug: 'zaji', en: 'The reader I wanted for my own folders.', zh: '我自己读文件夹时想要的阅读器。' },
+].map((t) => ({ ...t, name: pj(t.slug).name }));
+import Lumen from '../components/Lumen.astro';
+import Index from '../components/Index.astro';
+import Featured from '../components/Featured.astro';
+import Compare from '../components/Compare.astro';
+import { notes, zhTitles } from '../data/notes';
+import '../styles/home.css';
+const b = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const email = 'crislynn063@gmail.com';
+---
+<Base titleEn="Christian — I build software and the way it feels" titleZh="Christian · 写软件，也设计它给人的感觉"
+  descEn="Christian's portfolio: native apps, Rust and TypeScript systems, design, motion and film. Built by hand, with live demos."
+  descZh="Christian 的作品集：原生应用、Rust 和 TypeScript 系统、设计、动效与短片。亲手搭建，带可交互的演示。">
+
+  <!-- 1. Hero: who, in one line; the apps themselves, playing (dark captures); every project one click away -->
+  <section class="hero dark" data-hero aria-labelledby="hero-title">
+    <div class="hero-field" aria-hidden="true"><canvas data-field></canvas></div>
+    <div class="hero-grid" data-hero-inner>
+      <div class="hero-copy">
+        <p class="hero-tag hero-in" style="--d:0"><T en="Student builder · Chengdu, China" zh="学生开发者 · 中国成都" /></p>
+        <h1 id="hero-title" class="t-name hero-name" translate="no"><span class="hn-row"><span class="hn">Christian<em class="lit">.</em></span></span></h1>
+        <p class="hero-line"><T en="I build apps, the systems under them, and the motion that explains them." zh="我做应用，也做它们底下的系统，以及把它们讲清楚的动效。" /></p>
+        <div class="hero-cta hero-in" style="--d:2">
+          <a class="btn lg solid" data-lg="btn" href="#work" data-spec><T en="See the work" zh="看作品" /> <span class="arr" aria-hidden="true">↓</span></a>
+          <a class="btn lg" data-lg="btn" href="#about" data-spec><T en="About me" zh="关于我" /></a>
+        </div>
+      </div>
+      <div class="hero-stage">
+        <div class="hs-lap"><Device kind="laptop"><Video eager name="desk-eco-dark" w={1440} h={900} en="Aogiri Desktop, recorded: a request becomes a plan, subagents pick up steps, and the push asks for approval." zh="Aogiri 桌面端录屏：一句需求变成计划，子智能体分头执行，推送前请求确认。" /></Device></div>
+        <div class="hs-phone"><Device kind="phone"><Video eager name="phone-glass" w={588} h={1278} en="Aogiri on iPhone, recorded: scrolling the companion chat under the glass header." zh="Aogiri 手机端录屏：在玻璃顶栏下滚动伙伴对话。" /></Device></div>
+      </div>
+    </div>
+    <nav class="hero-strip" aria-label="All projects" data-aria-en="All projects" data-aria-zh="全部项目">
+      <div class="hs-rail">
+        {[0, 1].map((copy) => (
+          <ul class="hs-list" aria-hidden={copy ? 'true' : undefined}>
+            {projects.map((p) => (
+              <li><a class="hs-card" href={`${b}projects/${p.slug}/`} tabindex={copy ? -1 : undefined}>
+                <span class={`hs-thumb ${p.preview.tall ? 'tall' : ''}`}>
+                  {p.preview.kind === 'concept' ? <Concept kind={p.preview.name as any} /> :
+                   p.preview.kind === 'img' ? <Pic name={p.preview.name} en="" zh="" sizes="180px" /> :
+                   <img src={`${b}media/video/${p.preview.name}.webp`} alt="" loading="lazy" decoding="async" />}
+                </span>
+                <span class="hs-name" translate="no">{p.name.en === p.name.zh ? p.name.en : <><span data-l="en">{p.name.en}</span><span data-l="zh">{p.name.zh}</span></>}</span>
+              </a></li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </nav>
+  </section>
+
+  <!-- 3. Work: four featured projects as media panels, the rest in the index below -->
+  <section id="work" class="section dark work" aria-labelledby="work-title" tabindex="-1">
+    <div class="wrap-wide">
+      <Head n="01" label={{ en: 'Selected work', zh: '作品' }} id="work-title" size="h2"
+        en="Four projects, *running*." zh="四个项目，*正在运行*。" />
+      <Featured />
+      <Index exclude={['aogiri-phone', 'aogiri-desktop', 'zaji', 'armil']} />
+    </div>
+  </section>
+
+  <!-- Paper from here to the end: the page switches theme once. -->
+  <!-- 3. About, with a short timeline (my dates, month level) -->
+  <section id="about" class="section paper about" aria-labelledby="about-title" tabindex="-1">
+    <div class="wrap-wide about-grid">
+      <div class="about-me">
+        <Head n="02" label={{ en: 'About', zh: '关于我' }} id="about-title" size="h2" en="Hi, I’m *Christian*." zh="你好，我是 *Christian*。" />
+        <p class="t-lead" data-rv><T en="I’m a student builder in Chengdu. I work from Rust services to native apps, and I care about the details people feel but rarely name: an honest error, a control that answers your hand." zh="我是成都的一名学生开发者，从 Rust 服务做到原生应用。我在意那些人能感觉到、却很少说出口的细节：一句诚实的报错，一个跟手的控件。" /></p>
+        <p class="t-body" data-rv style="--d:120"><T en="I also lead a small team of AI coding agents: I write the brief, set what “done” means and review every result." zh="我还带着一个由 AI 编程助手组成的小团队：任务说明由我写，「做完」的标准由我定，每个结果都由我检查。" /></p>
+      </div>
+      <ol class="tl" data-rv style="--d:160" aria-label="Timeline" data-aria-en="Timeline" data-aria-zh="时间线">
+        {timeline.map((t) => (
+          <li>
+            <time datetime={t.d}><span data-l="en">{t.m.en}</span><span data-l="zh">{t.m.zh}</span></time>
+            <a href={`${b}projects/${t.slug}/`} translate="no">{t.name.en === t.name.zh ? t.name.en : <><span data-l="en">{t.name.en}</span><span data-l="zh">{t.name.zh}</span></>}</a>
+            <p><T en={t.en} zh={t.zh} /></p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. Play: the glass redesign slider and Lumen -->
+  <section id="play" class="section paper play" aria-labelledby="play-title" tabindex="-1">
+    <div class="wrap-wide play-grid">
+      <div class="play-txt">
+        <Head n="03" label={{ en: 'Play', zh: '玩一玩' }} id="play-title" size="h2" en="Two things *to touch*." zh="两样可以*动手*的东西。" />
+        <p class="t-body" data-rv><T en="Drag the slider across my redesign of the Aogiri Today page. Then tap Lumen, the companion from the same app." zh="拖动滑块，看我给 Aogiri「今天」页做的改版。再点一下 Lumen，它是同一个应用里的伙伴。" /></p>
+      </div>
+      <div class="play-objs">
+        <div class="play-cmp" data-rv><Compare before="p-today-before" after="p-today" en="the Today page" zh="今天页" /></div>
+        <div class="play-lumen" data-rv style="--d:120"><Lumen size="min(11rem, 48vw)" id="hl" interactive /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Notes: three titles; the full notes have their own page -->
+  <section id="notes" class="section paper notes-teaser" aria-labelledby="notes-title" tabindex="-1">
+    <div class="wrap-wide">
+      <Head n="04" label={{ en: 'Notes', zh: '札记' }} id="notes-title" size="h2" en="What building *has taught me*." zh="做东西*教会我的事*。" />
+      <ol class="nt-list">
+        {notes.slice(0, 3).map((n) => (
+          <li><a href={`${b}notes/#note-${n.n}`}><span class="nt-n">{n.n}</span><span class="nt-t"><span data-l="en">{n.title}</span><span data-l="zh" lang="zh-CN">{zhTitles[n.n] || n.title}</span></span><span class="nt-arr" aria-hidden="true">→</span></a></li>
+        ))}
+      </ol>
+      <a class="link nt-all" href={`${b}notes/`}><T en={`All ${notes.length} notes →`} zh={`全部 ${notes.length} 篇札记 →`} /></a>
+    </div>
+  </section>
+
+  <!-- 6. Contact -->
+  <section id="contact" class="section paper contact-sec" aria-labelledby="contact-title" tabindex="-1">
+    <div class="wrap-wide contact-grid">
+      <h2 id="contact-title" class="t-h2"><T en="Say hello." zh="打个招呼。" /></h2>
+      <dl class="contact">
+        <div><dt><T en="Email" zh="邮箱" /></dt><dd class="c-mail">
+          <a class="link" href={`mailto:${email}`} translate="no">{email}</a>
+          <button type="button" class="btn glass sm copy" data-copy={email} data-spec aria-describedby="copy-live">
+            <svg viewBox="0 0 16 16" aria-hidden="true" class="i-copy"><rect x="5" y="5" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+            <svg viewBox="0 0 16 16" aria-hidden="true" class="i-ok"><path d="m3 8.5 3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="t-copy"><T en="Copy" zh="复制" /></span><span class="t-ok"><T en="Copied" zh="已复制" /></span>
+          </button>
+          <span id="copy-live" class="sr" aria-live="polite"></span>
+        </dd></div>
+        <div><dt>GitHub</dt><dd><a class="link" href="https://github.com/Libra1337" rel="noopener" translate="no">github.com/Libra1337</a></dd></div>
+        <div><dt><T en="Location" zh="所在地" /></dt><dd><T en="Chengdu, China" zh="中国成都" /></dd></div>
+      </dl>
+    </div>
+  </section>
+</Base>

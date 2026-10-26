@@ -1,0 +1,15 @@
+---
+// Notes page: my notes in full (content/notes.md). The home page shows the first three titles.
+import Base from '../../layouts/Base.astro';
+import Head from '../../components/Head.astro';
+import Notes from '../../components/Notes.astro';
+---
+<Base page="notes" titleEn="Notes — Christian" titleZh="札记 · Christian"
+  descEn="Short notes on what building software has taught me." descZh="关于做软件教会我的事，几篇短札记。">
+  <section class="section paper notes-page" aria-labelledby="notes-title">
+    <div class="wrap">
+      <Head tag="h1" label={{ en: 'Notes', zh: '札记' }} id="notes-title" size="h2" en="What building *has taught me*." zh="做东西*教会我的事*。" />
+      <Notes />
+    </div>
+  </section>
+</Base>

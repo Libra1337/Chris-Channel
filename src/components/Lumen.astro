@@ -1,0 +1,42 @@
+---
+// Lumen, the ember companion, from the app's SVG geometry (viewBox 0 0 100 100).
+// CSS: a 4 s breath and a blink. interactive: mod/lumen makes the eyes and body lean toward the pointer,
+// blinks at random intervals and squishes when tapped. Reduced motion stops all of it.
+interface Props { size?: string; class?: string; id?: string; interactive?: boolean }
+const { size = '8rem', class: cls = '', id = 'lu', interactive = false } = Astro.props;
+const P = 'M55 1C59 10 67 17 77 27C88 38 94 51 93 66C92 86 73 100 50 100C27 100 7 86 7 66C7 53 13 43 21 35C23 43 28 49 35 51C32 37 38 17 55 1Z';
+---
+<svg class={`lumen ${interactive ? 'live' : ''} ${cls}`} style={`width:${size}`} viewBox="-30 -30 160 160"
+  data-module={interactive ? 'lumen' : undefined} role={interactive ? 'img' : undefined} aria-hidden={interactive ? undefined : 'true'}
+  aria-label={interactive ? 'Lumen, the ember companion' : undefined} data-aria-en={interactive ? 'Lumen, the ember companion' : undefined} data-aria-zh={interactive ? 'Lumen，那团小小的光' : undefined}
+ >
+  <defs>
+    <radialGradient id={`${id}-h`}><stop offset="0" stop-color="#F0A465" stop-opacity=".34"/><stop offset=".74" stop-color="#F0A465" stop-opacity=".2"/><stop offset="1" stop-color="#F0A465" stop-opacity="0"/></radialGradient>
+    <radialGradient id={`${id}-b`} cx="50%" cy="42%" r="62%" fx="44%" fy="34%"><stop offset="0" stop-color="#F0A465"/><stop offset=".6" stop-color="#F0A465"/><stop offset="1" stop-color="#D46E3E"/></radialGradient>
+    <radialGradient id={`${id}-c`}><stop offset="0" stop-color="#FFE3BC" stop-opacity=".95"/><stop offset=".45" stop-color="#FFE3BC" stop-opacity=".55"/><stop offset="1" stop-color="#FFE3BC" stop-opacity="0"/></radialGradient>
+    <clipPath id={`${id}-k`}><path d={P}/></clipPath>
+  </defs>
+  <circle class="lu-halo" cx="50" cy="58" r="68" fill={`url(#${id}-h)`}/>
+  <g class="lu-lean">
+    <g class="lu-body">
+      <path d={P} fill={`url(#${id}-b)`}/>
+      <circle cx="41" cy="40" r="26" fill={`url(#${id}-c)`} clip-path={`url(#${id}-k)`}/>
+      <g class="lu-look"><g class="lu-eyes"><rect x="36" y="60" width="7" height="14" rx="3.5" fill="#FFFBF4"/><rect x="57" y="60" width="7" height="14" rx="3.5" fill="#FFFBF4"/></g></g>
+    </g>
+  </g>
+</svg>
+<style>
+  .lumen { overflow: visible; }
+  .lu-body, .lu-halo { transform-box: fill-box; transform-origin: 50% 80%; animation: lu-breath 4s ease-in-out infinite; }
+  .lu-halo { transform-origin: 50% 50%; }
+  .lu-lean { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .5s var(--ease-out); }
+  .lu-look { transition: transform .25s var(--ease-out); }
+  .lu-eyes { transform-box: fill-box; transform-origin: 50% 50%; animation: lu-blink 6.5s infinite; }
+  .lumen.live .lu-eyes { animation: none; transition: transform .09s ease-in; }
+  .lumen.live.blink .lu-eyes { transform: scaleY(.1); }
+  .lumen.live.squish .lu-lean { transform: scale(1.08, .9) !important; transition-duration: .14s; }
+  .lumen.live { cursor: pointer; }
+  @keyframes lu-breath { 50% { transform: scale(1.03); } }
+  @keyframes lu-blink { 0%, 96%, 100% { transform: scaleY(1); } 98% { transform: scaleY(.12); } }
+  @media (prefers-reduced-motion: reduce) { .lu-body, .lu-halo, .lu-eyes { animation: none; } }
+</style>

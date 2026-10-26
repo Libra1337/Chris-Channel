@@ -1,0 +1,84 @@
+---
+import Project from '../../layouts/Project.astro';
+import T from '../../components/T.astro';
+import Pic from '../../components/Pic.astro';
+import Video from '../../components/Video.astro';
+import Device from '../../components/Device.astro';
+import Mark from '../../components/Mark.astro';
+import Lumen from '../../components/Lumen.astro';
+import Film from '../../components/Film.astro';
+import ArchBrand from '../../components/ArchBrand.astro';
+const b = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Project slug="brand">
+  <div slot="hero" class="brand-hero">
+    <div class="bh-mark"><Mark mode="launch" replay brand="aogiri" id="bh1" title="Aogiri mark. Click to replay the launch." /></div>
+    <div class="bh-mark"><Mark mode="light" replay brand="lynshen" id="bh2" title="LynShen mark. Click to replay the light." /></div>
+    <button class="btn glass sm bh-replay" type="button" data-spec data-replay="bh1 bh2"><T en="Replay both" zh="两个都重播" /></button>
+  </div>
+
+  <T slot="problem-title" en="A flame that read as a letter." zh="一团读起来像字母的火苗。" />
+  <div slot="problem" class="ps">
+    <div data-rv><h3><T en="Two products, no system" zh="两个产品，没有体系" /></h3><p><T en="The desktop app, the phone app, the console and the docs each had their own small icon. Nothing tied the ecosystem together." zh="桌面端、手机端、控制台和文档各有各的小图标，没有任何东西把整个生态串起来。" /></p></div>
+    <div data-rv><h3><T en="Small sizes break shapes" zh="小尺寸会把形状弄坏" /></h3><p><T en="A gradient mark that looks good at 1024 px turns to mush at 16 px in a menu bar or a browser tab." zh="在 1024 像素下好看的渐变标志，缩到菜单栏或浏览器标签的 16 像素就糊成一团。" /></p></div>
+    <div data-rv><h3><T en="A launch with no show" zh="开屏什么都没演" /></h3><p><T en="The first launch animation was cut off as soon as the app was ready, so people saw a flash, not a logo." zh="第一版开屏动画在应用一就绪时就被切掉，大家只看到一闪，看不到标志。" /></p></div>
+  </div>
+
+  <T slot="built-title" en="One shape, two lights." zh="一个形状，两种光。" />
+  <div slot="built" class="bento">
+    <div class="tile w3" data-rv>
+      <h3><T en="The logo" zh="标志" /></h3>
+      <p><T en="Two trunks of different heights and a beam of light that floats between them. The beam never touches a trunk or the ground, so it reads as light, not as the third stroke of an N." zh="两根高低不同的树干，中间悬着一束光。光不碰树干，也不落地，所以读作「光」，而不是 N 的第三笔。" /></p>
+      <div class="tile-media"><Pic name="b-marks" en="The marks: gradient light on dark and light grounds for both brands, flat and single-colour versions." zh="标志：两个品牌在深浅底上的渐光版本，以及平涂和单色版本。" sizes="(max-width: 900px) 92vw, 560px" class="kf" /></div>
+    </div>
+    <div class="tile w3" data-rv>
+      <h3><T en="Built for every size" zh="每个尺寸都能用" /></h3>
+      <p><T en="At 32 px and below the gradient becomes a flat light and the mark is redrawn on the pixel grid, so trunk edges land on whole pixels. The wordmark is redrawn from the mark’s own strokes: one stroke width, round ends." zh="32 像素及以下，渐变改成平涂光，并按像素网格重画，让树干边缘落在整像素上。字标按标志自己的笔画重画：单一笔宽，圆头。" /></p>
+      <div class="tile-media"><Pic name="b-icons" en="Platform icons from the brand sheet: macOS, Windows, iOS light, dark and tinted, Android adaptive and themed, favicons and menu-bar icons." zh="品牌规范里的各平台图标：macOS、Windows、iOS 浅色/深色/着色、Android 自适应和主题图标、网页图标和菜单栏图标。" sizes="(max-width: 900px) 92vw, 560px" class="kf" /></div>
+    </div>
+    <div class="tile w2" data-rv>
+      <h3><T en="Lumen, the character" zh="角色 Lumen" /></h3>
+      <p><T en="The earlier ember icon stayed on as the phone app’s companion: same colours, now with eyes, a breath and seven moods." zh="早先的火苗图标留了下来，成为手机端的伙伴：颜色不变，多了眼睛、呼吸和七种状态。" /></p>
+      <div class="tile-media" style="display:flex;justify-content:center;padding:.5rem 0"><Lumen size="7.5rem" id="bl" interactive /></div>
+    </div>
+    <div class="tile w4" data-rv>
+      <h3><T en="The launch, slowed down on purpose" zh="开屏，故意放慢" /></h3>
+      <p><T en="Version 0.10.1 plays the whole entrance on every cold start (2.05 s), holds for 450 ms, then fades into the app. A click or key skips it. It is the only animation in the design system allowed to run longer than 400 ms." zh="0.10.1 起，每次冷启动都完整播放入场（2.05 秒），停 450 毫秒，再淡入应用。点击或按键可以跳过。它是设计规范里唯一允许超过 400 毫秒的动画。" /></p>
+      <div class="tile-media"><Device kind="plain"><Video name="launch" w={760} h={500} en="The desktop launch animation, recorded in the app." zh="桌面端开屏动画，在应用里录制。" /></Device></div>
+    </div>
+  </div>
+
+  <T slot="arch-title" en="One geometry, every output." zh="一份几何，所有产出。" />
+  <ArchBrand slot="arch" />
+
+  <T slot="ui-title" en="Storyboard to film." zh="从分镜到成片。" />
+  <div slot="ui" class="grid-3">
+    <figure data-rv><Pic name="b-film-01" en="Key frame 01: the mark forms over a soft stage." zh="关键帧 01：标志在柔光舞台上出现。" sizes="(max-width: 860px) 92vw, 380px" class="kf" /><figcaption class="caption"><T en="0:00 · The mark forms, timed to the four notes of the sound logo." zh="0:00 · 标志出现，卡在声音标志的四个音上。" /></figcaption></figure>
+    <figure data-rv><Pic name="b-film-04" en="Key frame 04: the approval card lifts off the laptop and flies to the phone." zh="关键帧 04：确认卡从笔记本上揭起，飞向手机。" sizes="(max-width: 860px) 92vw, 380px" class="kf" /><figcaption class="caption"><T en="0:24 · The signature shot: the card flies from desk to phone." zh="0:24 · 招牌镜头：卡片从电脑飞到手机。" /></figcaption></figure>
+    <figure data-rv><Pic name="b-film-08" en="Key frame 08: three devices on one stage, the mark and the tagline." zh="关键帧 08：三台设备同台，标志和口号。" sizes="(max-width: 860px) 92vw, 380px" class="kf" /><figcaption class="caption"><T en="0:52 · Pull back: browser, laptop and phone, all done." zh="0:52 · 拉远：浏览器、笔记本和手机，都已完成。" /></figcaption></figure>
+  </div>
+
+  <section slot="extra" id="film" class="section tight" tabindex="-1">
+    <div class="wrap section-head center" data-rv>
+      <p class="t-label"><T en="Video" zh="视频" /></p>
+      <h2 class="t-h2"><T en="The promo film." zh="宣传片。" /></h2>
+      <p class="t-lead center" style="margin-top:.8rem"><T en="60 seconds, 25 bars at 100 BPM, six kinds of camera move, two silences. Built in Remotion from real screen recordings with demo data." zh="60 秒，100 BPM 下 25 小节，六种镜头运动，两处静音。用 Remotion 搭建，素材是真实录屏和演示数据。" /></p>
+    </div>
+    <div class="wrap" data-zoom>
+      <Film />
+    </div>
+  </section>
+
+  <dl slot="stack" class="stack">
+    <dt><T en="Logo" zh="标志" /></dt><dd><ul class="chips" translate="no"><li>SVG</li><li><T en="Pixel-grid small sizes" zh="像素网格小尺寸" /></li><li>ICO · ICNS</li><li>Icon Composer</li><li><T en="Android adaptive icons" zh="Android 自适应图标" /></li></ul></dd>
+    <dt><T en="Motion" zh="动效" /></dt><dd><ul class="chips" translate="no"><li>CSS keyframes</li><li><T en="transform + opacity only" zh="只用 transform 和 opacity" /></li><li>prefers-reduced-motion</li><li>brand.test.ts</li></ul></dd>
+    <dt><T en="Film" zh="短片" /></dt><dd><ul class="chips" translate="no"><li>Remotion</li><li>React</li><li>FFmpeg</li><li>−14 LUFS</li></ul></dd>
+  </dl>
+
+  <Fragment slot="learned">
+    <li><T html en="<strong>Test the brand like code.</strong> A unit test checks contrast, the timetable and the keyframes, so the logo can’t quietly drift between releases." zh="<strong>像测代码一样测品牌。</strong>单元测试检查对比度、时间表和关键帧，标志不会在版本之间悄悄走样。" /></li>
+    <li><T html en="<strong>Feedback beats taste.</strong> “The animation is too fast, there is no animation” was the most useful sentence in the project; the fix was in when it plays, not how it looks." zh="<strong>反馈比品味更有用。</strong>「动画太快了，根本没有动画」是整个项目里最有用的一句话；问题在什么时候播放，而不是长什么样。" /></li>
+    <li><T html en="<strong>Cut on the beat.</strong> Locking every scene change to a bar line made a 60-second film feel deliberate instead of busy." zh="<strong>剪在拍子上。</strong>每次换镜头都对齐小节线，60 秒的短片就显得从容，而不是忙乱。" /></li>
+  </Fragment>
+</Project>
+

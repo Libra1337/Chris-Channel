@@ -1,0 +1,32 @@
+---
+// Pinned scroll scene: a sticky device on one side, steps on the other. The screen changes as each step crosses
+// the middle of the viewport, sliding in the scroll direction. rotate: the device turns in from 3D as the scene
+// enters and sways while pinned. Under 860 px each step shows its own screen inline.
+import Pic from './Pic.astro';
+import Device from './Device.astro';
+type L = { en: string; zh: string };
+interface Props { frame: 'phone' | 'laptop' | 'browser'; url?: string; steps: { shot: string; alt: L; title: L; body: L }[]; flip?: boolean; rotate?: boolean }
+const { frame, url, steps, flip = false, rotate = false } = Astro.props;
+const sizes = frame === 'phone' ? '(max-width: 860px) 72vw, 320px' : '(max-width: 860px) 92vw, 60vw';
+---
+<div class={`steps ${flip ? 'flip' : ''} f-${frame}`} data-steps>
+  <div class="stage" aria-hidden="true">
+    <div class="stage-dev" data-rotate={rotate ? '' : undefined}>
+      <Device kind={frame} url={url}>
+        {steps.map((s, i) => <div class={`shot ${i === 0 ? 'on' : ''}`} data-shot><Pic name={s.shot} en={s.alt.en} zh={s.alt.zh} sizes={sizes} /></div>)}
+      </Device>
+      {frame === 'phone' && <span class="stage-glow"></span>}
+    </div>
+    <div class="stage-dots">{steps.map((_, i) => <i class={i === 0 ? 'on' : ''} data-dot></i>)}</div>
+  </div>
+  <ol class="step-list">
+    {steps.map((s, i) => (
+      <li class={`step ${i === 0 ? 'on' : ''}`} data-step>
+        <div class="step-m"><Device kind={frame} url={url}><Pic name={s.shot} en={s.alt.en} zh={s.alt.zh} sizes={sizes} /></Device></div>
+        <span class="step-n">{String(i + 1).padStart(2, '0')} / {String(steps.length).padStart(2, '0')}</span>
+        <h3 class="t-h3"><span data-l="en">{s.title.en}</span><span data-l="zh" lang="zh-CN">{s.title.zh}</span></h3>
+        <p class="t-body"><span data-l="en" set:html={s.body.en} /><span data-l="zh" lang="zh-CN" set:html={s.body.zh} /></p>
+      </li>
+    ))}
+  </ol>
+</div>

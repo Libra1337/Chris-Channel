@@ -1,0 +1,129 @@
+---
+// 牵星 (English name Armil). Facts from the project's README.md, design.md, docs/定位与差异化.md and
+// commit log to 2026-10-23: the chart engine moved into the app in TypeScript (Web Worker, offline), the app has its
+// own online API, plain-language readings; social features and AI-assisted help are plans, not shipped.
+// Phone only: no web version. Framed as computation, cultural heritage and honest product design; no claim that a
+// reading predicts anything, no prices. Screens: the app's own build with a fictional sample profile.
+import Project from '../../layouts/Project.astro';
+import T from '../../components/T.astro';
+import Pic from '../../components/Pic.astro';
+import Device from '../../components/Device.astro';
+import Steps from '../../components/Steps.astro';
+import Flow from '../../components/Flow.astro';
+import { ARMIL_EN as AR } from '../../data/projects';
+const ps = '(max-width: 700px) 76vw, 300px';
+---
+<Project slug="armil">
+  <div slot="hero" class="phone-trio">
+    <Device kind="phone" class="pt-side"><Pic name="qx-today" eager en={`${AR}’s Today page: the date in both calendars, the moon at its real phase, and a score with a “how it is computed” link.`} zh="牵星的今日页：公历和农历日期、按真实月相画的月亮，以及一个带「怎么算的」说明的分数。" sizes={ps} /></Device>
+    <Device kind="phone" class="pt-mid"><Pic name="qx-chart" eager en={`A natal chart wheel in ${AR}, with Placidus houses, planets and aspect lines for a sample birth, and a time slider below.`} zh="牵星里的本命星盘：按示例出生信息画出的 Placidus 宫位、行星和相位线，下面是时间滑杆。" sizes={ps} /></Device>
+    <Device kind="phone" class="pt-side"><Pic name="qx-reading" eager en="The Four Pillars page opening with a plain-language reading of a sample chart." zh="八字页开头是一段白话解读，示例命盘。" sizes={ps} /></Device>
+  </div>
+
+  <T slot="problem-title" en="Ask twice, get two answers." zh="问两次，得到两个答案。" />
+  <div slot="problem" class="ps">
+    <div data-rv><h3><T en="Answers that change" zh="会变的答案" /></h3><p><T en="Many apps in this space write readings with a language model. Ask the same question again and the answer changes, and asking again is often the thing you pay for." zh="这一类应用很多用大模型来写解读。同一个问题再问一次，答案就变了，而「再问一次」往往正是要付费的地方。" /></p></div>
+    <div data-rv><h3><T en="Calendars are hard" zh="历法本身就难" /></h3><p><T en="The year changes at the start of spring, months change at solar terms, the hour depends on longitude and daylight saving. Small slips in these rules give wrong charts that nobody can check." zh="年以立春为界，月以节气为界，时辰还取决于经度和夏令时。这些规则上的小差错会排出错误的盘，而且没人能核对。" /></p></div>
+    <div data-rv><h3><T en="Fear as a feature" zh="把恐惧当卖点" /></h3><p><T en="Coins, auto-renewal and warnings about bad luck that a paid service can “fix” are common. I wanted a tool that treats the user as someone who can check the work." zh="代币、自动续费，以及「付费就能化解」的厄运提醒都很常见。我想做一个把用户当成能自己核对结果的人来对待的工具。" /></p></div>
+  </div>
+
+  <T slot="built-title" en="A calculator for traditional charts, in your pocket." zh="一台装在口袋里、排传统历法和星盘的计算器。" />
+  <div slot="built" class="grid-2" style="align-items:start">
+    <div data-rv>
+      <p class="t-lead"><T html en={`${AR} is a phone app with one computation engine and several traditions on top: <strong>Chinese</strong> systems (Four Pillars, Zi Wei Dou Shu, Qi Men Dun Jia) and <strong>Western</strong> astronomy (natal charts, progressions, solar returns), plus tarot and a personality test. Everything is computed by deterministic code, never by a language model.`} zh="牵星是一个手机应用：一套计算引擎，上面是几种传统：<strong>中国</strong>的四柱八字、紫微斗数、奇门遁甲，<strong>西方</strong>的本命星盘、次限推运、太阳返照，另外还有塔罗和性格测试。全部由确定性的代码计算，从不交给大模型。" /></p>
+      <p class="t-body" style="margin-top:1rem"><T en={`The English name is an armil: the ring of an armillary sphere, the old instrument for modelling the sky.`} zh="英文名 Armil 指浑仪上的环，浑仪是古人用来模拟天球的仪器。" /></p>
+    </div>
+    <ul class="t-body" data-rv style="margin:0;padding-left:1.1em;display:grid;gap:.5rem">
+      <li><T en="The whole chart engine is TypeScript inside the app, in a Web Worker, so charts are computed on the phone and work offline. It replaced an earlier Python service, and the port was checked field by field against it." zh="整套排盘引擎用 TypeScript 写在应用里，跑在 Web Worker 中，所以盘在手机上算，离线也能用。它替换了早先的 Python 服务，移植时逐字段和旧实现对照过。" /></li>
+      <li><T en="Calendar core: solar terms to the minute, the year boundary at the start of spring, true solar time from the birthplace’s longitude and the equation of time, and the 1986–1991 Chinese daylight saving undone automatically." zh="历法核心：节气精确到分钟，年柱以立春为界；按出生地经度和均时差换算真太阳时；1986–1991 年的大陆夏令时自动回拨。" /></li>
+      <li><T en="Plain-language readings: each chart opens with a short summary and then one plain paragraph per item. The sentences are assembled from a written knowledge base by lookup, not generated, so each one can be traced to its entry." zh="白话解读：每张盘先给一段总论，再逐项给出白话说明。句子是从写好的知识库里查表拼出来的，不是生成的，所以每一句都能追到它的条目。" /></li>
+      <li><T en="Where schools disagree (when the day changes at night, how the luck cycles start, which month a leap month belongs to) the choice is labelled on screen and can be switched." zh="各派说法不一的地方（夜里几点换日、起运怎么算、闰月归哪个月），界面上都写明采用哪种口径，并且可以切换。" /></li>
+      <li><T en="One React code base, packaged with Capacitor for iPhone and Android. The app talks to its own online API, which is where the networked features below will live." zh="一套 React 代码，用 Capacitor 打包成 iPhone 和 Android 应用。应用连着自己的线上接口，下面说到的联网功能会放在那里。" /></li>
+    </ul>
+  </div>
+
+  <T slot="arch-title" en="From a birth time to a sourced result." zh="从一个出生时间，到一个有出处的结果。" />
+  <Flow slot="flow" steps={[
+    { t: { en: 'Input', zh: '输入' }, d: { en: 'Date (solar or lunar, checked against the real calendar), time and birthplace.', zh: '日期（公历或农历，按真实历表校验）、时间和出生地。' } },
+    { t: { en: 'Time correction', zh: '时间校正' }, d: { en: 'Clock time becomes true solar time; the page shows each step and whether the hour changed.', zh: '钟表时间换算成真太阳时；页面列出每一步，以及时辰有没有变。' } },
+    { t: { en: 'On-device engine', zh: '本机引擎' }, d: { en: 'TypeScript in a Web Worker: calendar, pillars, stars, ephemeris. Same input, same output, no network needed.', zh: 'Web Worker 里的 TypeScript：历法、四柱、星曜、星历。同样的输入，同样的输出，不需要联网。' } },
+    { t: { en: 'Sourced reading', zh: '有出处的解读' }, d: { en: 'A summary and plain paragraphs looked up from the knowledge base, each result with a note on the conventions used.', zh: '从知识库查表得到总论和白话段落，每个结果都附上所用口径的说明。' } },
+  ]} />
+  <div slot="arch" class="grid-2" style="align-items:start">
+    <div>
+      <h3 class="t-h3" style="margin-bottom:.6rem"><T en="Checked against an authority." zh="拿权威数据来对照。" /></h3>
+      <p class="t-body"><T en="167 tests cover facts that can be looked up: 1 October 1949 is a jiazi day; solar-term boundaries; the full 10 × 10 Ten Gods table; all 60 Na Yin pairs; star placements against the reference text’s worked example; planet positions against Swiss Ephemeris values. When the engine moved from Python to TypeScript, 128 golden inputs had to match the old output field by field, and 6,000 moments in the Asia/Shanghai time zone to the second." zh="167 项测试覆盖能查证的事实：1949 年 10 月 1 日是甲子日；节气交界；10 × 10 的十神全表；全部 60 组纳音；按参考文献自带例子核对的安星结果；对照 Swiss Ephemeris 的行星位置。引擎从 Python 移到 TypeScript 时，128 组金标准输入必须和旧输出逐字段一致，Asia/Shanghai 时区的 6000 个时刻逐秒一致。" /></p>
+    </div>
+    <div>
+      <h3 class="t-h3" style="margin-bottom:.6rem"><T en="Randomness you can verify." zh="能验证的随机。" /></h3>
+      <p class="t-body"><T en="Tarot uses commit and reveal: before you draw, the app shows the SHA-256 hash of the shuffle seed; after the cards are turned, you can check the seed against it on your own device. The same question on the same day gives the same cards, so asking again changes nothing." zh="塔罗采用「先承诺、后揭示」：抽牌前先显示洗牌种子的 SHA-256 哈希；翻牌之后，你可以在自己的设备上用种子核对这个哈希。同一个问题当天再抽，还是同一组牌，所以再问一次不会改变什么。" /></p>
+    </div>
+  </div>
+
+  <T slot="ui-title" en="Ivory glass, a night sky, real astronomy." zh="象牙玻璃，夜空，真实的天文数据。" />
+  <Steps slot="ui" frame="phone" steps={[
+    { shot: 'qx-today', alt: { en: 'Today on a phone: the date in both calendars, the moon drawn for its actual phase, and a score with a “how it is computed” link.', zh: '手机上的今日页：公历和农历日期、按当天真实月相画的月亮，以及一个带「怎么算的」说明的分数。' },
+      title: { en: 'Today', zh: '今日' },
+      body: { en: 'The date in both calendars and the moon drawn from NASA’s lunar map at today’s real phase. The score is a transparent rule; “how it is computed” shows it.', zh: '公历和农历日期，以及用 NASA 月面图、按今天真实月相画出的月亮。分数是一条公开的规则，点「怎么算的」就能看到。' } },
+    { shot: 'qx-reading', alt: { en: 'A plain-language reading at the top of the Four Pillars page, for a sample chart.', zh: '八字页最上方的白话解读，示例命盘。' },
+      title: { en: 'Plain-language reading', zh: '白话解读' },
+      body: { en: 'Every chart now opens with what it says in everyday words: a summary first, then one paragraph per item you can open. The technical chart follows below it.', zh: '每张盘先用日常的话讲它说了什么：先是总论，再是可以展开的逐项说明。专业的盘面放在下面。' } },
+    { shot: 'qx-bazi', alt: { en: 'The Four Pillars on a phone: four columns of stems and branches in element colours.', zh: '手机上的八字：四列天干地支，按五行着色。' },
+      title: { en: 'Four Pillars', zh: '四柱八字' },
+      body: { en: 'Year, month, day and hour pillars with hidden stems, Ten Gods and Na Yin, then luck cycles by decade, year and month.', zh: '年、月、日、时四柱，带藏干、十神和纳音，再往下是大运、流年和流月。' } },
+    { shot: 'qx-ziwei', alt: { en: 'Zi Wei Dou Shu on a phone: the life palace, its main star and the four transformations.', zh: '手机上的紫微斗数：命宫、主星和生年四化。' },
+      title: { en: 'Zi Wei Dou Shu', zh: '紫微斗数' },
+      body: { en: 'Twelve palaces and fourteen main stars placed by the transcribed rules. The line under the stars shows the clock time, the corrected time and both corrections.', zh: '十二宫和十四主星按转录的安星诀排出。星曜下面一行写着钟表时间、校正后的时间，以及两项修正各是多少。' } },
+    { shot: 'qx-chart', alt: { en: 'A natal chart wheel on a phone with houses, planets and a time slider below.', zh: '手机上的本命星盘：宫位、行星，下面是时间滑杆。' },
+      title: { en: 'Natal chart', zh: '本命星盘' },
+      body: { en: 'The wheel is computed for the birth minute and place. Drag the time slider and the same ephemeris reruns on the phone as you move.', zh: '星盘按出生的那一分钟和那个地点计算。拖动时间滑杆，同一套星历公式就在手机上跟着重算。' } },
+    { shot: 'qx-tarot', alt: { en: 'A three-card tarot draw on a phone, with the sealed hash and a combined reading under a glass bell.', zh: '手机上的三张塔罗牌，带封存哈希，玻璃罩下是综合解读。' },
+      title: { en: 'Tarot, sealed first', zh: '塔罗，先封存' },
+      body: { en: 'Text-set cards, no images. Where you tap only decides the order they turn; the cards were fixed by the sealed seed.', zh: '牌面用文字排版，不用图片。你点哪里只决定翻牌的顺序；牌本身早已由封存的种子决定。' } },
+  ]} />
+
+  <section slot="extra" class="section tight paper grain" aria-labelledby="qx-honest">
+    <div class="wrap head">
+      <p class="t-label"><b>✦</b><span aria-hidden="true">/</span><T en="Honest by design" zh="诚实是设计出来的" /></p>
+      <h2 id="qx-honest" class="t-h2" data-rv><T en="What it refuses to do." zh="它拒绝做的事。" /></h2>
+      <p class="t-lead" data-rv style="--d:120"><T en="These traditions are part of Chinese culture, and I treat them as something to compute carefully and present honestly. The app makes no claim that a reading predicts anything; every result says it is for cultural interest only." zh="这些传统是中国文化的一部分，我把它们当成需要认真计算、诚实呈现的东西。应用不声称任何解读能预测什么；每个结果都注明仅供文化研究参考。" /></p>
+    </div>
+    <div class="wrap">
+      <ul class="t-body" data-rv style="margin:0;padding-left:1.1em;display:grid;gap:.5rem;max-width:38em">
+        <li><T en="No coins, no auto-renewal, no countdown offers, no paid consultations." zh="没有代币，没有自动续费，没有倒计时优惠，也没有付费咨询。" /></li>
+        <li><T en="No fear. The readings are written so that a difficult sign comes with one practical suggestion, never a warning that something must be paid to be “fixed”." zh="不制造焦虑。解读里遇到不好的征象，会配一条能做到的建议，而不是告诉你要花钱去「化解」。" /></li>
+        <li><T en="Asking the same tarot question again on the same day says so and shows the same cards, instead of a new answer." zh="同一天再问同一个塔罗问题，会提示已经问过，并给出同一组牌，而不是一个新答案。" /></li>
+        <li><T en="Profiles, history and the other person’s birth data stay on the device." zh="档案、记录，以及对方的出生信息，都只存在本机。" /></li>
+        <li><T en="The personality test uses public-domain IPIP items, shows each trait with an error band, and marks tendencies that are too close to call." zh="性格测试用公共领域的 IPIP 题目，每个维度都显示误差范围，太接近的倾向会标为「不明显」。" /></li>
+      </ul>
+    </div>
+  </section>
+
+  <section slot="extra" class="section tight dark" aria-labelledby="qx-next">
+    <div class="wrap head">
+      <p class="t-label"><b>✦</b><span aria-hidden="true">/</span><T en="Next" zh="接下来" /></p>
+      <h2 id="qx-next" class="t-h2" data-rv><T en="What I plan to add." zh="我打算加的东西。" /></h2>
+      <p class="t-lead" data-rv style="--d:120"><T en="None of this is built yet. These are plans, in the order I expect to work on them." zh="下面这些都还没有做出来，只是计划，按我预计动手的顺序排列。" /></p>
+    </div>
+    <div class="wrap">
+      <ul class="t-body" data-rv style="margin:0;padding-left:1.1em;display:grid;gap:.5rem;max-width:38em">
+        <li><T en="Social features first: sharing a chart or a reading with friends, and comparing charts together, through the app’s own online service." zh="先做社交：通过应用自己的线上服务，把一张盘或一段解读分享给朋友，一起对照彼此的盘。" /></li>
+        <li><T en="Then AI-assisted help: answering questions about your own chart in plain words. The chart itself stays computed by the engine, and anything a model writes will be labelled as AI-written." zh="再做 AI 辅助：用平常的话回答关于你自己那张盘的问题。盘本身仍由引擎计算，模型写出的内容都会标明是 AI 生成。" /></li>
+        <li><T en="Some of this may become paid later. If it does, the computed charts and the rules above stay as they are." zh="以后其中一部分可能会收费。即使收费，排出来的盘和上面那些规则也不会变。" /></li>
+      </ul>
+    </div>
+  </section>
+
+  <dl slot="stack" class="stack" translate="no">
+    <dt><T en="Engine" zh="引擎" /></dt><dd><ul class="chips" translate="no"><li>TypeScript</li><li>Web Worker</li><li>lunar-javascript</li><li>astronomy-engine</li><li>Vitest</li></ul></dd>
+    <dt><T en="App" zh="应用" /></dt><dd><ul class="chips" translate="no"><li>React 19</li><li>Vite</li><li>Tailwind CSS 4</li><li>Framer Motion</li><li>Capacitor 8</li><li>iOS · Android</li></ul></dd>
+    <dt><T en="Data" zh="数据" /></dt><dd><ul class="chips" translate="no"><li>Yale Bright Star Catalogue</li><li>NASA LRO</li><li>Natural Earth</li><li>IPIP</li><li>Waite 1911</li></ul></dd>
+  </dl>
+
+  <Fragment slot="learned">
+    <li><T html en="<strong>Determinism is a product decision.</strong> Once the same input always gives the same result, there is nothing to sell by asking again, and the honest design follows from that." zh="<strong>确定性是一个产品决定。</strong>一旦同样的输入永远得到同样的结果，「再问一次」就没什么可卖的了，诚实的设计也就顺理成章。" /></li>
+    <li><T html en="<strong>A rewrite needs a referee.</strong> Moving the engine from Python to TypeScript was safe only because the old version could judge the new one: the same 128 inputs, compared field by field, before the old one was deleted." zh="<strong>重写需要一个裁判。</strong>把引擎从 Python 搬到 TypeScript 之所以稳妥，是因为旧版本能给新版本打分：同样的 128 组输入逐字段对照，全部一致之后才删掉旧的。" /></li>
+    <li><T html en="<strong>Show the convention.</strong> Where traditions disagree, labelling the choice and letting people switch it is more honest than picking one quietly." zh="<strong>把口径摆出来。</strong>各派说法不一时，写明选了哪种、让人自己切换，比悄悄选一种更诚实。" /></li>
+    <li><T html en="<strong>Write down what you won’t build.</strong> A positioning document with a “things we don’t do” list (no coins, no paid consultations, no fear) settled more design questions than any mock-up, and it is the list the planned features have to pass." zh="<strong>把不做的事写下来。</strong>定位文档里有一张「不做的事」清单（不做代币、不做付费咨询、不制造焦虑），它解决的设计问题比任何一张设计稿都多，也是计划中的新功能必须先过的一关。" /></li>
+  </Fragment>
+</Project>

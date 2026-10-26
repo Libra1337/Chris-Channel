@@ -1,0 +1,14 @@
+import { chromium } from 'playwright';
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
+await p.goto('http://127.0.0.1:4322/projects/aogiri-phone/', { waitUntil: 'networkidle' });
+await p.waitForTimeout(2500);
+const el = p.locator('.phone-trio .pt-mid');
+await el.screenshot({ path: '/tmp/pv/frame-ios.png' });
+const m = await el.evaluate((d) => { const r = d.getBoundingClientRect(), s = d.querySelector('.scr').getBoundingClientRect(); const cs = getComputedStyle(d.querySelector('.scr'));
+  return { body: [r.width, r.height, (r.width / r.height).toFixed(3)], screen: [s.width, s.height, (s.width / s.height).toFixed(4)], bezel: ((s.left - r.left) / r.width * 100).toFixed(2) + '%', scrRadius: cs.borderTopLeftRadius }; });
+console.log(JSON.stringify(m));
+await p.locator('.dev.android').first().evaluate((e) => e.scrollIntoView({ block: 'center' }));
+await p.waitForTimeout(1500);
+await p.locator('.dev.android').first().screenshot({ path: '/tmp/pv/frame-android.png' });
+await b.close();

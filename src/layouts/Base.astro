@@ -1,0 +1,87 @@
+---
+// Page shell: head flags before first paint (language, motion, view-transition fallback), glass nav with the
+// language toggle, scroll hairline, footer. All scripts start from core.ts and split per feature.
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../styles/materials.css';
+import '../components/glass/glass.css';
+import T from '../components/T.astro';
+interface Props { titleEn: string; titleZh: string; descEn: string; descZh: string; page?: string }
+const { titleEn, titleZh, descEn, descZh, page = 'home' } = Astro.props;
+const b = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const home = page === 'home';
+const nav = [
+  { href: `${b}#work`, en: 'Work', zh: '作品', id: 'work' },
+  { href: `${b}notes/`, en: 'Notes', zh: '札记', id: 'notes', opt: true },
+  { href: `${b}#about`, en: 'About', zh: '关于', id: 'about' },
+];
+---
+<!doctype html>
+<html lang="en" translate="no" class="notranslate" data-title-en={titleEn} data-title-zh={titleZh} data-desc-en={descEn} data-desc-zh={descZh}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{titleEn}</title>
+  <meta name="description" content={descEn} />
+  <meta name="theme-color" content="#0A0A0B" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="google" content="notranslate" />
+  <meta name="robots" content="noindex" />
+  <meta name="view-transition" content="same-origin" />
+  <link rel="icon" href={`${b}favicon.svg`} type="image/svg+xml" />
+  <link rel="preload" href={`${b}fonts/instrument-serif-400.woff2`} as="font" type="font/woff2" crossorigin />
+  <script is:inline>
+    // Language: ?lang=zh|en wins, then localStorage, then English. Runs before paint (no flash).
+    (function () {
+      var d = document.documentElement, q = null, s = null;
+      try { q = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+      try { s = localStorage.getItem('lang'); } catch (e) {}
+      var l = q === 'zh' || q === 'en' ? q : s === 'zh' ? 'zh' : 'en';
+      if (q) { try { localStorage.setItem('lang', l); } catch (e) {} }
+      d.lang = l === 'zh' ? 'zh-CN' : 'en';
+      if (l === 'zh') document.title = d.getAttribute('data-title-zh');
+      // Motion: reveals are hidden only when motion is allowed; a failsafe shows them if scripts never run.
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        d.classList.add('js-motion');
+        setTimeout(function () { if (!window.__core) d.classList.remove('js-motion'); }, 3000);
+      }
+      // Cross-document view transitions: browsers without them get a short fade-in instead.
+      if (!('onpagereveal' in window) || !(window.CSS && CSS.supports && CSS.supports('view-transition-name: a'))) d.classList.add('no-vt');
+    })();
+  </script>
+</head>
+<body data-page={page} class="dark">
+  <a class="skip" href="#main"><T en="Skip to content" zh="跳到正文" /></a>
+  <div class="progress" aria-hidden="true"><i></i></div>
+  <header class="nav">
+    <nav class="nav-bar lg lg-bar" data-lg="bar" aria-label="Main" data-spec>
+      <span class="nav-lens lg lg-lens" data-lg="lens" aria-hidden="true"></span>
+      <a class="nav-brand" href={b} aria-label="Christian, home">
+        <svg viewBox="0 0 488.92 640" aria-hidden="true"><path d="M0 256.6v331.6a51.8 51.8 0 0 0 103.6 0V256.6a51.8 51.8 0 0 0-103.6 0Z" fill="currentColor"/><path d="M385.3 51.8v536.4a51.8 51.8 0 0 0 103.6 0V51.8a51.8 51.8 0 0 0-103.6 0Z" fill="currentColor"/><path d="m144 144.4 97.8 268.7a36.3 36.3 0 0 0 68.1-24.8L212.1 119.6a36.3 36.3 0 0 0-68.1 24.8Z" fill="#F0A465"/></svg>
+        <span translate="no">Christian</span>
+      </a>
+      <span class="nav-sep" aria-hidden="true"></span>
+      <ul class="nav-links">
+        {nav.map((n) => <li class={n.opt ? 'opt' : ''}><a href={n.href} data-nav={home ? n.id : undefined} aria-current={!home && page === n.id ? 'page' : undefined}><T en={n.en} zh={n.zh} /></a></li>)}
+      </ul>
+      <div class="lang" role="group" aria-label="Language" data-aria-en="Language" data-aria-zh="语言">
+        <span class="lang-lens lg lg-lens" data-lg="lens" aria-hidden="true"></span>
+        <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
+        <button type="button" data-lang="zh" aria-pressed="false" lang="zh-CN">中文</button>
+      </div>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1">
+    <slot />
+  </main>
+  <footer class={`foot ${home || page === 'notes' ? 'paper' : 'dark'}`}>
+    <div class="wrap">
+      <span>© 2026 <span translate="no">Christian</span></span>
+      <a class="link" href={`${b}#contact`}><T en="Say hello" zh="打个招呼" /></a>
+    </div>
+  </footer>
+  <script>
+    import '../scripts/core.ts';
+  </script>
+</body>
+</html>

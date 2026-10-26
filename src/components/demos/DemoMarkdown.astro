@@ -1,0 +1,47 @@
+---
+import T from '../T.astro';
+import '../../styles/demos.css';
+// Mini Markdown reader: type on the left, it renders live on the right in Zaji's reading style
+// (one centred column, hairline tables, code cards with a language label). Theme toggle mirrors the app's T key.
+const sample = `# Notes on failover
+
+A gateway should **retry**, but only *before* the first byte.
+
+> Once a stream starts, switching upstream would stitch two half-answers together.
+
+- [x] bounded retries
+- [x] circuit breakers
+- [ ] write the blog post
+
+| Upstream | State   | Latency |
+|----------|---------|--------:|
+| A        | open    |       — |
+| B        | healthy |  212 ms |
+
+\`\`\`rust
+if first_byte_sent { return Err(StreamError::Upstream) }
+\`\`\``;
+---
+<div class="demo md" data-module="md">
+  <div class="demo-head">
+    <div>
+      <h3 class="t-h3"><T en="Type Markdown. Read it like a page." zh="写 Markdown，读起来像一页纸。" /></h3>
+      <p class="t-small"><T en="The reading style of Zaji, my document reader: one quiet column, hairline tables, code as cards. Edit the text and the page renders as you type. Press the theme button, the way T does in the app." zh="这是我做的文档阅读器 Zaji 的阅读样式：一栏安静的正文、发丝线表格、卡片式代码块。改动左边的文字，右边会边打边渲染。按主题按钮，就像在应用里按 T。" /></p>
+    </div>
+    <span class="demo-tag"><T en="Client-side · no network" zh="纯前端 · 不联网" /></span>
+  </div>
+  <div class="md-win">
+    <div class="md-bar" aria-hidden="true"><i></i><i></i><i></i><span translate="no">Zaji · notes › failover.md</span></div>
+    <div class="md-panes">
+      <label class="md-src"><span class="sr"><T en="Markdown source" zh="Markdown 源文本" /></span>
+        <textarea spellcheck="false" translate="no" data-src>{sample}</textarea>
+      </label>
+      <article class="md-out" data-out data-theme="dark" translate="no" aria-live="off" aria-label="Rendered page" data-aria-en="Rendered page" data-aria-zh="渲染结果"></article>
+    </div>
+    <div class="md-foot">
+      <button type="button" class="btn glass sm" data-theme-btn data-spec><span class="kbd" aria-hidden="true">T</span> <T en="Theme" zh="主题" /></button>
+      <button type="button" class="btn ghost sm" data-reset><T en="Reset text" zh="恢复示例" /></button>
+      <span class="t-small md-stat" data-stat translate="no"></span>
+    </div>
+  </div>
+</div>

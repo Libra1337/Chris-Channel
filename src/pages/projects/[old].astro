@@ -1,0 +1,25 @@
+---
+// Old project URLs keep working after renames: one static page per old slug that forwards to the
+// new one. Written by hand instead of Astro's `redirects` so the page names only the current product, never the old one.
+import { projects, moved } from '../../data/projects';
+export function getStaticPaths() {
+  return Object.entries(moved).map(([old, to]) => ({ params: { old }, props: { to } }));
+}
+const { to } = Astro.props as { to: string };
+const p = projects.find((x) => x.slug === to)!;
+const url = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}projects/${to}/`;
+---
+<!doctype html>
+<html lang="en" translate="no">
+<head>
+  <meta charset="utf-8" />
+  <title>{p.name.en} — Christian</title>
+  <meta http-equiv="refresh" content={`0;url=${url}`} />
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href={url} />
+  <meta name="color-scheme" content="dark" />
+</head>
+<body style="background:#0B0B0C;color:#F5F5F4;font:16px/1.5 system-ui,sans-serif;padding:2rem">
+  <a href={url} style="color:inherit">{p.name.en} →</a>
+</body>
+</html>

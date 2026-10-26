@@ -1,0 +1,62 @@
+---
+// Engineering write-up only, no screenshots.
+import Project from '../../layouts/Project.astro';
+import T from '../../components/T.astro';
+import Flow from '../../components/Flow.astro';
+import Concept from '../../components/Concept.astro';
+---
+<Project slug="jm2api">
+  <div slot="hero" class="code-hero">
+    <div class="code-hero-art"><Concept kind="contract" /></div>
+    <pre class="code" translate="no" aria-label="Example: a shared zod schema"><code><span class="c">// shared/src — imported by server and web</span>
+<span class="k">export const</span> <span class="t">CreateTask</span> = z.object({'{'}
+  <span class="v">model</span>: z.string(),
+  <span class="v">content</span>: z.array(<span class="t">ContentPart</span>),
+  <span class="v">extra</span>: <span class="t">Extra</span>.optional(),
+{'}'});
+<span class="k">export type</span> <span class="t">CreateTask</span> = z.infer&lt;<span class="k">typeof</span> <span class="t">CreateTask</span>&gt;;</code></pre>
+  </div>
+
+  <T slot="problem-title" en="Two APIs, two shapes, one source of truth." zh="两套 API，两种结构，一个事实来源。" />
+  <div slot="problem" class="ps">
+    <div data-rv><h3><T en="Protocol translation" zh="协议转换" /></h3><p><T en="Clients speak one video-generation API format; the service behind it speaks another. Requests, task states and results all have to be mapped both ways." zh="客户端讲一种视频生成 API 格式，后面的服务讲另一种。请求、任务状态和结果都要双向映射。" /></p></div>
+    <div data-rv><h3><T en="Types drift" zh="类型会漂移" /></h3><p><T en="When the server and the admin panel each define their own types, a renamed field breaks the panel at runtime, not at build time." zh="服务端和管理面板各写各的类型时，改一个字段名，面板会在运行时才坏，而不是在构建时报错。" /></p></div>
+    <div data-rv><h3><T en="Long-running work" zh="长时间任务" /></h3><p><T en="Generation tasks run for minutes, so the service needs queuing, load balancing across upstream connections, and results that survive restarts." zh="生成任务一跑就是几分钟，所以服务需要排队、在多个上游连接之间做负载均衡，以及重启后仍在的结果。" /></p></div>
+  </div>
+
+  <T slot="built-title" en="One contract, three packages." zh="一份契约，三个包。" />
+  <div slot="built" class="grid-2" style="align-items:start">
+    <p class="t-lead" data-rv><T html en="A protocol library and CLI, a <strong>Bun + Hono</strong> server, and a <strong>React Router + shadcn/ui</strong> admin panel, all in TypeScript. The <strong>zod</strong> schemas in <code>shared/</code> are the only definition of every request and response." zh="一个协议库和 CLI、一个 <strong>Bun + Hono</strong> 服务端、一个 <strong>React Router + shadcn/ui</strong> 管理面板，全部是 TypeScript。<code>shared/</code> 里的 <strong>zod</strong> schema 是所有请求和响应的唯一定义。" /></p>
+    <ul class="t-body" data-rv style="margin:0;padding-left:1.1em;display:grid;gap:.5rem">
+      <li><T en="Validation at the edge: every request is parsed with the shared schema before it reaches business logic." zh="在入口处校验：每个请求在进入业务逻辑前都先用共享 schema 解析。" /></li>
+      <li><T en="Load balancing across upstream connections, with health state and retries." zh="在多个上游连接之间做负载均衡，带健康状态和重试。" /></li>
+      <li><T en="An asset-mapping layer that rewrites media references between the two formats and serves results from signed local URLs." zh="素材映射层：在两种格式之间改写媒体引用，并通过签名的本地地址返回结果。" /></li>
+      <li><T en="Drizzle ORM on PostgreSQL with versioned migrations that run on start." zh="PostgreSQL 上的 Drizzle ORM，带版本化迁移，启动时自动执行。" /></li>
+      <li><T en="No config files: every runtime setting lives in the panel; only the database URL and port come from the environment." zh="没有配置文件：所有运行设置都在面板里，只有数据库地址和端口来自环境变量。" /></li>
+      <li><T en="Production hardening: the database listens on a Unix socket only, and the app binds to localhost behind a reverse proxy." zh="生产加固：数据库只监听 Unix socket，应用只绑定 localhost，前面是反向代理。" /></li>
+    </ul>
+  </div>
+
+  <T slot="arch-title" en="A request, end to end." zh="一个请求，从头到尾。" />
+  <Flow slot="flow" accent="amber" steps={[
+    { t: { en: 'Client request', zh: '客户端请求' }, d: { en: 'Standard API format, Bearer key.', zh: '标准 API 格式，Bearer 密钥。' } },
+    { t: { en: 'Hono + zod', zh: 'Hono + zod' }, d: { en: 'Parsed against the shared contract.', zh: '按共享契约解析。' } },
+    { t: { en: 'Balancer', zh: '负载均衡' }, d: { en: 'Picks a healthy upstream connection.', zh: '选一条健康的上游连接。' } },
+    { t: { en: 'Protocol + assets', zh: '协议 + 素材' }, d: { en: 'Translates the task and maps media.', zh: '转换任务，映射媒体。' } },
+    { t: { en: 'Task store', zh: '任务存储' }, d: { en: 'PostgreSQL; results via signed URLs.', zh: 'PostgreSQL；结果走签名地址。' } },
+  ]} />
+
+  <dl slot="stack" class="stack" translate="no">
+    <dt><T en="Server" zh="服务端" /></dt><dd><ul class="chips" translate="no"><li>Bun</li><li>Hono</li><li>Drizzle ORM</li><li>PostgreSQL</li></ul></dd>
+    <dt><T en="Contract" zh="契约" /></dt><dd><ul class="chips" translate="no"><li>zod</li><li>TypeScript</li><li><T en="shared/ package" zh="shared/ 包" /></li></ul></dd>
+    <dt><T en="Panel" zh="面板" /></dt><dd><ul class="chips" translate="no"><li>React Router</li><li>shadcn/ui</li><li>Vite</li></ul></dd>
+    <dt><T en="Ops" zh="运维" /></dt><dd><ul class="chips" translate="no"><li>Docker Compose</li><li>pm2</li><li><T en="Unix-socket database" zh="Unix socket 数据库" /></li></ul></dd>
+    <dt><T en="Repo" zh="仓库" /></dt><dd><ul class="chips" translate="no"><li><T en="Private repository" zh="私有仓库" /></li><li>TypeScript 99%</li></ul></dd>
+  </dl>
+
+  <Fragment slot="learned">
+    <li><T html en="<strong>Make the compiler your reviewer.</strong> With one zod contract, a renamed field fails the build in both the server and the panel instead of failing a user." zh="<strong>让编译器当审查员。</strong>只有一份 zod 契约时，改一个字段名会让服务端和面板一起构建失败，而不是让用户碰到错误。" /></li>
+    <li><T html en="<strong>Settings belong where people can see them.</strong> Moving everything into the panel removed a class of “works on my machine” configuration bugs." zh="<strong>设置应该放在看得见的地方。</strong>把所有设置都搬进面板，一类「在我机器上没问题」的配置问题就没有了。" /></li>
+    <li><T html en="<strong>Security is mostly defaults.</strong> No TCP port for the database and localhost-only binding did more than any amount of clever code." zh="<strong>安全大多来自默认值。</strong>数据库不开 TCP 端口、应用只绑定 localhost，比任何巧妙的代码都管用。" /></li>
+  </Fragment>
+</Project>

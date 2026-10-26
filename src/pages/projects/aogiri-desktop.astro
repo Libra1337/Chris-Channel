@@ -1,0 +1,94 @@
+---
+import Project from '../../layouts/Project.astro';
+import T from '../../components/T.astro';
+import Pic from '../../components/Pic.astro';
+import Video from '../../components/Video.astro';
+import Device from '../../components/Device.astro';
+import Steps from '../../components/Steps.astro';
+import Flow from '../../components/Flow.astro';
+import ScrubVideo from '../../components/ScrubVideo.astro';
+import ArchAgent from '../../components/ArchAgent.astro';
+import Handoff from '../../components/Handoff.astro';
+---
+<Project slug="aogiri-desktop">
+  <Device slot="hero" kind="laptop">
+    <Video name="desk-eco" w={1440} h={900} en="Aogiri desktop: a request becomes a plan, subagents pick up steps, and the push asks for approval." zh="Aogiri 桌面端：一句需求变成计划，子智能体分头执行，推送前请求确认。" />
+  </Device>
+
+  <T slot="problem-title" en="Agents are powerful. Watching them is hard." zh="智能体很强，但很难看清它在做什么。" />
+  <div slot="problem" class="ps">
+    <div data-rv><h3><T en="One terminal per agent" zh="一个智能体一个终端" /></h3><p><T en="Coding agents each live in their own terminal. Running several tasks across projects means juggling windows and losing track." zh="每个编程智能体都住在自己的终端里。跨项目跑几个任务，就要在窗口之间来回切，很容易跟丢。" /></p></div>
+    <div data-rv><h3><T en="Trust needs a gate" zh="信任需要一道门" /></h3><p><T en="An agent that can run commands needs clear rules for what it may do alone, and a fast way to ask a person for the rest." zh="能执行命令的智能体，需要清楚的规则：哪些可以自己做，其余的要能快速问人。" /></p></div>
+    <div data-rv><h3><T en="You are not always at the desk" zh="人不总在电脑前" /></h3><p><T en="Long tasks stall on a single approval while you are away. The question should follow you, safely." zh="长任务常常卡在一个审批上，而你刚好不在。这个问题应该安全地找到你。" /></p></div>
+  </div>
+
+  <T slot="built-title" en="A workbench, an engine, and a remote." zh="一个工作台，一个引擎，一个遥控器。" />
+  <div slot="built" class="grid-3">
+    <div class="tile" data-rv><p class="t-label" style="margin:0"><T en="Desktop" zh="桌面端" /></p><h3><T en="Many projects, many sessions, one window" zh="多项目、多会话，一个窗口" /></h3><p><T en="Each session picks its agent. Files, Git with worktrees for parallel tasks, a terminal and a built-in browser sit beside the chat. Plan mode shows the plan on its own page as it is written." zh="每个会话自选智能体。文件、Git（并行任务用 worktree）、终端和内置浏览器都在对话旁边。计划模式会把计划边写边显示在独立页面上。" /></p></div>
+    <div class="tile" data-rv><p class="t-label" style="margin:0"><T en="Engine" zh="引擎" /></p><h3><T en="One agent core, many front ends" zh="一个智能体内核，多种前端" /></h3><p><T en="The Rust engine runs as a TUI, as headless JSONL for scripts and CI, over stdio for GUIs, over ACP for editors, and as a daemon hosting many sessions. Built-in subagents, skills and MCP (prompts, resources, OAuth)." zh="Rust 引擎可以作为终端界面、给脚本和 CI 用的无界面 JSONL、给图形界面用的 stdio、给编辑器用的 ACP，以及托管多个会话的守护进程运行。内置子智能体、技能和 MCP（提示、资源、OAuth）。" /></p></div>
+    <div class="tile" data-rv><p class="t-label" style="margin:0"><T en="Safety & remote" zh="安全与远程" /></p><h3><T en="Four approval modes, a sandbox, a phone" zh="四种审批模式、沙箱和手机" /></h3><p><T en="Manual, auto-edit, auto and full access. Shell commands run in an OS sandbox (Seatbelt, bubblewrap); git push always asks. Approvals reach the phone through an encrypted relay with push and quiet hours." zh="手动、自动编辑、自动和完全访问。命令在系统沙箱里执行（Seatbelt、bubblewrap）；git push 总要确认。审批经加密中继推送到手机，带免打扰时段。" /></p></div>
+  </div>
+
+  <Flow slot="flow" accent="amber" steps={[
+    { t: { en: 'Desktop task', zh: '桌面任务' }, d: { en: 'One sentence in a session.', zh: '会话里的一句话。' } },
+    { t: { en: 'Plan + subagents', zh: '计划 + 子智能体' }, d: { en: 'The engine splits and runs steps.', zh: '引擎拆分并执行步骤。' } },
+    { t: { en: 'Sandbox gate', zh: '沙箱关口' }, d: { en: 'A risky command needs approval.', zh: '有风险的命令需要审批。' } },
+    { t: { en: 'Encrypted relay', zh: '加密中继' }, d: { en: 'Noise IK; push to the phone.', zh: 'Noise IK；推送到手机。' } },
+    { t: { en: 'Approve on phone', zh: '手机上批准' }, d: { en: 'Face ID, then the task continues.', zh: 'Face ID 之后，任务继续。' } },
+  ]} />
+  <T slot="arch-title" en="The UI is a client. The daemon is the source of truth." zh="界面只是客户端，守护进程才是真相。" />
+  <ArchAgent slot="arch" />
+
+  <T slot="ui-title" en="Designed to be read at a glance." zh="一眼就能看懂。" />
+  <Steps slot="ui" frame="laptop" steps={[
+    { shot: 'd-start', alt: { en: 'Aogiri desktop home: projects and sessions in the sidebar, a single prompt in the middle.', zh: 'Aogiri 桌面端首页：侧栏是项目和会话，中间一个输入框。' },
+      title: { en: 'Start with one sentence', zh: '从一句话开始' },
+      body: { en: 'Projects and sessions live in a dense sidebar; the canvas stays empty until you ask. The model picker sits in the input bar.', zh: '项目和会话放在紧凑的侧栏里；画布在你开口前保持空白。模型选择就在输入栏里。' } },
+    { shot: 'd-code', alt: { en: 'A session with code, a plan panel (3 of 7) and four subagents with their state.', zh: '一个会话：代码、计划面板（3/7）和四个子智能体的状态。' },
+      title: { en: 'Plan and subagents, side by side', zh: '计划和子智能体并排' },
+      body: { en: 'The plan panel ticks off steps as they finish. The subagents card shows each agent’s role, state and elapsed time, and opens its own conversation.', zh: '计划面板随步骤完成逐项打勾。子智能体卡片显示每个智能体的角色、状态和耗时，点开就是它自己的对话。' } },
+    { shot: 'd-modes', alt: { en: 'The approval-mode menu: read-only, auto-edit, plan, auto, full access.', zh: '审批模式菜单：只读、自动编辑、计划、自动、完全访问。' },
+      title: { en: 'Choose how much to trust', zh: '自己决定信任多少' },
+      body: { en: 'Modes from read-only to full access, each with a one-line description and a shortcut key. A plan can be approved straight into any mode.', zh: '从只读到完全访问，每种模式都有一句说明和快捷键。计划可以直接批准进入任何一种模式。' } },
+    { shot: 'd-approval', alt: { en: 'An approval card for git push with Allow once, Always allow, and Deny.', zh: 'git push 的确认卡：允许一次、总是允许、拒绝。' },
+      title: { en: 'Ask before it leaves the sandbox', zh: '离开沙箱之前先问' },
+      body: { en: 'The card says why, the exact command and the directory. Keys 1, 2 and 3 answer it; a dock badge and an OS notification show that something is waiting.', zh: '卡片写清原因、完整命令和目录。按 1、2、3 就能回答；程序坞角标和系统通知提示有事在等。' } },
+  ]} />
+
+  <Handoff slot="extra" />
+
+  <section slot="extra">
+    <ScrubVideo name="plan-scrub" w={508} h={502} en="The plan panel completing all seven steps, scrubbed by scroll." zh="计划面板完成全部七步，随滚动播放。">
+      <div slot="text">
+        <p class="t-label"><T en="Scroll to scrub" zh="滚动拖动播放" /></p>
+        <h2 class="t-h2" style="margin-bottom:.8rem"><T en="Seven steps, one sweep." zh="七步，一扫而过。" /></h2>
+        <p class="t-lead"><T en="When the last step finishes, a light sweep runs down the list once. Scroll to move through it frame by frame." zh="最后一步完成时，一道光沿列表扫过一次。滚动页面可以逐帧查看。" /></p>
+      </div>
+    </ScrubVideo>
+    <div class="section tight"><div class="wrap grid-2">
+      <div data-rv>
+        <p class="t-label"><T en="Micro-interactions" zh="微交互" /></p>
+        <h2 class="t-h2" style="margin-bottom:.8rem"><T en="Small motion, clear state." zh="动得少，状态清楚。" /></h2>
+        <p class="t-body"><T en="Subagents slide into their card as they start, and the recap card summarises what changed when a task ends. One easing curve, no bounce, and every animation has a reduced-motion path." zh="子智能体启动时滑进卡片，任务结束时回顾卡总结改了什么。只用一条缓动曲线、不回弹，每个动画都有减少动态效果的版本。" /></p>
+      </div>
+      <div style="display:grid;grid-template-columns:.75fr 1fr;gap:1rem;align-items:center">
+        <Device kind="plain"><Video name="subagents" w={544} h={940} en="Subagents card: agents appear and update their state." zh="子智能体卡片：智能体依次出现并更新状态。" /></Device>
+        <Device kind="plain"><Video name="recap" w={1008} h={500} en="Recap card at the end of a task." zh="任务结束时的回顾卡。" /></Device>
+      </div>
+    </div></div>
+  </section>
+
+  <dl slot="stack" class="stack">
+    <dt><T en="Desktop" zh="桌面端" /></dt><dd><ul class="chips" translate="no"><li>Tauri 2</li><li>Svelte 5</li><li>SvelteKit (SPA)</li><li>Vite 8</li><li>TypeScript 6</li><li>CodeMirror 6</li><li>xterm.js</li></ul></dd>
+    <dt><T en="Engine" zh="引擎" /></dt><dd><ul class="chips" translate="no"><li>Rust workspace</li><li>agent-core</li><li>daemon</li><li>TUI</li><li>Seatbelt · bubblewrap</li><li>MCP</li><li>ACP</li></ul></dd>
+    <dt><T en="Remote" zh="远程" /></dt><dd><ul class="chips" translate="no"><li>Go relay</li><li>Noise_IK_25519_ChaChaPoly_SHA256</li><li>Web Push (VAPID)</li><li>APNs · FCM</li><li>PWA</li></ul></dd>
+    <dt><T en="Quality" zh="质量" /></dt><dd><ul class="chips" translate="no"><li><T en="1,267 Rust tests (engine)" zh="1267 个 Rust 测试（引擎）" /></li><li><T en="~1,500 Vitest cases (desktop)" zh="约 1500 个 Vitest 用例（桌面端）" /></li><li><T en="Playwright browser regressions" zh="Playwright 浏览器回归" /></li></ul></dd>
+    <dt><T en="Releases" zh="版本" /></dt><dd><ul class="chips" translate="no"><li><T en="Desktop v0.10.4" zh="桌面端 v0.10.4" /></li><li><T en="CLI v0.7.8" zh="CLI v0.7.8" /></li><li>Apache-2.0</li><li><T en="macOS · Windows · Linux" zh="macOS · Windows · Linux" /></li></ul></dd>
+  </dl>
+
+  <Fragment slot="learned">
+    <li><T html en="<strong>Put state where it survives.</strong> Moving sessions into a daemon meant closing the window no longer killed work, and the phone could join the same session." zh="<strong>把状态放在活得久的地方。</strong>会话搬进守护进程以后，关窗口不再打断工作，手机也能加入同一个会话。" /></li>
+    <li><T html en="<strong>Safety is a design problem.</strong> Approval modes only help if people understand them in one line; the menu copy was rewritten more than the code." zh="<strong>安全也是设计问题。</strong>审批模式只有一句话能看懂才有用；菜单文案改的次数比代码还多。" /></li>
+    <li><T html en="<strong>Never send secrets in a notification.</strong> Push text is limited by policy: it never contains commands or file paths, only that something needs you." zh="<strong>通知里不放敏感内容。</strong>推送文字有规则限制：从不包含命令或文件路径，只说明有事需要你。" /></li>
+  </Fragment>
+</Project>

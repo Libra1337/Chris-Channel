@@ -1,0 +1,25 @@
+/* Notes reading page (/notes/): sticky index and one note per viewport. */
+.notes { display: grid; grid-template-columns: minmax(11rem, 15rem) 1fr; gap: clamp(1.6rem, 7vw, 6rem); align-items: start; }
+.notes-ix { position: sticky; top: calc(var(--nav-h) + 2.4rem); }
+.notes-ix ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.notes-ix a { display: grid; grid-template-columns: 1.6rem 1fr; gap: .4rem; padding: .5rem .6rem .5rem 0; text-decoration: none; color: var(--faint); font-size: calc(.725rem + var(--fz)); line-height: 1.35; border-radius: .4rem; transition: color .3s; }
+.notes-ix a:hover { color: var(--dim); }
+.notes-ix a.on { color: var(--text); }
+.ni-n { font: 500 calc(.55rem + var(--fz))/1.9 var(--mono); }
+.notes-ix a.on .ni-n { color: var(--amber); }
+.ni-bar { margin-top: .9rem; height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.ni-bar i { display: block; height: 100%; background: var(--amber); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); transition: transform .6s var(--ease-out); }
+.notes-body { display: grid; }
+.note { min-height: 72vh; display: grid; align-content: center; padding: clamp(2rem, 6vw, 4rem) 0; border-top: 1px solid var(--line); scroll-margin-top: 5rem; }
+.note:first-child { border-top: 0; padding-top: 0; min-height: 60vh; align-content: start; }
+.note:focus { outline: none; }
+.note-n { font: 400 clamp(3.2rem, 8vw, 6rem)/1 var(--serif); color: var(--amber); opacity: .9; margin: 0 0 .9rem; font-style: italic; }
+.note-t { max-width: 14em; margin-bottom: 1.4rem; }
+.note-txt { max-width: 30em; font-size: clamp(calc(.9rem + var(--fz)), 1.5vw, calc(1.05rem + var(--fz))); line-height: 1.7; color: var(--dim); }
+html[lang="zh-CN"] .note-txt { max-width: 30em; line-height: 1.95; }
+.note-txt p { margin: 0; }
+.note-lead { color: var(--text); }
+.js-motion .note-t.rise { opacity: 0; transform: translateY(1.2rem); transition: opacity 1s var(--ease-out), transform 1s var(--ease-out); }
+.js-motion .note-t.rise.rv-in { opacity: 1; transform: none; }
+@media (max-width: 860px) { .notes { grid-template-columns: 1fr; } .notes-ix { display: none; } .note { min-height: 0; } .note:first-child { min-height: 0; } }
+

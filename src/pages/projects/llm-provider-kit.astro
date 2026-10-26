@@ -1,0 +1,66 @@
+---
+import Project from '../../layouts/Project.astro';
+import T from '../../components/T.astro';
+import DemoStream from '../../components/demos/DemoStream.astro';
+import Flow from '../../components/Flow.astro';
+import Concept from '../../components/Concept.astro';
+---
+<Project slug="llm-provider-kit">
+  <div slot="hero" class="code-hero">
+    <div class="code-hero-art"><Concept kind="code" /></div>
+    <pre class="code" translate="no" aria-label="Example: the unified event type"><code><span class="k">pub enum</span> <span class="t">WireEvent</span> {'{'}
+    <span class="v">Delta</span>(String),            <span class="c">// visible text</span>
+    <span class="v">ReasoningDelta</span>(String),   <span class="c">// reasoning summary</span>
+    <span class="v">ResponseItem</span>(Value),      <span class="c">// canonical output item</span>
+    <span class="v">Usage</span>(Usage),             <span class="c">// tokens in / out</span>
+{'}'}</code></pre>
+  </div>
+
+  <T slot="problem-title" en="Every caller was writing its own HTTP client." zh="每个调用方都在自己写 HTTP 客户端。" />
+  <div slot="problem" class="ps">
+    <div data-rv><h3><T en="Three streams, three shapes" zh="三种流，三种结构" /></h3><p><T en="OpenAI Responses, Anthropic Messages and Chat Completions each stream server-sent events with different event names, item types and usage fields." zh="OpenAI Responses、Anthropic Messages 和 Chat Completions 都用 SSE 流式输出，但事件名、条目类型和用量字段都不一样。" /></p></div>
+    <div data-rv><h3><T en="Logins are protocols too" zh="登录也是协议" /></h3><p><T en="Providers sign in with OAuth authorization codes, device codes or plain API keys, each with its own refresh rules." zh="服务商的登录方式有 OAuth 授权码、设备码和普通 API Key，每种都有自己的刷新规则。" /></p></div>
+    <div data-rv><h3><T en="Small binaries" zh="二进制要小" /></h3><p><T en="The CLI engine should not pull in an async runtime just to read one stream at a time." zh="CLI 引擎一次只读一条流，不该为此引入一整个异步运行时。" /></p></div>
+  </div>
+
+  <T slot="built-title" en="One crate that owns the wire." zh="一个专门负责通信协议的库。" />
+  <div slot="built" class="grid-2" style="align-items:start">
+    <p class="t-lead" data-rv><T html en="Callers get a <strong>Client</strong>, pick a <strong>Protocol</strong>, and read unified <strong>WireEvent</strong>s. Responses-style output items are the canonical format they store, whatever the provider spoke." zh="调用方拿到一个 <strong>Client</strong>，选一种 <strong>Protocol</strong>，读出统一的 <strong>WireEvent</strong>。无论服务商讲的是哪种协议，存下来的都是 Responses 风格的输出条目。" /></p>
+    <ul class="t-body" data-rv style="margin:0;padding-left:1.1em;display:grid;gap:.5rem">
+      <li><T en="Parsers for the three SSE dialects, each with its own module and tests." zh="三种 SSE 方言的解析器，各有独立模块和测试。" /></li>
+      <li><T en="A blocking transport (ureq + threads) that retries transport failures, 429s and 5xx, and honours Retry-After up to a cap." zh="阻塞式传输（ureq + 线程）：对传输失败、429 和 5xx 重试，并在上限内遵守 Retry-After。" /></li>
+      <li><T en="Login flows: OAuth authorization code with PKCE, device code, and API key, plus token refresh. Credentials are returned; storing them is the caller’s job." zh="登录流程：带 PKCE 的 OAuth 授权码、设备码和 API Key，以及令牌刷新。凭据只返回给调用方，存储由调用方负责。" /></li>
+      <li><T en="A provider catalog parser (models, dialects, routes) and provider templates." zh="服务商目录解析（模型、协议方言、路由）和服务商模板。" /></li>
+      <li><T en="Tool execution, approvals and the agent loop deliberately stay outside the crate." zh="工具执行、审批和智能体循环被刻意留在库外面。" /></li>
+    </ul>
+  </div>
+
+  <T slot="arch-title" en="From bytes to one event type." zh="从字节到同一种事件。" />
+  <Flow slot="flow" steps={[
+    { t: { en: 'Caller', zh: '调用方' }, d: { en: 'Builds a request with a Protocol and a base URL.', zh: '用 Protocol 和 base URL 构造请求。' } },
+    { t: { en: 'Transport', zh: '传输' }, d: { en: 'Sends over blocking HTTP; retries with Retry-After.', zh: '通过阻塞式 HTTP 发送；按 Retry-After 重试。' } },
+    { t: { en: 'Dialect parser', zh: '方言解析' }, d: { en: 'Responses, Messages or Chat SSE frames.', zh: '解析 Responses、Messages 或 Chat 的 SSE 帧。' } },
+    { t: { en: 'WireEvent', zh: 'WireEvent' }, d: { en: 'Text, reasoning, output items and usage, unified.', zh: '文字、推理、输出条目和用量，统一成一种。' } },
+  ]} />
+
+  <section slot="extra" class="section tight dark" aria-labelledby="try">
+    <div class="wrap head">
+      <p class="t-label"><b>✦</b><span aria-hidden="true">/</span><T en="Try it" zh="试一试" /></p>
+      <h2 id="try" class="t-h2" data-rv><T en="Replay a stream through the decoder." zh="把一段流放进解码器里重放。" /></h2>
+      <p class="t-lead" data-rv style="--d:120"><T en="A small, real behaviour from this project, rebuilt to run in your browser. Sample data only; nothing leaves this page." zh="从这个项目里挑出的一个真实小行为，重写成能在浏览器里跑的版本。只用示例数据，什么都不会离开这个页面。" /></p>
+    </div>
+    <div class="wrap"><DemoStream /></div>
+  </section>
+
+  <dl slot="stack" class="stack" translate="no">
+    <dt><T en="Language" zh="语言" /></dt><dd><ul class="chips" translate="no"><li>Rust 2021</li><li><T en="~7,000 lines" zh="约 7000 行" /></li></ul></dd>
+    <dt><T en="Dependencies" zh="依赖" /></dt><dd><ul class="chips" translate="no"><li>ureq</li><li>serde_json</li><li>sha2</li><li>base64</li><li>getrandom</li></ul></dd>
+    <dt><T en="Quality" zh="质量" /></dt><dd><ul class="chips" translate="no"><li><T en="95 unit tests" zh="95 个单元测试" /></li><li>Apache-2.0</li><li><a href="https://github.com/Libra1337/llm-provider-kit" rel="noopener">github.com/Libra1337/llm-provider-kit</a></li></ul></dd>
+  </dl>
+
+  <Fragment slot="learned">
+    <li><T html en="<strong>Pick one canonical format.</strong> Storing every provider’s output as the same item type removed a whole layer of conversions from the callers." zh="<strong>选一种标准格式。</strong>把所有服务商的输出存成同一种条目，调用方就少了一整层转换。" /></li>
+    <li><T html en="<strong>Boundaries are features.</strong> Saying “credentials are returned, not stored” and “no agent loop here” kept the crate small and easy to test." zh="<strong>边界本身就是功能。</strong>「凭据只返回、不存储」和「这里没有智能体循环」让这个库保持小而好测。" /></li>
+    <li><T html en="<strong>Blocking is fine.</strong> One stream at a time over threads was simpler than async and fast enough for an interactive tool." zh="<strong>阻塞也没问题。</strong>用线程一次处理一条流，比异步简单，对交互式工具来说也足够快。" /></li>
+  </Fragment>
+</Project>

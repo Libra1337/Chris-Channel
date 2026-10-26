@@ -1,0 +1,80 @@
+---
+// Case-study shell: hero → problem (paper) → what I built (dark) → how it works (paper) → interface (dark)
+// → extra scenes → tech used (paper) → lessons (dark) → next project. Pages fill the named slots.
+// The project title shares a view-transition name with its row in the home index, so it morphs between pages.
+import Base from './Base.astro';
+import T from '../components/T.astro';
+import { projects } from '../data/projects';
+import '../styles/project.css';
+interface Props { slug: string }
+const { slug } = Astro.props;
+const i = projects.findIndex((p) => p.slug === slug);
+const p = projects[i];
+const nx = projects[(i + 1) % projects.length];
+const b = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const st = /Shipped/.test(p.status.en) ? 'ship' : /development/.test(p.status.en) ? 'dev' : '';
+const nm = (x: typeof p) => x.name.en === x.name.zh ? x.name.en : null;
+---
+<Base titleEn={`${p.name.en} — Christian`} titleZh={`${p.name.zh} · Christian`} descEn={p.oneLine.en} descZh={p.oneLine.zh} page={slug}>
+  <section class={`p-hero dark grain ${p.accent}`}>
+    <div class="wrap">
+      <p class="t-label"><b>{p.n}</b><span aria-hidden="true">/</span>{p.group && <><span translate="no">{p.group.en}</span><span aria-hidden="true">·</span></>}<T en={p.kicker.en} zh={p.kicker.zh} /></p>
+      <h1 class="t-display p-title" translate="no" style={`view-transition-name: pt-${slug}`}>{nm(p) ?? <><span data-l="en">{p.name.en}</span><span data-l="zh" lang="zh-CN">{p.name.zh}</span></>}</h1>
+      <div class="p-intro">
+        <p class="t-lead p-in" style="--d:1"><T en={p.oneLine.en} zh={p.oneLine.zh} /></p>
+        <dl class="p-meta p-in" style="--d:2">
+          <div><dt><T en="My role" zh="我的角色" /></dt><dd><T en={p.role.en} zh={p.role.zh} /></dd></div>
+          <div><dt><T en="Status" zh="状态" /></dt><dd><span class={`status ${st}`}><T en={p.status.en} zh={p.status.zh} /></span></dd></div>
+          {p.repo && <div><dt><T en="Repository" zh="仓库" /></dt><dd><code class="repo" translate="no">{p.repo}</code></dd></div>}
+          {p.site && <div><dt><T en="Website" zh="官网" /></dt><dd><a class="link" href={p.site} target="_blank" rel="noopener" translate="no">{p.site.replace(/^https:\/\/(www\.)?/, '')}</a></dd></div>}
+        </dl>
+      </div>
+    </div>
+    <div class="wrap p-hero-media" data-zoom><slot name="hero" /></div>
+    <div class="wrap">
+      <div class="facts">{p.facts.map((f, k) => <div data-rv style={`--d:${k * 100}`}><b class="t-num"><T en={f.v.en} zh={f.v.zh} /></b><span><T en={f.k.en} zh={f.k.zh} /></span></div>)}</div>
+    </div>
+  </section>
+
+  <section class="section tight paper grain wm" data-wm={p.n} aria-labelledby="problem"><div class="wrap">
+    <div class="head"><p class="t-label"><b>01</b><span aria-hidden="true">/</span><T en="The problem" zh="问题" /></p><h2 id="problem" class="t-h2" data-rv><slot name="problem-title" /></h2></div>
+    <slot name="problem" />
+  </div></section>
+
+  <section class="section tight dark grain" aria-labelledby="built"><div class="wrap">
+    <div class="head"><p class="t-label"><b>02</b><span aria-hidden="true">/</span><T en="What I built" zh="我做了什么" /></p><h2 id="built" class="t-h2" data-rv><slot name="built-title" /></h2></div>
+    <slot name="built" />
+  </div></section>
+
+  <section class="section tight paper grain" aria-labelledby="arch"><div class="wrap">
+    <div class="head"><p class="t-label teal"><b>03</b><span aria-hidden="true">/</span><T en="How it works" zh="怎么做的" /></p><h2 id="arch" class="t-h2" data-rv><slot name="arch-title" /></h2></div>
+    <slot name="flow" />
+    {Astro.slots.has('arch') && <div data-rv class="arch-wrap"><slot name="arch" /></div>}
+  </div></section>
+
+  {Astro.slots.has('ui') && <section class="section tight dark grain" aria-labelledby="ui">
+    <div class="wrap head"><p class="t-label"><b>04</b><span aria-hidden="true">/</span><T en="Interface and details" zh="界面与细节" /></p><h2 id="ui" class="t-h2" data-rv><slot name="ui-title" /></h2></div>
+    <div class="wrap"><slot name="ui" /></div>
+  </section>}
+
+  <slot name="extra" />
+
+  <section class="section tight paper grain" aria-labelledby="stack"><div class="wrap">
+    <div class="head"><p class="t-label teal"><b>05</b><span aria-hidden="true">/</span><T en="Tech used" zh="用到的技术" /></p><h2 id="stack" class="t-h2" data-rv><T en="What it’s made of." zh="用什么做的。" /></h2></div>
+    <div data-rv><slot name="stack" /></div>
+  </div></section>
+
+  <section class="section tight dark grain" aria-labelledby="learned"><div class="wrap">
+    <div class="head"><p class="t-label"><b>06</b><span aria-hidden="true">/</span><T en="What I learned" zh="我学到了什么" /></p><h2 id="learned" class="t-h2" data-rv><T en="Lessons I’ll keep." zh="会一直记得的几件事。" /></h2></div>
+    <ol class="learned"><slot name="learned" /></ol>
+  </div></section>
+
+  <nav class={`p-next dark ${nx.accent}`} aria-label="Next project" data-aria-en="Next project" data-aria-zh="下一个项目">
+    <a href={`${b}projects/${nx.slug}/`} class="wrap">
+      <span class="t-label"><b>{nx.n}</b><span aria-hidden="true">/</span><T en="Next project" zh="下一个项目" /></span>
+      <span class="pn-title" translate="no" style={`view-transition-name: pt-${nx.slug}`}>{nm(nx) ?? <><span data-l="en">{nx.name.en}</span><span data-l="zh" lang="zh-CN">{nx.name.zh}</span></>}</span>
+      <span class="pn-arr" aria-hidden="true">→</span>
+    </a>
+    <div class="wrap pn-back"><a class="btn glass sm" href={`${b}#work`} data-spec><T en="← All projects" zh="← 全部项目" /></a></div>
+  </nav>
+</Base>

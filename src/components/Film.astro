@@ -1,0 +1,58 @@
+---
+// The promo film in a cinematic frame: letterboxed stage, glass play button, a timeline with chapter ticks,
+// and a chapter list that seeks. Without JS the native controls stay. Plays only on user action, with sound.
+import '../styles/film.css';
+const b = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const v = `${b}media/video/`;
+const chapters = [
+  { t: 0, en: 'The mark', zh: '标志' },
+  { t: 4.8, en: 'One sentence', zh: '一句需求' },
+  { t: 15.2, en: 'Plan and subagents', zh: '计划与子智能体' },
+  { t: 24, en: 'Hand-off', zh: '交接' },
+  { t: 31.2, en: 'Approve on the phone', zh: '在手机上批准' },
+  { t: 36, en: 'Every call, logged', zh: '每次调用都有记录' },
+  { t: 50.4, en: 'Pull back', zh: '拉远' },
+];
+const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+---
+<figure class="film" data-module="film" aria-labelledby="film-cap">
+  <div class="film-stage">
+    <video controls playsinline preload="none" data-poster={`${v}film-1080.webp`} width="1920" height="1080"
+      aria-label="Promo film: one task across the desktop app, the phone and the console." data-aria-en="Promo film: one task across the desktop app, the phone and the console." data-aria-zh="宣传片：一个任务走过桌面端、手机和控制台。">
+      <source src={`${v}film-1080.webm`} type='video/webm; codecs="vp9,opus"' media="(min-width: 1000px)" />
+      <source src={`${v}film-1080.mp4`} type="video/mp4" media="(min-width: 1000px)" />
+      <source src={`${v}film-720.webm`} type='video/webm; codecs="vp9,opus"' />
+      <source src={`${v}film-720.mp4`} type="video/mp4" />
+    </video>
+    <button type="button" class="film-big lg" data-lg="btn" data-film-play data-magnetic data-spec aria-label="Play the film" data-aria-en="Play the film" data-aria-zh="播放短片">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
+      <span><span data-l="en">Play · 1:00 · sound on</span><span data-l="zh">播放 · 1:00 · 有声音</span></span>
+    </button>
+    <div class="film-bar lg lg-bar" data-lg="bar" hidden>
+      <button type="button" class="film-pp" data-film-toggle aria-label="Play or pause" data-aria-en="Play or pause" data-aria-zh="播放或暂停">
+        <svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.4" height="12" rx="1" fill="currentColor"/><rect x="8.6" y="1" width="3.4" height="12" rx="1" fill="currentColor"/></svg>
+        <svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9.5-5.5z" fill="currentColor"/></svg>
+      </button>
+      <span class="film-time" aria-hidden="true">0:00</span>
+      <div class="film-track" role="slider" tabindex="0" aria-label="Seek" data-aria-en="Seek" data-aria-zh="进度" aria-valuemin="0" aria-valuemax="60" aria-valuenow="0" aria-valuetext="0:00">
+        <i class="ft-buf"></i><i class="ft-fill"></i><i class="ft-knob"></i>
+        {chapters.slice(1).map((c) => <b class="ft-tick" style={`left:${(c.t / 60) * 100}%`}></b>)}
+      </div>
+      <span class="film-time" aria-hidden="true">1:00</span>
+      <button type="button" class="film-mute" data-film-mute aria-pressed="false" aria-label="Mute" data-aria-en="Mute" data-aria-zh="静音">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor"/><path class="w" d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.3 6.3 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path class="x" d="m11 6 4 4m0-4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </button>
+      <button type="button" class="film-fs" data-film-fs aria-label="Full screen" data-aria-en="Full screen" data-aria-zh="全屏">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <ol class="film-ch" aria-label="Chapters" data-aria-en="Chapters" data-aria-zh="章节">
+    {chapters.map((c, i) => (
+      <li><button type="button" data-seek={c.t} data-ch={i}>
+        <span class="ch-t">{fmt(c.t)}</span><span class="ch-n"><span data-l="en">{c.en}</span><span data-l="zh" lang="zh-CN">{c.zh}</span></span><i class="ch-p" aria-hidden="true"></i>
+      </button></li>
+    ))}
+  </ol>
+  <figcaption id="film-cap" class="caption"><span data-l="en">With sound. A review cut; a few screens still show the earlier logo.</span><span data-l="zh" lang="zh-CN">有声音。这是审片版，部分画面里还是旧标志。</span></figcaption>
+</figure>

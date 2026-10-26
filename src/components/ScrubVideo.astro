@@ -1,0 +1,20 @@
+---
+// Scroll-scrubbed video: the section is tall, the video is sticky, scroll position = playhead.
+// The clip is encoded all-intra (every frame a keyframe) so seeking is instant.
+// Reduced motion: the section collapses and shows the final frame.
+interface Props { name: string; en: string; zh: string; w: number; h: number }
+const { name, en, zh, w, h } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'media/video/';
+---
+<div class="scrub" data-scrub-video>
+  <div class="scrub-in">
+    <slot name="text" />
+    <figure class="dev plain scrub-dev" style={`aspect-ratio:${w}/${h}`}>
+      <div class="scr">
+        <video muted playsinline preload="none" width={w} height={h} poster={`${base}${name}.webp`} aria-label={en} data-aria-en={en} data-aria-zh={zh} tabindex="-1">
+          <source src={`${base}${name}.mp4`} type="video/mp4" />
+        </video>
+      </div>
+    </figure>
+  </div>
+</div>

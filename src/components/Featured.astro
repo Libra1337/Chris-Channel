@@ -1,0 +1,40 @@
+---
+// Featured work: the four main projects as a mosaic of unequal media panels, each a real screen
+// recording looping in its frame, titled by product name, with one line, my role and three tags. Panels play only
+// while on screen (Video's scheduler: ≥ 35% visible, at most two at once) and scale in as they enter (data-zoom).
+// The other projects stay in the typographic index below (Index.astro, "More work").
+import { projects } from '../data/projects';
+import Video from './Video.astro';
+import Device from './Device.astro';
+const b = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+type F = { slug: string; size: 'xl' | 'tall' | 'wide' | 'sq'; frame: 'phone' | 'bare'; clip: string; w: number; h: number; tags: string[]; line: { en: string; zh: string }; alt: { en: string; zh: string } };
+const feat: F[] = [
+  { slug: 'aogiri-phone', line: { en: 'A pocket companion that sets real alarms and approves your computer’s next step.', zh: '口袋里的伙伴：能定真的闹钟，也能替你批准电脑的下一步。' }, size: 'tall', frame: 'phone', clip: 'phone-tabs', w: 588, h: 1278, tags: ['React Native', 'Swift', 'Kotlin'],
+    alt: { en: 'Aogiri on iPhone, recorded: swiping between the companion, Today and Computer tabs; the glass tab capsule follows.', zh: 'Aogiri 手机端录屏：在伙伴、今天和电脑三个标签之间滑动，玻璃标签胶囊跟着移动。' } },
+  { slug: 'aogiri-desktop', line: { en: 'A desktop workbench for coding agents: plans, subagents and approvals.', zh: '给编程智能体用的桌面工作台：计划、子智能体和审批。' }, size: 'xl', frame: 'bare', clip: 'desk-modes', w: 1440, h: 900, tags: ['Tauri', 'Svelte', 'Rust'],
+    alt: { en: 'Aogiri Desktop, recorded: a session with its plan and subagents, then the approval-mode menu.', zh: 'Aogiri 桌面端录屏：一个带计划和子智能体的会话，然后打开审批模式菜单。' } },
+  { slug: 'zaji', line: { en: 'A quiet reader for every file in a folder on the Mac; short notes as cards on the iPhone.', zh: 'Mac 上读文件夹里的每一种文件；iPhone 上写小记，排成卡片。' }, size: 'wide', frame: 'bare', clip: 'zaji-ui', w: 1440, h: 1000, tags: ['Swift', 'Go', 'SwiftUI'],
+    alt: { en: 'Zaji, recorded: the home screen, a Markdown document, the Aa type panel, then writing on the left and reading on the right.', zh: 'Zaji 录屏：主页、一篇 Markdown 文档、Aa 字体面板，然后左边写、右边看。' } },
+  { slug: 'armil', line: { en: 'A phone app that computes traditional charts like a calculator: same input, same result.', zh: '像计算器一样排传统历法和星盘的手机应用：同样的输入，永远同样的结果。' }, size: 'sq', frame: 'phone', clip: 'qx-tarot', w: 588, h: 1272, tags: ['TypeScript', 'React', 'Capacitor'],
+    alt: { en: 'Armil on a phone, recorded: a sealed tarot shuffle, three cards picked and turned, then the reading.', zh: '牵星手机端录屏：封存后洗牌、选三张牌并翻开，然后是解读。' } },
+];
+const pick = (slug: string) => projects.find((p) => p.slug === slug)!;
+---
+<ol class="feat">
+  {feat.map((f) => { const p = pick(f.slug); return (
+    <li class={`ft ft-${f.size} ${p.accent}`}>
+      <a class="ft-hit" href={`${b}projects/${p.slug}/`} aria-labelledby={`ft-${p.slug}`}></a>
+      <div class={`ft-media ft-${f.frame}`} data-zoom>
+        {f.frame === 'phone'
+          ? <Device kind="phone"><Video name={f.clip} w={f.w} h={f.h} en={f.alt.en} zh={f.alt.zh} /></Device>
+          : <Video name={f.clip} w={f.w} h={f.h} en={f.alt.en} zh={f.alt.zh} />}
+      </div>
+      <div class="ft-txt">
+        <h3 class="ft-title" id={`ft-${p.slug}`} translate="no" style={`view-transition-name: pt-${p.slug}`}>{p.name.en === p.name.zh ? p.name.en : <><span data-l="en">{p.name.en}</span><span data-l="zh">{p.name.zh}</span></>}</h3>
+        <p class="ft-one"><span data-l="en">{f.line.en}</span><span data-l="zh">{f.line.zh}</span></p>
+        <p class="ft-role"><span data-l="en">{p.role.en.split(/(?<=\.)\s/)[0]}</span><span data-l="zh">{p.role.zh.split(/(?<=。)/)[0]}</span></p>
+        <ul class="ft-tags" translate="no">{f.tags.map((t) => <li>{t}</li>)}</ul>
+      </div>
+    </li>
+  ); })}
+</ol>

@@ -1,0 +1,32 @@
+---
+// Notes reading section (the /notes/ page); data from src/data/notes.ts.
+// Desktop: a sticky numbered index on the left; each note fills most of a viewport on the right, in a single
+// reading column with a large serif title. The index highlights the note being read and jumps on click.
+// Phone: one column; the index is hidden. Reduced motion: no reveals; everything is visible.
+import { notes, zhTitles } from '../data/notes';
+import '../styles/notes.css';
+const firstSentence = (s: string) => { const m = s.match(/^(.+?[.!?])\s/); return m ? [m[1], s.slice(m[1].length)] : [s, '']; };
+---
+<div class="notes" data-module="notes">
+  <nav class="notes-ix" aria-label="Notes" data-aria-en="Notes" data-aria-zh="札记目录">
+    <ol>
+      {notes.map((n) => <li><a href={`#note-${n.n}`} data-note={n.n}><span class="ni-n">{n.n}</span><span class="ni-t"><span data-l="en">{n.title}</span><span data-l="zh" lang="zh-CN">{zhTitles[n.n] || n.title}</span></span></a></li>)}
+    </ol>
+    <div class="ni-bar" aria-hidden="true"><i></i></div>
+  </nav>
+  <div class="notes-body">
+    {notes.map((n) => {
+      const [lead, rest] = firstSentence(n.en);
+      return (
+        <article class="note" id={`note-${n.n}`} aria-labelledby={`note-${n.n}-t`} tabindex="-1">
+          <p class="note-n" aria-hidden="true">{n.n}</p>
+          <h3 id={`note-${n.n}-t`} class="t-h2 note-t rise"><span data-l="en">{n.title}</span><span data-l="zh" lang="zh-CN">{zhTitles[n.n] || n.title}</span></h3>
+          <div class="note-txt" data-rv>
+            <p data-l="en"><span class="note-lead">{lead}</span>{rest}</p>
+            <p data-l="zh" lang="zh-CN">{n.zh}</p>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+</div>

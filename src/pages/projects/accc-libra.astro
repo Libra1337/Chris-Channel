@@ -1,0 +1,58 @@
+---
+// Engineering write-up only, no screenshots.
+import Project from '../../layouts/Project.astro';
+import T from '../../components/T.astro';
+import Flow from '../../components/Flow.astro';
+import Concept from '../../components/Concept.astro';
+---
+<Project slug="accc-libra">
+  <div slot="hero" class="code-hero">
+    <div class="code-hero-art"><Concept kind="flow" /></div>
+    <pre class="code" translate="no" aria-label="Example: configuration with environment overrides"><code><span class="c"># application.yaml — every secret can be overridden</span>
+<span class="v">spring.datasource.url</span>: jdbc:sqlite:app.db
+<span class="v">spring.sql.init.mode</span>: always   <span class="c"># schema on start</span>
+<span class="v">captcha.id</span>:  <span class="t">${'{'}CAPTCHA_ID{'}'}</span>
+<span class="v">captcha.key</span>: <span class="t">${'{'}CAPTCHA_KEY{'}'}</span>
+<span class="v">admin.token</span>: <span class="t">${'{'}ADMIN_TOKEN{'}'}</span></code></pre>
+  </div>
+
+  <T slot="problem-title" en="A small service that has to be safe by default." zh="一个小服务，也得默认安全。" />
+  <div slot="problem" class="ps">
+    <div data-rv><h3><T en="Bots on the public page" zh="公开页上的机器人" /></h3><p><T en="A public endpoint that hands out records must make sure a person, not a script, is asking." zh="对外提供记录的公开接口，必须确认是人在请求，而不是脚本。" /></p></div>
+    <div data-rv><h3><T en="Bulk data entry" zh="批量录入" /></h3><p><T en="The admin needs to add one record quickly, or hundreds from a spreadsheet, without breaking existing data." zh="管理员既要能快速加一条，也要能从表格一次导入几百条，而且不能破坏已有数据。" /></p></div>
+    <div data-rv><h3><T en="Zero setup" zh="零配置部署" /></h3><p><T en="It should run from one jar with no database server to install." zh="应该一个 jar 就能跑，不需要另装数据库服务。" /></p></div>
+  </div>
+
+  <T slot="built-title" en="Spring Boot, SQLite, and a captcha gate." zh="Spring Boot、SQLite 和一道人机验证。" />
+  <div slot="built" class="grid-2" style="align-items:start">
+    <p class="t-lead" data-rv><T html en="A <strong>Spring Boot</strong> app with two pages: a public page gated by <strong>Geetest v4</strong> captcha verification on the server, and a password-protected admin page. <strong>SQLite</strong> holds the data, and the schema is created on startup." zh="一个有两个页面的 <strong>Spring Boot</strong> 应用：公开页由服务端校验 <strong>Geetest v4</strong> 人机验证，管理页有口令保护。数据存在 <strong>SQLite</strong>，启动时自动建表。" /></p>
+    <ul class="t-body" data-rv style="margin:0;padding-left:1.1em;display:grid;gap:.5rem">
+      <li><T en="Server-side captcha check: the page sends the challenge result; the server verifies it with the provider before doing anything." zh="服务端校验人机验证：页面提交验证结果，服务端先向验证服务确认，再做任何操作。" /></li>
+      <li><T en="Admin page with single entry and CSV batch import, validated row by row." zh="管理页支持单条录入和 CSV 批量导入，逐行校验。" /></li>
+      <li><T en="Every secret can be overridden by an environment variable, so nothing sensitive needs to live in the repo." zh="所有密钥都能用环境变量覆盖，敏感信息不需要放进仓库。" /></li>
+      <li><T en="51 JUnit test classes, plus Python tooling with its own tests." zh="51 个 JUnit 测试类，另有带测试的 Python 工具。" /></li>
+    </ul>
+  </div>
+
+  <T slot="arch-title" en="Two doors into one database." zh="两扇门，通向同一个数据库。" />
+  <Flow slot="flow" accent="amber" steps={[
+    { t: { en: 'Public page', zh: '公开页' }, d: { en: 'Static HTML + JS, captcha widget.', zh: '静态 HTML + JS，人机验证组件。' } },
+    { t: { en: 'Captcha verify', zh: '人机验证' }, d: { en: 'Server checks the token with Geetest v4.', zh: '服务端向 Geetest v4 校验令牌。' } },
+    { t: { en: 'Spring service', zh: 'Spring 服务' }, d: { en: 'Controllers, validation, transactions.', zh: '控制器、校验、事务。' } },
+    { t: { en: 'SQLite', zh: 'SQLite' }, d: { en: 'One file; schema created on start.', zh: '一个文件；启动时建表。' } },
+    { t: { en: 'Admin page', zh: '管理页' }, d: { en: 'Token-protected; single entry or CSV import.', zh: '口令保护；单条录入或 CSV 导入。' } },
+  ]} />
+
+  <dl slot="stack" class="stack" translate="no">
+    <dt><T en="Server" zh="服务端" /></dt><dd><ul class="chips" translate="no"><li>Java 17</li><li>Spring Boot</li><li>Maven</li></ul></dd>
+    <dt><T en="Data" zh="数据" /></dt><dd><ul class="chips" translate="no"><li>SQLite</li><li>JDBC</li><li>CSV</li></ul></dd>
+    <dt><T en="Security" zh="安全" /></dt><dd><ul class="chips" translate="no"><li>Geetest v4</li><li><T en="env overrides" zh="环境变量覆盖" /></li><li><T en="token-protected admin" zh="口令保护的管理页" /></li></ul></dd>
+    <dt><T en="Quality" zh="质量" /></dt><dd><ul class="chips" translate="no"><li><T en="51 JUnit test classes" zh="51 个 JUnit 测试类" /></li><li><T en="Private repository" zh="私有仓库" /></li></ul></dd>
+  </dl>
+
+  <Fragment slot="learned">
+    <li><T html en="<strong>Never trust the browser.</strong> The captcha result is only a claim until the server verifies it; the first version learned this the hard way in testing." zh="<strong>永远别信浏览器。</strong>人机验证的结果在服务端确认之前只是一个说法；第一版在测试里吃过这个亏。" /></li>
+    <li><T html en="<strong>Imports need a dry run.</strong> Validating every CSV row before writing any made bulk import boring, which is what you want." zh="<strong>导入要先试跑。</strong>先校验 CSV 的每一行、再写入任何一条，批量导入就变得很无聊，这正是想要的。" /></li>
+    <li><T html en="<strong>The simplest database that works.</strong> SQLite meant one file to back up and no server to run." zh="<strong>用够用的最简单数据库。</strong>SQLite 意味着只需要备份一个文件，也不用运行数据库服务。" /></li>
+  </Fragment>
+</Project>

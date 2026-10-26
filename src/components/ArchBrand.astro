@@ -1,0 +1,22 @@
+---
+// Brand system: one geometry, two lights, three sizes, launch timetable.
+---
+<figure class="arch arch-scroll" role="img" aria-labelledby="ab-t" data-aria-en="Brand system diagram" data-aria-zh="品牌系统图">
+  <span id="ab-t" class="sr"><span data-l="en">One master geometry drives every asset: a gradient light for large sizes, a flat pixel-snapped light at 32 px and below, and single-colour versions. Aogiri uses warm amber, LynShen uses teal. A timetable of five parts drives the launch animation in the desktop app, the website and the promo film.</span><span data-l="zh">一份主几何驱动所有素材：大尺寸用渐变光，32 像素及以下用按像素网格重画的平涂光，另有单色版本。Aogiri 用暖橙，LynShen 用青色。一张五个部件的时间表同时驱动桌面端、网站和宣传片里的开屏动画。</span></span>
+  <svg viewBox="0 0 1100 330" aria-hidden="true">
+    <rect class="box" x="10" y="20" width="250" height="290" rx="20"/>
+    <text class="sub" x="30" y="48">MASTER GEOMETRY</text>
+    <g transform="translate(70 70) scale(.26)"><path d="M0 256.59V588.21a51.79 51.79 0 0 0 103.58 0V256.59a51.79 51.79 0 0 0-103.58 0Z" fill="#eee"/><path d="M385.33 51.79V588.21a51.79 51.79 0 0 0 103.59 0V51.79a51.79 51.79 0 0 0-103.59 0Z" fill="#eee"/><path d="M144.01 144.43 241.79 413.08a36.25 36.25 0 0 0 68.13-24.8L212.14 119.63a36.25 36.25 0 0 0-68.13 24.8Z" fill="none" stroke="#fff" stroke-width="6" stroke-dasharray="14 10"/></g>
+    <text class="sub" x="30" y="268">trunks 1 : 1.62 · beam at 20°</text><text class="sub" x="30" y="288">beam never touches a trunk</text>
+    <path class="flow" d="M260 165H300"/>
+    <rect class="box am" x="300" y="20" width="250" height="135" rx="18"/><text class="lbl" x="320" y="52">Aogiri · amber</text><text class="sub" x="320" y="76">dark: #FFE3BC → #F0A465</text><text class="sub" x="320" y="96">light: #D9652F → #B24E1A</text><text class="sub" x="320" y="124">both ends ≥ 3:1 contrast</text>
+    <rect class="box hi" x="300" y="175" width="250" height="135" rx="18"/><text class="lbl" x="320" y="207">LynShen · teal</text><text class="sub" x="320" y="231">dark: #B5ECF4 → #24B3CD</text><text class="sub" x="320" y="251">light: #1693AA → #0B6F82</text><text class="sub" x="320" y="279">both ends ≥ 3:1 contrast</text>
+    <path class="flow" d="M550 88H590M550 243H590"/>
+    <rect class="box" x="590" y="20" width="230" height="290" rx="18"/><text class="lbl" x="610" y="52">Outputs</text>
+    <text class="sub" x="610" y="80">app icons: macOS · Win · iOS</text><text class="sub" x="610" y="100">Android adaptive + monochrome</text><text class="sub" x="610" y="120">16 / 24 / 32 px pixel-grid marks</text><text class="sub" x="610" y="140">menu-bar template · tray</text><text class="sub" x="610" y="160">favicons · PWA (maskable)</text><text class="sub" x="610" y="180">lockups: horizontal · stacked</text><text class="sub" x="610" y="200">wordmark redrawn from strokes</text><text class="sub" x="610" y="220">console component (TSX)</text>
+    <path class="flow" d="M820 165H860"/>
+    <rect class="box am" x="860" y="20" width="230" height="290" rx="18"/><text class="lbl" x="880" y="52">Launch timetable</text>
+    <g class="sub"><text x="880" y="84">short trunk   100 ms · 700</text><text x="880" y="108">tall trunk    260 ms · 700</text><text x="880" y="132">beam          820 ms · 640</text><text x="880" y="156">glow         1100 ms · 700</text><text x="880" y="180">wordmark     1450 ms · 600</text></g>
+    <text class="sub" x="880" y="216">→ desktop app (CSS)</text><text class="sub" x="880" y="236">→ promo film (Remotion)</text><text class="sub" x="880" y="256">→ this website’s hero</text><text class="sub" x="880" y="286">checked by brand.test.ts</text>
+  </svg>
+</figure>

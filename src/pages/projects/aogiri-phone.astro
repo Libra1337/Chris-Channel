@@ -1,0 +1,144 @@
+---
+import Project from '../../layouts/Project.astro';
+import T from '../../components/T.astro';
+import Pic from '../../components/Pic.astro';
+import Video from '../../components/Video.astro';
+import Device from '../../components/Device.astro';
+import Steps from '../../components/Steps.astro';
+import Flow from '../../components/Flow.astro';
+import Compare from '../../components/Compare.astro';
+import Lumen from '../../components/Lumen.astro';
+import ArchPhone from '../../components/ArchPhone.astro';
+const ps = '(max-width: 860px) 60vw, 240px';
+---
+<Project slug="aogiri-phone">
+  <div slot="hero" class="phone-trio">
+    <Device kind="phone" class="pt-side"><Pic name="p-today" eager en="The Today page: a two-line headline, mood and weather chips, and today's agenda." zh="今天页：两行标题、心情和天气选项，以及今天的安排。" sizes={ps} /></Device>
+    <Device kind="phone" class="pt-mid"><Video name="phone-welcome" w={588} h={1278} en="First launch on iPhone: greeting, Lumen appears, sign-in, then the companion chat." zh="iPhone 首次启动：问候、Lumen 出现、登录，然后进入伙伴对话。" /></Device>
+    <Device kind="phone" class="pt-side"><Pic name="p-computer" eager en="The Computer tab: paired computer status and sessions." zh="电脑页：已配对电脑的状态和会话。" sizes={ps} /></Device>
+  </div>
+
+  <T slot="problem-title" en="An assistant that talks, but can’t do." zh="会聊天，却办不了事的助手。" />
+  <div slot="problem" class="ps">
+    <div data-rv><h3><T en="Chat ends at text" zh="聊天停在文字" /></h3><p><T en="Asking an assistant to “wake me at 7” usually ends with instructions, not an alarm." zh="让助手「明早 7 点叫我」，通常得到的是操作说明，而不是一个闹钟。" /></p></div>
+    <div data-rv><h3><T en="Actions need receipts" zh="动作需要回执" /></h3><p><T en="When an app acts for you, you need to see exactly what it did, and undo it in one tap." zh="应用替你做事时，你得清楚看到它做了什么，并且一下就能撤销。" /></p></div>
+    <div data-rv><h3><T en="Your computer is elsewhere" zh="电脑不在手边" /></h3><p><T en="The desktop agent needs a person for risky steps. The phone is the one device that is always with you." zh="桌面智能体在有风险的步骤上需要人来拍板，而手机是唯一一直在你身边的设备。" /></p></div>
+  </div>
+
+  <T slot="built-title" en="A companion with hands." zh="一个能动手的伙伴。" />
+  <div slot="built" class="grid-2" style="align-items:center">
+    <div data-rv>
+      <p class="t-lead"><T html en="Three swipeable tabs: <strong>Companion</strong>, <strong>Today</strong> and <strong>Computer</strong>. Lumen, a glowing ember you can name and reshape, lives in every top bar and reacts to what it is doing." zh="三个可以左右滑动的标签：<strong>伙伴</strong>、<strong>今天</strong>和<strong>电脑</strong>。Lumen 是一团可以取名、可以换形状的光，待在每个页面的顶栏里，并随着它在做的事变换神态。" /></p>
+      <ul class="t-body" style="padding-left:1.1em;display:grid;gap:.4rem;margin-top:1rem">
+        <li><T en="Real alarms and timers through AlarmKit (iOS 26+), calendar events, system reminders, maps hand-off, calls, SMS and mail." zh="通过 AlarmKit（iOS 26+）设置真正的闹钟和计时器，写日历、系统提醒，交给地图导航，打电话、发短信和邮件。" /></li>
+        <li><T en="On Android, screen control through Shizuku: read the screen, tap, type, swipe, toggle settings, with confirmation first." zh="在 Android 上通过 Shizuku 控制屏幕：读屏、点按、输入、滑动、切换设置，先确认再执行。" /></li>
+        <li><T en="Every action becomes a ledger line under the reply, with Undo." zh="每个动作都会在回复下面记成一行账本，可以撤销。" /></li>
+        <li><T en="The computer remote: QR pairing with a 6-digit check code, live sessions, the plan sheet, approvals with Face ID, and push with Allow/Deny actions." zh="电脑遥控：扫码配对加 6 位校验码，实时会话、计划面板、需要 Face ID 的审批，以及带「允许 / 拒绝」按钮的推送。" /></li>
+      </ul>
+    </div>
+    <div class="lumen-stage" data-rv aria-hidden="true">
+      <Lumen size="min(13rem, 60vw)" id="pl" interactive />
+      <div class="lumen-states">
+        <span><T en="idle · breathes" zh="待机 · 呼吸" /></span><span><T en="thinking · light turns" zh="思考 · 光在转" /></span><span><T en="working · orbit" zh="工作 · 光点环绕" /></span><span><T en="waiting · floats" zh="等待 · 上浮" /></span>
+      </div>
+    </div>
+  </div>
+
+  <Flow slot="flow" accent="amber" steps={[
+    { t: { en: '“Wake me at 7”', zh: '「明早 7 点叫我」' }, d: { en: 'Said to the companion.', zh: '对伙伴说一句话。' } },
+    { t: { en: 'Tool call', zh: '工具调用' }, d: { en: 'set_alarm with a time.', zh: '带时间的 set_alarm。' } },
+    { t: { en: 'Native module', zh: '原生模块' }, d: { en: 'Swift → AlarmKit.', zh: 'Swift → AlarmKit。' } },
+    { t: { en: 'Ledger line', zh: '账本行' }, d: { en: 'What was done, with Undo.', zh: '做了什么，可撤销。' } },
+  ]} />
+  <T slot="arch-title" en="JavaScript for the product, native code where the OS insists." zh="产品逻辑用 JavaScript，系统要求的地方用原生代码。" />
+  <ArchPhone slot="arch" />
+
+  <T slot="ui-title" en="Ask once. See exactly what happened." zh="说一次，就看清发生了什么。" />
+  <Steps slot="ui" frame="phone" rotate steps={[
+    { shot: 'p-alarm', alt: { en: 'Companion chat: an alarm was set, shown as a ledger line with Undo.', zh: '伙伴对话：设好了闹钟，显示为一行可撤销的账本。' },
+      title: { en: 'A real alarm, with a receipt', zh: '真的闹钟，带回执' },
+      body: { en: 'The companion calls the system alarm and writes what it did under the reply. One tap undoes it.', zh: '伙伴调用系统闹钟，并把做了什么写在回复下面。点一下就能撤销。' } },
+    { shot: 'p-calendar', alt: { en: 'A calendar event created from the chat.', zh: '从对话里创建的日历事件。' },
+      title: { en: 'Into your calendar', zh: '写进你的日历' },
+      body: { en: 'Events land in the system calendar, not a private list, so every other app sees them too.', zh: '事件写进系统日历，而不是应用自己的列表，所以其他应用也能看到。' } },
+    { shot: 'p-agenda', alt: { en: 'The Today page with reminders and open to-dos.', zh: '今天页：提醒和未完成的待办。' },
+      title: { en: 'Today, in two lines', zh: '今天，两行写完' },
+      body: { en: 'A calm headline (mood, then weather and weekday) over an agenda of reminders and to-dos, plus a check-in calendar.', zh: '安静的标题（心情，然后是天气和星期），下面是提醒和待办，还有签到日历。' } },
+    { shot: 'p-shizuku', alt: { en: 'Android: a confirmation before turning on airplane mode through Shizuku.', zh: 'Android：通过 Shizuku 打开飞行模式前的确认。' },
+      title: { en: 'Android can go further', zh: 'Android 能走得更远' },
+      body: { en: 'With Shizuku the companion can change settings or operate another app, and always asks first.', zh: '有了 Shizuku，伙伴能改设置、操作别的应用，而且每次都先问你。' } },
+    { shot: 'p-approval', alt: { en: 'Computer remote: an approval card for the desktop agent.', zh: '电脑遥控：桌面智能体的确认卡。' },
+      title: { en: 'Your computer, in your pocket', zh: '口袋里的电脑' },
+      body: { en: 'Sessions stream live from the paired computer. Approvals arrive as a deck of cards; risky ones require Face ID.', zh: '已配对电脑上的会话实时同步过来。审批以一叠卡片的形式出现；有风险的需要 Face ID。' } },
+    { shot: 'p-plan', alt: { en: 'The plan sheet for a running session.', zh: '正在运行的会话的计划面板。' },
+      title: { en: 'The same plan, everywhere', zh: '同一份计划，到处都一样' },
+      body: { en: 'The plan you saw on the desktop opens as a sheet on the phone, step by step, with who is doing what.', zh: '电脑上看到的计划，在手机上以面板打开，逐步列出，谁在做什么一目了然。' } },
+  ]} />
+
+  <section slot="extra" class="section tight paper grain" aria-labelledby="glass-t">
+    <div class="wrap head">
+      <p class="t-label"><b>✦</b><span aria-hidden="true">/</span><T en="The glass redesign" zh="通透改版" /></p>
+      <h2 id="glass-t" class="t-h2" data-rv><T en="Before and after. Drag the light." zh="改版前后。拖动这道光。" /></h2>
+      <p class="t-lead" data-rv style="--d:120"><T en="Ten changes, each with a reason, checked on an iOS simulator and an Android emulator in dark and light. Drag the handle, or focus it and use the arrow keys. Pick a screen below." zh="十项改动，每项都写了理由，在 iOS 模拟器和 Android 模拟器的深浅两种模式下检查过。拖动把手，或者聚焦后用方向键。在下面选一个页面。" /></p>
+    </div>
+    <div class="wrap" data-module="tilt">
+      <div class="glass-cmp">
+        <div class="gc-side l" data-rv>
+          <p class="t-label"><T en="Before" zh="改版前" /></p>
+          <ul class="gc-list">
+            <li><T en="Warm brown surfaces everywhere" zh="到处是暖棕色底" /></li>
+            <li><T en="40 pt bold headline, three lines" zh="三行 40pt 粗体标题" /></li>
+            <li><T en="Flat grey edges on every control" zh="每个控件都是平平的灰边" /></li>
+            <li><T en="Amber used for five different meanings" zh="琥珀色同时表达五种意思" /></li>
+          </ul>
+        </div>
+        <div class="gc-panes">
+          <div class="gc-pane" data-pane="0"><Compare before="p-today-before" after="p-today" en="Today" zh="今天页" sizes="340px" /></div>
+          <div class="gc-pane" data-pane="1" hidden><Compare before="p-chat-before" after="p-chat" en="Companion chat" zh="伙伴对话" sizes="340px" /></div>
+          <div class="gc-pane" data-pane="2" hidden><Compare before="p-computer-before" after="p-computer" en="Computer" zh="电脑页" sizes="340px" /></div>
+        </div>
+        <div class="gc-side r" data-rv style="--d:120">
+          <p class="t-label"><b><T en="After" zh="改版后" /></b></p>
+          <ul class="gc-list">
+            <li><T en="A neutral base, so content leads" zh="中性底色，让内容先说话" /></li>
+            <li><T en="26 pt medium, two lines" zh="两行 26pt 中等字重" /></li>
+            <li><T en="A rim of light: bright on top, fading down" zh="一圈光边：上沿亮，往下渐暗" /></li>
+            <li><T en="Amber only for the companion and the one primary action" zh="琥珀色只留给伙伴和唯一的主操作" /></li>
+          </ul>
+        </div>
+      </div>
+      <div class="gc-pick">
+        <div class="seg glass" role="group" aria-label="Screen" data-aria-en="Screen" data-aria-zh="页面" data-spec>
+          <button type="button" data-pick="0" aria-pressed="true"><T en="Today" zh="今天" /></button>
+          <button type="button" data-pick="1" aria-pressed="false"><T en="Companion" zh="伙伴" /></button>
+          <button type="button" data-pick="2" aria-pressed="false"><T en="Computer" zh="电脑" /></button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section slot="extra" class="section tight dark grain">
+    <div class="wrap grid-2">
+      <div class="phone-wrap"><Device kind="phone"><Video name="phone-tabs" w={588} h={1278} en="Swiping between the three tabs; the glass tab capsule follows." zh="在三个标签之间滑动，玻璃标签胶囊跟着移动。" /></Device></div>
+      <div data-rv>
+        <h3 class="t-h3" style="margin-bottom:.7rem"><T en="Three tabs you can swipe." zh="三个能滑动的标签。" /></h3>
+        <p class="t-body"><T en="The tab bar is an icon-only glass capsule next to an amber “talk to companion” button that becomes the message field on the chat tab. Android has no system blur, so it gets a translucent chrome with a top-lit gradient instead." zh="标签栏是一枚只有图标的玻璃胶囊，旁边是琥珀色的「和伙伴说」按钮，在对话页会变成输入框。Android 没有系统模糊，所以改用半透明底加顶光渐变。" /></p>
+        <div class="phone-wrap" style="margin-top:1.4rem"><Device kind="android" style="width:min(11rem,56vw)"><Video name="phone-android" w={540} h={1212} en="First launch on Android." zh="Android 首次启动。" /></Device></div>
+      </div>
+    </div>
+  </section>
+
+  <dl slot="stack" class="stack">
+    <dt><T en="App" zh="应用" /></dt><dd><ul class="chips" translate="no"><li>Expo 57</li><li>React Native 0.86</li><li>React 19</li><li>Expo Router</li><li>Reanimated 4</li><li>react-native-svg</li><li>zustand 5</li><li>TypeScript 6</li></ul></dd>
+    <dt><T en="Native" zh="原生" /></dt><dd><ul class="chips" translate="no"><li>Swift · AlarmKit</li><li>App Intents</li><li>Kotlin · Shizuku</li><li><T en="5 config plugins" zh="5 个配置插件" /></li></ul></dd>
+    <dt><T en="Security" zh="安全" /></dt><dd><ul class="chips" translate="no"><li>Noise IK (@noble)</li><li>Keychain</li><li>Face ID / passcode</li><li>APNs · FCM</li></ul></dd>
+    <dt><T en="Design" zh="设计" /></dt><dd><ul class="chips" translate="no"><li><T en="Night Lamp design system" zh="「夜灯」设计规范" /></li><li><T en="3 glass materials" zh="3 种玻璃材质" /></li><li><T en="4 pt grid" zh="4pt 网格" /></li><li><T en="System fonts, 3 weights" zh="系统字体，3 种字重" /></li></ul></dd>
+    <dt><T en="Quality" zh="质量" /></dt><dd><ul class="chips" translate="no"><li><T en="312 Vitest tests" zh="312 个 Vitest 测试" /></li><li><T en="iOS simulator + Android emulator shots" zh="iOS 模拟器 + Android 模拟器截图验收" /></li></ul></dd>
+  </dl>
+
+  <Fragment slot="learned">
+    <li><T html en="<strong>Show the work.</strong> The ledger line with Undo did more for trust than any wording. People relax when they can see and reverse an action." zh="<strong>把做了什么摆出来。</strong>带「撤销」的账本行，比任何措辞都更能建立信任。能看到、能撤回，人就放心了。" /></li>
+    <li><T html en="<strong>Restraint is a feature.</strong> The redesign removed colour more than it added it: amber now means “the companion” or “the one thing to press”." zh="<strong>克制本身就是功能。</strong>这次改版删掉的颜色比加的多：现在琥珀色只代表「伙伴」或「唯一该点的那个按钮」。" /></li>
+    <li><T html en="<strong>Platforms differ; respect it.</strong> Android has no system blur and iOS has no Shizuku. Each platform got its own best version instead of a lowest common denominator." zh="<strong>平台不同，就尊重不同。</strong>Android 没有系统模糊，iOS 没有 Shizuku。每个平台都做到自己最好的版本，而不是取最低公约数。" /></li>
+  </Fragment>
+</Project>
+

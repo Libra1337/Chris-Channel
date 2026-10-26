@@ -1,0 +1,55 @@
+---
+import T from '../T.astro';
+import '../../styles/demos.css';
+// Routing / failover toy (sample data, client-side). Three upstreams in waterfall order with health state.
+// Click an upstream to break or repair it; send a request (or turn on auto) and watch it fall through.
+// After the first byte, the stream never switches upstream: shown by breaking the serving upstream mid-stream.
+const ups = [
+  { id: 'a', en: 'Upstream A', zh: '上游 A', note: 'primary' },
+  { id: 'b', en: 'Upstream B', zh: '上游 B', note: 'fallback' },
+  { id: 'c', en: 'Upstream C', zh: '上游 C', note: 'fallback' },
+];
+---
+<div class="demo fo" data-module="failover">
+  <div class="demo-head">
+    <div>
+      <h3 class="t-h3"><T en="Break an upstream. Watch the request find a way." zh="弄坏一个上游，看请求自己找到出路。" /></h3>
+      <p class="t-small"><T en="Click an upstream to take it down. Requests try the waterfall in order with bounded retries; after three failures a circuit breaker opens and the upstream is skipped until a probe succeeds." zh="点一下上游就能把它弄坏。请求按瀑布顺序尝试，重试次数有上限；连续失败三次，熔断器打开，这个上游会被跳过，直到探测成功。" /></p>
+    </div>
+    <span class="demo-tag"><T en="Sample · runs in your browser" zh="示例 · 在你的浏览器里运行" /></span>
+  </div>
+  <div class="fo-stage">
+    <svg class="fo-wires" viewBox="0 0 1000 340" aria-hidden="true">
+      <path class="w w-in" d="M150 170 H330" />
+      <path class="w w-a" d="M470 170 C560 170 560 60 680 60" />
+      <path class="w w-b" d="M470 170 H680" />
+      <path class="w w-c" d="M470 170 C560 170 560 280 680 280" />
+      <path class="w w-out" d="M470 170 H330" />
+    </svg>
+    <div class="fo-node fo-client"><span class="t-label"><T en="Your app" zh="你的应用" /></span><b>POST /v1/responses</b></div>
+    <div class="fo-node fo-gw"><span class="t-label"><T en="Gateway" zh="网关" /></span><b><T en="Router" zh="路由器" /></b><span class="fo-attempt" aria-hidden="true"></span></div>
+    <ul class="fo-ups">
+      {ups.map((u, i) => (
+        <li><button type="button" class="fo-up" data-up={u.id} aria-pressed="false">
+          <span class="fo-dot" aria-hidden="true"></span>
+          <span class="fo-name"><span data-l="en">{u.en}</span><span data-l="zh">{u.zh}</span><small>#{i + 1} · {u.note === 'primary' ? <T en="primary" zh="首选" /> : <T en="fallback" zh="备用" />}</small></span>
+          <span class="fo-state" data-state>healthy</span>
+          <span class="fo-fails" aria-hidden="true"><i></i><i></i><i></i></span>
+        </button></li>
+      ))}
+    </ul>
+    <i class="fo-pkt" aria-hidden="true"></i>
+  </div>
+  <div class="demo-ctl">
+    <button type="button" class="btn solid sm" data-send data-spec><T en="Send a request" zh="发送请求" /></button>
+    <button type="button" class="btn glass sm" data-auto aria-pressed="false" data-spec><T en="Auto traffic" zh="自动流量" /></button>
+    <button type="button" class="btn glass sm" data-mid data-spec><T en="Break it mid-stream" zh="流到一半时弄坏" /></button>
+    <button type="button" class="btn ghost sm" data-reset><T en="Reset" zh="重置" /></button>
+  </div>
+  <ol class="fo-log" aria-live="polite" aria-label="Request log" data-aria-en="Request log" data-aria-zh="请求日志"></ol>
+  <div class="fo-stats" aria-hidden="true">
+    <span><b data-s="ok">0</b> <T en="served" zh="成功" /></span>
+    <span><b data-s="fo">0</b> <T en="failed over" zh="次切换" /></span>
+    <span><b data-s="err">0</b> <T en="errors to client" zh="返回错误" /></span>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+/tmp/
+.cache/
+# Vendored copies of source files from my iCloud Desktop (scripts/sources.sh). Not committed: ~20 MB of
+# originals, including the unblurred promo film; the site only needs the outputs in public/media.
+/sources/
+# Local working material: design research and page-check screenshots
+/调研/
+/预览/
+# Editor and assistant settings
+/.claude/

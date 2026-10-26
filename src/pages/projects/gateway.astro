@@ -1,0 +1,94 @@
+---
+import Project from '../../layouts/Project.astro';
+import T from '../../components/T.astro';
+import DemoFailover from '../../components/demos/DemoFailover.astro';
+import Pic from '../../components/Pic.astro';
+import Video from '../../components/Video.astro';
+import Device from '../../components/Device.astro';
+import Steps from '../../components/Steps.astro';
+import Flow from '../../components/Flow.astro';
+import ArchGateway from '../../components/ArchGateway.astro';
+---
+<Project slug="gateway">
+  <Device slot="hero" kind="browser" url="LynShen Console · Request logs">
+    <Pic name="g-logs" eager en="Gateway console request logs with demo data: model, channel, latency and tokens per request." zh="网关控制台的请求日志（演示数据）：每条请求的模型、渠道、延迟和 Token。" sizes="(max-width: 1200px) 94vw, 1180px" />
+  </Device>
+
+  <T slot="problem-title" en="Three APIs that almost agree." zh="三套几乎一样、又不太一样的 API。" />
+  <div slot="problem" class="ps">
+    <div data-rv><h3><T en="Different shapes" zh="结构不同" /></h3><p><T en="OpenAI Responses, Chat Completions and Anthropic Messages model reasoning, tool calls, usage and streaming in different ways." zh="OpenAI Responses、Chat Completions 和 Anthropic Messages 对推理、工具调用、用量和流式输出的建模各不相同。" /></p></div>
+    <div data-rv><h3><T en="Lossy converters" zh="转换会丢东西" /></h3><p><T en="Field-by-field mapping drops encrypted reasoning, breaks stream lifecycles, or quietly switches upstream halfway through a reply." zh="逐字段映射会丢掉加密的推理内容、打乱流的生命周期，或者在回复中途悄悄切换上游。" /></p></div>
+    <div data-rv><h3><T en="Failure is normal" zh="失败是常态" /></h3><p><T en="Upstreams time out, rate-limit and fail mid-stream. Retrying must never send a client two half-answers stitched together." zh="上游会超时、限流，也会在流到一半时出错。重试绝不能把两个半截回答拼在一起发给客户端。" /></p></div>
+  </div>
+
+  <T slot="built-title" en="Convert the meaning, not the field names." zh="转换的是含义，不是字段名。" />
+  <div slot="built" class="grid-2" style="align-items:start">
+    <div data-rv>
+      <p class="t-lead"><T html en="Every request is decoded into <strong>URP</strong>, a typed internal format, then encoded for whichever upstream serves it. Streams are re-emitted as events in the client’s own dialect." zh="每条请求先解码成带类型的内部格式 <strong>URP</strong>，再按负责它的上游编码。流式回复按客户端自己的协议重新发出事件。" /></p>
+    </div>
+    <ul class="t-body" data-rv style="margin:0;padding-left:1.1em;display:grid;gap:.5rem">
+      <li><T en="Provider waterfall routing with bounded retries, circuit breakers, passive and active health probes, cooldowns and model affinity." zh="按顺序的服务商瀑布路由：有限重试、熔断、被动和主动健康探测、冷却和模型亲和。" /></li>
+      <li><T en="43 transform modules: prompt-cache breakpoints, reasoning mapping, role repair, SSE frame splitting, image compression (JPEG, PNG, WebP, JPEG XL)." zh="43 个变换模块：提示缓存断点、推理映射、角色修复、SSE 分帧、图片压缩（JPEG、PNG、WebP、JPEG XL）。" /></li>
+      <li><T en="Usage is counted per request in integer units and rounded once, so totals never drift." zh="用量按请求以整数单位计量，只舍入一次，合计不会漂移。" /></li>
+      <li><T en="A React console (keys, request logs with a capture viewer, a Playground, provider health) in 4 UI languages." zh="React 控制台（密钥、带抓包查看器的请求日志、Playground、服务商健康状态），界面有 4 种语言。" /></li>
+      <li><T en="Public docs: a Next.js static site with 240 MDX pages in 4 locales, including one page per transform." zh="公开文档：Next.js 静态站，4 种语言、240 个 MDX 页面，每个变换都有单独一页。" /></li>
+    </ul>
+  </div>
+
+  <Flow slot="flow" steps={[
+    { t: { en: 'Your app', zh: '你的应用' }, d: { en: 'Any SDK: Responses, Chat or Messages.', zh: '任意 SDK：Responses、Chat 或 Messages。' } },
+    { t: { en: 'Decode', zh: '解码' }, d: { en: 'Into URP, a typed internal format.', zh: '转成带类型的内部格式 URP。' } },
+    { t: { en: 'Transform', zh: '变换' }, d: { en: 'Cache hints, reasoning, role repair.', zh: '缓存提示、推理映射、角色修复。' } },
+    { t: { en: 'Route', zh: '路由' }, d: { en: 'Waterfall with retries and breakers.', zh: '瀑布路由，带重试和熔断。' } },
+    { t: { en: 'Stream back', zh: '流式返回' }, d: { en: 'In the client’s own dialect.', zh: '按客户端自己的协议。' } },
+  ]} />
+  <T slot="arch-title" en="One binary, one request path." zh="一个程序，一条请求路径。" />
+  <ArchGateway slot="arch" />
+
+  <T slot="ui-title" en="Make the invisible path visible." zh="把看不见的路径摆出来。" />
+  <Steps slot="ui" frame="browser" url="LynShen Console" steps={[
+    { shot: 'g-logs', alt: { en: 'Request logs with model, channel and latency (demo data).', zh: '请求日志：模型、渠道和延迟（演示数据）。' },
+      title: { en: 'Every request, accounted for', zh: '每条请求都有账可查' },
+      body: { en: 'Request logs show the model, the channel that actually served it, time to first token and tokens in and out. A capture viewer opens the exact request and response for debugging.', zh: '请求日志显示模型、实际服务的渠道、首字延迟和输入输出 Token。抓包查看器能打开完整的请求和响应，方便排查。' } },
+    { shot: 'g-playground', alt: { en: 'Playground chat showing a reasoning summary (demo data).', zh: 'Playground 对话，显示推理摘要（演示数据）。' },
+      title: { en: 'A Playground that speaks every dialect', zh: '能讲所有协议的 Playground' },
+      body: { en: 'The Playground sends real requests through the gateway and renders reasoning summaries, tool calls and streamed output, so you can see what a client would see.', zh: 'Playground 通过网关发真实请求，渲染推理摘要、工具调用和流式输出，让你看到客户端会看到的东西。' } },
+    { shot: 'g-docs', alt: { en: 'The public docs site: the Streaming guide.', zh: '公开文档站：流式输出指南。' },
+      title: { en: 'Docs that state the rules', zh: '把规则写清楚的文档' },
+      body: { en: 'The docs explain the contract precisely, for example: once the first byte is sent, the gateway will not switch to another upstream; errors after that arrive as stream events.', zh: '文档把约定写得很精确，比如：第一个字节发出后，网关不会再换上游；之后的错误以流事件的形式返回。' } },
+  ]} />
+
+  <section slot="extra" class="section tight">
+    <div class="wrap grid-2">
+      <div data-rv>
+        <p class="t-label teal"><T en="Video" zh="视频" /></p>
+        <h2 class="t-h2" style="margin-bottom:.8rem"><T en="One task, in the logs." zh="一个任务，落在日志里。" /></h2>
+        <p class="t-body"><T en="The request log as the desktop agent works: each subagent call lands as a row with its model, latency and tokens. Recorded with demo data." zh="桌面智能体干活时的请求日志：每次子智能体调用都变成一行，带模型、延迟和 Token。用演示数据录制。" /></p>
+      </div>
+      <Device kind="plain" style="max-width:26rem;justify-self:center;width:100%"><Video name="gw-logs" w={1312} h={1120} en="Console request logs filling in as an agent task runs (demo data)." zh="智能体任务运行时，控制台请求日志逐行出现（演示数据）。" /></Device>
+    </div>
+  </section>
+
+  <section slot="extra" class="section tight dark" aria-labelledby="try">
+    <div class="wrap head">
+      <p class="t-label"><b>✦</b><span aria-hidden="true">/</span><T en="Try it" zh="试一试" /></p>
+      <h2 id="try" class="t-h2" data-rv><T en="Break an upstream yourself." zh="自己弄坏一个上游试试。" /></h2>
+      <p class="t-lead" data-rv style="--d:120"><T en="A small, real behaviour from this project, rebuilt to run in your browser. Sample data only; nothing leaves this page." zh="从这个项目里挑出的一个真实小行为，重写成能在浏览器里跑的版本。只用示例数据，什么都不会离开这个页面。" /></p>
+    </div>
+    <div class="wrap"><DemoFailover /></div>
+  </section>
+
+  <dl slot="stack" class="stack">
+    <dt><T en="Server" zh="服务端" /></dt><dd><ul class="chips" translate="no"><li>Rust 2024</li><li>axum 0.8</li><li>tokio</li><li>reqwest + rustls</li><li>tokio-tungstenite</li><li>tower-http</li></ul></dd>
+    <dt><T en="Data" zh="数据" /></dt><dd><ul class="chips" translate="no"><li>SeaORM</li><li>sqlx</li><li>SQLite</li><li>PostgreSQL</li><li>rust_decimal</li><li>Prometheus</li></ul></dd>
+    <dt><T en="Console" zh="控制台" /></dt><dd><ul class="chips" translate="no"><li>React 19</li><li>Vite 7</li><li>TypeScript</li><li>Tailwind</li><li>shadcn/ui</li><li>SWR</li><li>i18next</li><li>Recharts</li></ul></dd>
+    <dt><T en="Docs" zh="文档" /></dt><dd><ul class="chips" translate="no"><li>Next.js 16 (static export)</li><li>Fumadocs</li><li>MDX</li><li>KaTeX</li></ul></dd>
+    <dt><T en="Quality" zh="质量" /></dt><dd><ul class="chips" translate="no"><li><T en="1,500+ Rust tests added" zh="新增 1500+ Rust 测试" /></li><li><T en="~330 front-end tests" zh="约 330 个前端测试" /></li><li><T en="Playwright browser scripts" zh="Playwright 浏览器脚本" /></li><li><T en="PostgreSQL migration tests in CI" zh="CI 中的 PostgreSQL 迁移测试" /></li></ul></dd>
+  </dl>
+
+  <Fragment slot="learned">
+    <li><T html en="<strong>Write the spec before the code.</strong> Routing and usage accounting each have a written spec; the tests follow the spec, so edge cases are decided once, on paper." zh="<strong>先写规格，再写代码。</strong>路由和用量统计都有成文的规格；测试照规格写，边界情况只在纸上决定一次。" /></li>
+    <li><T html en="<strong>Round once.</strong> Storing counts as integers and rounding at a single, named step removed a whole class of off-by-one totals." zh="<strong>只舍入一次。</strong>用整数存计数、只在一个明确的步骤舍入，一整类「差一点点」的合计问题就消失了。" /></li>
+    <li><T html en="<strong>Streams are contracts.</strong> The hardest bugs were not in parsing but in lifecycle: when a stream may still fail over, and when it may not." zh="<strong>流就是约定。</strong>最难的问题不在解析，而在生命周期：流什么时候还能切换，什么时候不能。" /></li>
+  </Fragment>
+</Project>

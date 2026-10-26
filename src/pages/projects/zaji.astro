@@ -1,0 +1,119 @@
+---
+// Zaji: a local document reader for the Mac and a notes app for the iPhone. Facts from the project's README.md,
+// design.md, docs/ios-ux-audit.md and commit log up to 1.3.0 (find in page; on the phone: note detail, search, review,
+// the fixed-ratio share canvas, quote cards, withdrawable share links). Mac screens are the reading page inside Zaji.app
+// 1.3.0 on a scratch copy of the project's sample files; phone screens are the 1.3.0 debug build in the simulator, demo seed.
+import Project from '../../layouts/Project.astro';
+import T from '../../components/T.astro';
+import DemoMarkdown from '../../components/demos/DemoMarkdown.astro';
+import Pic from '../../components/Pic.astro';
+import Device from '../../components/Device.astro';
+import Steps from '../../components/Steps.astro';
+import Flow from '../../components/Flow.astro';
+---
+<Project slug="zaji">
+  <Device slot="hero" kind="browser" url="Zaji · samples › sample.md">
+    <Pic name="pn-md" eager en="Zaji reading a sample Markdown document in the dark theme: a one-line toolbar, a centred column with a heading, a quote and body text." zh="Zaji 在深色主题下阅读一篇示例 Markdown：一行工具栏，居中的单栏里有标题、引用和正文。" sizes="(max-width: 1200px) 94vw, 1180px" />
+  </Device>
+
+  <T slot="problem-title" en="Every file type opened in a different app." zh="每种文件，都要换一个应用打开。" />
+  <div slot="problem" class="ps">
+    <div data-rv><h3><T en="A folder is many formats" zh="一个文件夹，好几种格式" /></h3><p><T en="A project folder holds Markdown notes, a PDF paper, a Word file from a teacher, a CSV export and a saved web page. Reading them meant five apps and five ways to search." zh="一个项目文件夹里有 Markdown 笔记、一篇 PDF 论文、老师发的 Word 文件、一份导出的 CSV，还有存下来的网页。读它们要开五个应用，搜索也有五种方式。" /></p></div>
+    <div data-rv><h3><T en="Editors are for writing" zh="编辑器是用来写的" /></h3><p><T en="A code editor shows source, tabs and a file tree, not a page you want to read for an hour." zh="代码编辑器给你看的是源码、标签页和文件树，不是一个能安心读一小时的页面。" /></p></div>
+    <div data-rv><h3><T en="Big files freeze things" zh="大文件会卡死" /></h3><p><T en="A one-gigabyte log or a whole novel in one .txt file locks up most viewers before the first line appears." zh="1 GB 的日志，或者整本小说放在一个 .txt 里，大多数查看器还没显示第一行就卡住了。" /></p></div>
+  </div>
+
+  <T slot="built-title" en="One quiet reader for everything in a folder." zh="一个安静的阅读器，读一个文件夹里的所有东西。" />
+  <div slot="built" class="grid-2" style="align-items:start">
+    <div data-rv>
+      <p class="t-lead"><T html en="Zaji opens to a <strong>home screen</strong>: new, open file, open folder, and the files in the folder that changed most recently. Pick one and it fills a single reading column, whatever the format." zh="Zaji 打开先是<strong>主页</strong>：新建、打开文件、打开文件夹，以及这个文件夹里最近改过的文件。选一个，它就铺进同一个阅读栏，不管是什么格式。" /></p>
+      <Device kind="browser" url="Zaji"><Pic name="pn-home" en="The Zaji home screen: new, open file and open folder on the left; recently changed files with format icons on the right." zh="Zaji 主页：左边是新建、打开文件、打开文件夹；右边是带格式图标的最近改动文件。" sizes="(max-width: 860px) 92vw, 460px" /></Device>
+    </div>
+    <ul class="t-body" data-rv style="margin:0;padding-left:1.1em;display:grid;gap:.5rem">
+      <li><T en="Reads Markdown, PDF, Word, HTML, CSV and TSV, plain text, and code with line numbers. Older .doc, .rtf and .odt files go through macOS’s own converter." zh="能读 Markdown、PDF、Word、HTML、CSV 和 TSV、纯文本，以及带行号的代码。老的 .doc、.rtf 和 .odt 交给 macOS 自带的转换工具。" /></li>
+      <li><T en="PDF keeps selectable text, working links and its bookmarks as the outline, with zoom, fit-width and page jump." zh="PDF 保留可选中的文字、能点的链接，书签就是目录；可以缩放、适宽、跳页。" /></li>
+      <li><T en="HTML shows as the real page in a sandbox, or as clean reading text, or as source." zh="HTML 可以在沙箱里按原网页显示，也可以只看正文，或者看源码。" /></li>
+      <li><T en="Edit text formats in place: on a wide window you write on the left and read on the right; it saves a second after you stop typing and keeps the file’s encoding and line endings." zh="文本类格式可以直接编辑：窗口够宽时左边写、右边看；停笔一秒自动保存，并保留文件原来的编码和换行符。" /></li>
+      <li><T en="⌘F finds in the open document, whatever its format: matches light up in Markdown, plain text, Word, web pages and PDF, ↵ and ⇧↵ step through them, and the bar counts “3 of 12”. ⌘⇧F searches the whole folder." zh="⌘F 在当前文档里查找，不管什么格式：Markdown、纯文本、Word、网页和 PDF 里的命中都会高亮，↵ 和 ⇧↵ 逐个跳转，查找条显示「第 3 个 / 共 12 个」。⌘⇧F 搜整个文件夹。" /></li>
+      <li><T en="Pinch to zoom; the column widens with the text, and the line you were reading stays put." zh="双指缩放时，正文列跟着字号变宽，你正在读的那一行不会跳走。" /></li>
+      <li><T en="A bundled reading font (LXGW WenKai, OFL), the system Chinese fonts, and any font file you drag in. Three line spacings." zh="内置一款阅读字体（霞鹜文楷，OFL 授权），可选系统中文字体，也可以把任何字体文件拖进来。行距有三档。" /></li>
+      <li><T en="Every action has a key: ⌘1 home, ⌘F find, ⌘⇧F search the folder, D outline, E edit, W width, T theme." zh="每个操作都有快捷键：⌘1 主页，⌘F 查找，⌘⇧F 搜整个文件夹，D 目录，E 编辑，W 版式，T 主题。" /></li>
+    </ul>
+  </div>
+
+  <T slot="arch-title" en="A small native shell around a local engine." zh="一个小小的原生外壳，包着一个本地引擎。" />
+  <Flow slot="flow" steps={[
+    { t: { en: 'Swift shell', zh: 'Swift 外壳' }, d: { en: 'A native window with a WKWebView; it starts the engine on a free local port and quits it on exit.', zh: '原生窗口加 WKWebView；在空闲的本地端口启动引擎，退出时一起关掉。' } },
+    { t: { en: 'Go engine', zh: 'Go 引擎' }, d: { en: 'Lists, reads, searches and saves files; listens on 127.0.0.1 only and rejects other Host headers.', zh: '列文件、读文件、搜索和保存；只监听 127.0.0.1，并拒绝其他 Host 头。' } },
+    { t: { en: 'Reading page', zh: '阅读页' }, d: { en: 'One page renders every format with bundled libraries: marked, highlight.js, Mermaid, KaTeX, pdf.js, mammoth.', zh: '同一个页面渲染所有格式，渲染库都打包在应用里：marked、highlight.js、Mermaid、KaTeX、pdf.js、mammoth。' } },
+    { t: { en: 'Updates', zh: '更新' }, d: { en: 'A signed update is checked with SHA-256 and Ed25519 before it replaces the app.', zh: '更新包先校验 SHA-256 和 Ed25519 签名，通过后才替换应用。' } },
+  ]} />
+  <div slot="arch" class="grid-2" style="align-items:start">
+    <div>
+      <h3 class="t-h3" style="margin-bottom:.6rem"><T en="Gigabyte files, read as they stream." zh="GB 级的文件，边读边显示。" /></h3>
+      <p class="t-body"><T en="A text file over 8 MB shows its first 8 MB at once; scrolling to the end reads the next 2 MB, cut at a paragraph or line break so a character is never split. Search reads files line by line instead of loading them, small files first, with a 2.5-second budget: when time runs out it returns what it found and says how many files it covered." zh="超过 8 MB 的文本先显示开头 8 MB；滚到底再读下一段 2 MB，在段落或换行处截断，不会把一个字切成两半。搜索按行流式读取，不再整个文件读进内存，先搜小文件，时间上限 2.5 秒：到点就返回已找到的结果，并说明搜了多少个文件。" /></p>
+    </div>
+    <div>
+      <h3 class="t-h3" style="margin-bottom:.6rem"><T en="Documents can’t reach the app." zh="文档碰不到应用本身。" /></h3>
+      <p class="t-body"><T en="Scripts, event attributes and javascript: links in a document never run; the page uses a CSP with a per-launch nonce. A web page runs in a sandboxed frame that cannot call the app’s interfaces. Writes need a per-launch token, and a save goes to a temporary file first, then replaces the original in one step." zh="文档里的脚本、事件属性和 javascript: 链接都不会执行；页面使用 CSP，每次启动生成新的 nonce。网页在沙箱框架里运行，调用不到应用的接口。写操作需要每次启动生成的令牌；保存先写临时文件，再一次性替换原文件。" /></p>
+    </div>
+  </div>
+
+  <T slot="ui-title" en="One column, whatever the file." zh="不管什么文件，都是一栏。" />
+  <Steps slot="ui" frame="browser" url="Zaji" steps={[
+    { shot: 'pn-code', alt: { en: 'Code blocks in Zaji with a language label and a copy button.', zh: 'Zaji 里的代码块，带语言标签和复制按钮。' },
+      title: { en: 'Markdown, read as a page', zh: 'Markdown，当作一页书来读' },
+      body: { en: 'Headings, quotes, code with a copy button, tables with horizontal hairlines only, Mermaid diagrams and math. No dashboard, no sidebar unless you ask for one.', zh: '标题、引用、带复制按钮的代码、只有横向发丝线的表格、Mermaid 流程图和公式。没有仪表盘，你不叫它，侧栏也不会出来。' } },
+    { shot: 'pn-pdf', alt: { en: 'A PDF in Zaji: a white page card with a floating zoom and page bar.', zh: 'Zaji 里的 PDF：白色纸页，加一条浮动的缩放和翻页条。' },
+      title: { en: 'PDF on paper', zh: 'PDF 就是纸' },
+      body: { en: 'Each page is a white card the width of the column. Text is selectable, links work, and the PDF’s bookmarks become the outline.', zh: '每一页都是和正文列一样宽的白色纸卡。文字能选中，链接能点，PDF 自带的书签就是目录。' } },
+    { shot: 'pn-search', alt: { en: 'Folder search in Zaji listing matches by file and line.', zh: 'Zaji 的文件夹搜索，按文件和行号列出命中。' },
+      title: { en: 'Search the whole folder', zh: '搜整个文件夹' },
+      body: { en: '⌘⇧F, or “All files” in the find bar. Matches appear by file and line as they are found. Arrow keys choose, Enter opens the document at that line.', zh: '按 ⌘⇧F，或者点查找条里的「全部文件」。命中结果按文件和行号边找边出现。方向键选择，回车直接打开到那一行。' } },
+    { shot: 'pn-aa', alt: { en: 'The Aa reading settings: fonts, size, line spacing and font import.', zh: 'Aa 阅读设置：字体、字号、行距和导入字体。' },
+      title: { en: 'Type you can tune', zh: '字可以自己调' },
+      body: { en: 'The Aa panel holds the reading font, size and line spacing. Drop a .ttf or .otf on the window and it becomes a choice.', zh: 'Aa 面板里是阅读字体、字号和行距。把 .ttf 或 .otf 拖到窗口上，它就成了一个选项。' } },
+    { shot: 'pn-edit', alt: { en: 'Editing in Zaji: Markdown source on the left, the rendered page on the right.', zh: '在 Zaji 里编辑：左边是 Markdown 源码，右边是渲染后的页面。' },
+      title: { en: 'Write left, read right', zh: '左边写，右边看' },
+      body: { en: 'Press E. The editor uses the same font and spacing as the page, saves a second after you stop, and asks first if another app changed the file.', zh: '按 E。编辑区和正文用同样的字体和行距，停笔一秒自动保存；如果文件被别的程序改过，会先问你。' } },
+    { shot: 'pn-md-light', alt: { en: 'The same document in the light theme.', zh: '同一篇文档的浅色主题。' },
+      title: { en: 'Light when the Mac is light', zh: 'Mac 是浅色，它也是浅色' },
+      body: { en: 'Both themes are designed, not inverted: a warm white paper, its own code colours and the same blue accent for links and selection only.', zh: '两套主题都是设计出来的，不是简单反色：暖白的纸面，自己的代码配色，蓝色强调只用在链接和选中上。' } },
+  ]} />
+
+  <section slot="extra" class="section tight paper grain" aria-labelledby="zaji-ios">
+    <div class="wrap grid-2">
+      <div class="phone-wrap" data-rv><Device kind="phone"><Pic name="pn-ios-timeline" en="Zaji on iPhone: the timeline with an “On this day” entry, tag filters, a pinned note and notes grouped by day, each card in its own paper and font." zh="iPhone 上的 Zaji：时间线顶部是「那年今日」入口和标签筛选，下面是置顶的一条和按天分组的小记，每张卡片有自己的纸色和字体。" sizes="(max-width: 860px) 72vw, 320px" /></Device></div>
+      <div data-rv>
+        <p class="t-label"><b>✦</b><span aria-hidden="true">/</span><T en="iPhone" zh="iPhone 版" /></p>
+        <h2 id="zaji-ios" class="t-h2" style="margin:.6rem 0 1rem"><T en="The same reader, in a pocket." zh="同一个阅读器，放进口袋。" /></h2>
+        <p class="t-body"><T en="The iPhone app is SwiftUI with three tabs: a timeline of short notes, a library, and a “me” page for the signature, card settings and appearance. Tapping a note opens it as the card it will be shared as. The timeline searches full text and #tags, and a review page brings back what you wrote a year, a month and a week ago. The library opens files from the Files app and reuses the Mac reading page, answering the same requests through a WKURLSchemeHandler instead of a server; select a passage and it becomes a quote card that names its source. Notes are stored with SwiftData and sync through the user’s own private iCloud database. Each note can be styled as a card (layout, font, alignment, paper) on a fixed 3:4, 1:1 or 9:16 canvas, exported 1080 pixels wide, with long notes split into pages; it is saved as an image or shared as a link that can be withdrawn. It is in TestFlight." zh="iPhone 版用 SwiftUI 写，三个标签：小记时间线、文库，以及管署名、卡片设置和外观的「我」。点开一条小记，看到的就是它分享出去时的那张卡片。时间线能搜全文和 #标签，「回顾」会翻出一年前、一个月前、一周前的今天写下的东西。文库从「文件」App 打开文档，复用 Mac 版的阅读页，只是改用 WKURLSchemeHandler 应答同一套请求，不再起服务；选中一段文字，就能做成注明出处的书摘卡片。小记用 SwiftData 存储，通过用户自己的 iCloud 私有数据库同步。每条小记都能排成一张卡片（版式、字体、对齐、纸色），画布固定为 3:4、1:1 或 9:16，导出宽 1080 像素，长文自动分页；可以存成图片，也可以生成一个随时能撤回的分享链接。现在在 TestFlight 测试。" /></p>
+        <div class="phone-wrap" style="margin-top:1.4rem"><Device kind="phone" style="width:min(11rem,56vw)"><Pic name="pn-ios-style" en="Choosing a style for a note on iPhone: a 3:4 card preview above layout, font, alignment, paper and ratio controls." zh="在 iPhone 上给小记选样式：上面是 3:4 的预览卡片，下面是版式、字体、对齐、纸色和比例。" sizes="(max-width: 860px) 56vw, 220px" /></Device></div>
+      </div>
+    </div>
+  </section>
+
+  <section slot="extra" class="section tight dark" aria-labelledby="try">
+    <div class="wrap head">
+      <p class="t-label"><b>✦</b><span aria-hidden="true">/</span><T en="Try it" zh="试一试" /></p>
+      <h2 id="try" class="t-h2" data-rv><T en="Write on the left, read on the right." zh="左边写，右边看。" /></h2>
+      <p class="t-lead" data-rv style="--d:120"><T en="A small, real behaviour from this project, rebuilt to run in your browser. Sample data only; nothing leaves this page." zh="从这个项目里挑出的一个真实小行为，重写成能在浏览器里跑的版本。只用示例数据，什么都不会离开这个页面。" /></p>
+    </div>
+    <div class="wrap"><DemoMarkdown /></div>
+  </section>
+
+  <dl slot="stack" class="stack" translate="no">
+    <dt><T en="Mac app" zh="Mac 应用" /></dt><dd><ul class="chips" translate="no"><li>Swift</li><li>AppKit</li><li>WKWebView</li><li><T en="signed updates" zh="签名更新" /></li></ul></dd>
+    <dt><T en="Engine" zh="引擎" /></dt><dd><ul class="chips" translate="no"><li>Go</li><li><T en="universal binary" zh="通用二进制" /></li><li>golang.org/x/text</li></ul></dd>
+    <dt><T en="Rendering" zh="渲染" /></dt><dd><ul class="chips" translate="no"><li>marked</li><li>highlight.js</li><li>Mermaid</li><li>KaTeX</li><li>pdf.js</li><li>mammoth</li></ul></dd>
+    <dt><T en="iPhone" zh="iPhone" /></dt><dd><ul class="chips" translate="no"><li>SwiftUI</li><li>SwiftData</li><li>CloudKit</li><li>XcodeGen</li></ul></dd>
+    <dt><T en="Type" zh="字体" /></dt><dd><ul class="chips" translate="no"><li>LXGW WenKai Screen (OFL)</li><li><T en="font import" zh="字体导入" /></li></ul></dd>
+  </dl>
+
+  <Fragment slot="learned">
+    <li><T html en="<strong>Measure with the worst file, not the sample.</strong> Everything felt fast until a gigabyte .txt froze search. Reading in chunks with a time budget fixed it, and the page now says how much it covered instead of pretending." zh="<strong>用最糟的文件测，而不是用示例文件。</strong>一切都很快，直到一个 1 GB 的 .txt 让搜索卡死。改成分块读加时间上限才解决；现在页面会如实说搜了多少，而不是假装搜完了。" /></li>
+    <li><T html en="<strong>A design doc settles arguments early.</strong> “One column, no dashboard, hairline tables, every visible control must be clickable” was written before the code, and it held through two renames and a new platform." zh="<strong>设计文档能把争论提前解决。</strong>「单栏、不做仪表盘、表格只用发丝线、看得见的控件都必须能点」是写代码之前定下的，经过两次改名和一个新平台，都没变。" /></li>
+    <li><T html en="<strong>Untrusted files are still input.</strong> A web page or a document can carry script. Treating every file as hostile (sandbox, nonce, token, atomic save) cost a day and removed a whole class of worries." zh="<strong>不可信的文件也是输入。</strong>网页和文档里都可能带脚本。把每个文件都当作不可信的来处理（沙箱、nonce、令牌、原子保存）花了一天，但一整类担心从此没有了。" /></li>
+    <li><T html en="<strong>Reuse the page, not just the code.</strong> The iPhone app answers the same requests as the Mac engine, so one reading page serves both and stays the same." zh="<strong>复用的是页面，不只是代码。</strong>iPhone 版应答和 Mac 引擎同样的请求，所以一个阅读页同时服务两端，两边看起来完全一样。" /></li>
+  </Fragment>
+</Project>

@@ -1,0 +1,47 @@
+---
+import T from '../T.astro';
+import '../../styles/demos.css';
+// SSE stream visualiser (sample data). Pick a wire dialect, press Replay: raw SSE frames arrive on the left,
+// the decoder turns each into one WireEvent in the middle, and the rendered answer builds on the right.
+// Scrub with the slider or step frame by frame with the arrow keys.
+---
+<div class="demo sse" data-module="stream">
+  <div class="demo-head">
+    <div>
+      <h3 class="t-h3"><T en="Three dialects in. One event type out." zh="三种协议进去，一种事件出来。" /></h3>
+      <p class="t-small"><T en="A replay of what llm-provider-kit’s decoder does. Each protocol streams server-sent events with different names and shapes; the decoder turns every frame into the same WireEvent, so the caller writes one loop." zh="重放 llm-provider-kit 解码器做的事。每种协议都用 SSE 流式输出，但事件名和结构各不相同；解码器把每一帧都变成同一种 WireEvent，调用方只需要写一个循环。" /></p>
+    </div>
+    <span class="demo-tag"><T en="Sample stream" zh="示例流" /></span>
+  </div>
+  <div class="demo-ctl">
+    <div class="seg glass" role="group" aria-label="Wire protocol" data-aria-en="Wire protocol" data-aria-zh="通信协议" data-spec>
+      <button type="button" data-proto="responses" aria-pressed="true">Responses</button>
+      <button type="button" data-proto="messages" aria-pressed="false">Messages</button>
+      <button type="button" data-proto="chat" aria-pressed="false">Chat</button>
+    </div>
+    <button type="button" class="btn solid sm" data-play data-spec><span class="t-a"><T en="Replay stream" zh="重放这条流" /></span><span class="t-b"><T en="Pause" zh="暂停" /></span></button>
+    <label class="sse-speed t-small"><T en="Speed" zh="速度" /> <select data-speed><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
+  </div>
+  <div class="sse-cols">
+    <div class="sse-col">
+      <p class="t-label"><T en="Wire · raw SSE" zh="线路 · 原始 SSE" /></p>
+      <ol class="sse-raw" translate="no" aria-label="Raw frames" data-aria-en="Raw frames" data-aria-zh="原始帧"></ol>
+    </div>
+    <div class="sse-col">
+      <p class="t-label"><T en="Decoded · WireEvent" zh="解码后 · WireEvent" /></p>
+      <ol class="sse-ev" translate="no" aria-label="Decoded events" data-aria-en="Decoded events" data-aria-zh="解码后的事件"></ol>
+    </div>
+    <div class="sse-col sse-out-col">
+      <p class="t-label"><T en="What the user sees" zh="用户看到的" /></p>
+      <div class="sse-out" aria-live="polite">
+        <details class="sse-think" open><summary><T en="Reasoning" zh="推理" /></summary><p data-think></p></details>
+        <p class="sse-text" data-text></p>
+        <p class="sse-usage" data-usage translate="no"></p>
+      </div>
+    </div>
+  </div>
+  <div class="sse-scrub">
+    <input type="range" min="0" max="10" value="0" step="1" data-scrub aria-label="Frame" data-aria-en="Frame" data-aria-zh="帧" />
+    <span class="t-small" data-count translate="no">0 / 0</span>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+---
+// Desktop + CLI + phone remote.
+---
+<figure class="arch arch-scroll" role="img" aria-labelledby="aa-t" data-aria-en="Desktop, engine and phone remote architecture" data-aria-zh="桌面端、引擎和手机远程的架构图">
+  <span id="aa-t" class="sr"><span data-l="en">The Tauri desktop shell starts the Rust engine as a local daemon and talks to it over a token-authenticated local WebSocket. The daemon hosts sessions for several agent engines, runs tools in an OS sandbox, and asks for approvals. For the phone, the daemon keeps an outbound link to a relay that only forwards end-to-end encrypted Noise IK traffic, and sends push notifications (Web Push, APNs, FCM) for approvals.</span><span data-l="zh">Tauri 桌面外壳把 Rust 引擎作为本地守护进程启动，通过带令牌的本地 WebSocket 和它通信。守护进程托管多个智能体引擎的会话，在系统沙箱里执行工具，并请求审批。手机这一侧，守护进程向中继保持一条出站连接；中继只转发端到端加密的 Noise IK 流量，并为审批发送推送（Web Push、APNs、FCM）。</span></span>
+  <svg viewBox="0 0 1100 440" aria-hidden="true">
+    <defs><marker id="aa-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="rgba(255,255,255,.5)"/></marker></defs>
+    <rect class="box" x="10" y="30" width="300" height="380" rx="22" style="fill:#121110"/>
+    <text class="sub" x="32" y="58">AOGIRI DESKTOP · Tauri 2</text>
+    <rect class="box" x="32" y="76" width="256" height="92" rx="12"/><text class="lbl" x="48" y="104">SvelteKit SPA (Svelte 5)</text><text class="sub" x="48" y="124">sessions · plan page · subagents card</text><text class="sub" x="48" y="142">files · git worktrees · terminal · browser</text>
+    <rect class="box" x="32" y="186" width="256" height="72" rx="12"/><text class="lbl" x="48" y="214">Rust shell</text><text class="sub" x="48" y="234">PTY · tray · updater · secret store</text>
+    <rect class="box am" x="32" y="276" width="256" height="112" rx="12"/><text class="lbl" x="48" y="304">Approval cards</text><text class="sub" x="48" y="324">keys 1 · 2 · 3, dock badge,</text><text class="sub" x="48" y="342">OS notification</text><text class="sub" x="48" y="366">4 modes: manual → full access</text>
+    <rect class="box am" x="380" y="30" width="360" height="380" rx="22" style="fill:#14110e"/>
+    <text class="sub" x="402" y="58">LYNSHEN CLI ENGINE · Rust workspace</text>
+    <rect class="box" x="402" y="76" width="316" height="72" rx="12"/><text class="lbl" x="418" y="104">daemon</text><text class="sub" x="418" y="124">session hub · engine adapters · schedules</text>
+    <rect class="box" x="402" y="162" width="152" height="80" rx="12"/><text class="lbl" x="418" y="190">agent-core</text><text class="sub" x="418" y="210">loop · tools · plan</text><text class="sub" x="418" y="226">skills · MCP · hooks</text>
+    <rect class="box" x="566" y="162" width="152" height="80" rx="12"/><text class="lbl" x="582" y="190">subagents</text><text class="sub" x="582" y="210">explorer · workers</text><text class="sub" x="582" y="226">reviewer</text>
+    <rect class="box" x="402" y="256" width="152" height="68" rx="12"/><text class="lbl" x="418" y="284">sandbox</text><text class="sub" x="418" y="304">Seatbelt · bubblewrap</text>
+    <rect class="box" x="566" y="256" width="152" height="68" rx="12"/><text class="lbl" x="582" y="284">provider kit</text><text class="sub" x="582" y="304">3 wire protocols</text>
+    <rect class="box" x="402" y="338" width="316" height="52" rx="12"/><text class="lbl" x="418" y="370">TUI · headless JSONL · serve · ACP</text>
+    <rect class="box" x="810" y="70" width="280" height="96" rx="14"/><text class="lbl" x="826" y="100">Relay (Go)</text><text class="sub" x="826" y="120">forwards opaque Noise IK frames</text><text class="sub" x="826" y="138">holds no keys · stores nothing</text>
+    <rect class="box" x="810" y="190" width="280" height="70" rx="14"/><text class="lbl" x="826" y="220">Push</text><text class="sub" x="826" y="240">Web Push (VAPID) · APNs · FCM</text>
+    <rect class="box am" x="810" y="284" width="280" height="126" rx="14"/><text class="lbl" x="826" y="314">Phone</text><text class="sub" x="826" y="334">PWA or native Aogiri app</text><text class="sub" x="826" y="354">live session · plan · approve</text><text class="sub" x="826" y="374">Face ID before risky steps</text>
+    <path class="flow am" d="M310 112H400" marker-end="url(#aa-a)"/><text class="sub" x="318" y="102">local WebSocket</text><text class="sub" x="318" y="132">+ token</text>
+    <path class="flow" d="M310 222C345 222 345 112 380 112"/>
+    <path class="flow am" d="M740 112H808" marker-end="url(#aa-a)"/><text class="sub" x="748" y="102">outbound</text>
+    <path class="flow" d="M950 166V188M950 260V282" marker-end="url(#aa-a)"/>
+    <path class="flow am" d="M1090 118C1100 118 1100 330 1090 330"/>
+  </svg>
+  <figcaption class="arch-legend"><span style="color:var(--amber)">━ <span data-l="en">end-to-end encrypted session traffic</span><span data-l="zh">端到端加密的会话流量</span></span><span><span data-l="en">Sessions keep running after the window closes, because they live in the daemon, not the UI.</span><span data-l="zh">关掉窗口会话也照常运行，因为会话在守护进程里，不在界面里。</span></span></figcaption>
+</figure>

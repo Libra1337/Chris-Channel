@@ -1,0 +1,18 @@
+---
+// Responsive picture: AVIF + WebP sources and a PNG fallback, from scripts/images.mjs.
+import meta from '../data/images.json';
+interface Props { name: string; en: string; zh: string; sizes?: string; eager?: boolean; class?: string }
+const { name, en, zh, sizes = '100vw', eager = false, class: cls } = Astro.props;
+const m = (meta as Record<string, { w: number; h: number; widths: number[] }>)[name];
+if (!m) throw new Error(`image not in manifest: ${name}`);
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'media/img/';
+const set = (ext: string) => m.widths.map((w) => `${base}${name}-${w}.${ext} ${Math.min(w, m.w)}w`).join(', ');
+const h = Math.round((m.h / m.w) * Math.min(m.widths[0], m.w));
+const w0 = Math.min(m.widths[0], m.w);
+---
+<picture class={cls}>
+  <source type="image/avif" srcset={set('avif')} sizes={sizes} />
+  <source type="image/webp" srcset={set('webp')} sizes={sizes} />
+  <img src={`${base}${name}-${m.widths[0]}.png`} width={w0} height={h} alt={en} data-alt-en={en} data-alt-zh={zh}
+    loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : undefined} />
+</picture>

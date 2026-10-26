@@ -1,0 +1,61 @@
+---
+// Project index as an object: a list of large serif titles. On fine pointers a glass preview follows the cursor
+// and plays the hovered project's muted clip; keyboard focus shows the same preview beside the row.
+// Touch devices get an inline thumbnail and the one-line summary in each row (nothing is hover-only).
+// Home: "More work", the projects that are not featured as media panels (exclude). Titles are product names in the
+// serif; a repository name, when it differs, is set small in mono.
+import { projects as all, type Cat } from '../data/projects';
+import Pic from './Pic.astro';
+import Concept from './Concept.astro';
+const b = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const v = b + 'media/video/';
+interface Props { exclude?: string[] }
+const { exclude = [] } = Astro.props;
+const projects = all.filter((p) => !exclude.includes(p.slug));
+const cats: { id: Cat; en: string; zh: string }[] = [
+  { id: 'apps', en: 'Apps', zh: '应用' }, { id: 'systems', en: 'Systems', zh: '系统' }, { id: 'design', en: 'Brand & film', zh: '品牌与短片' },
+];
+const catName = (c: Cat) => cats.find((x) => x.id === c)!;
+---
+<div class="ix" data-module="index">
+  <div class="ix-bar">
+    <h3 class="ix-head"><span data-l="en">More work</span><span data-l="zh">更多作品</span></h3>
+    <p class="t-small ix-hint" aria-hidden="true"><span data-l="en">Hover a title to preview.</span><span data-l="zh">鼠标停在标题上可预览。</span></p>
+  </div>
+  <ol class="ix-list">
+    {projects.map((p, i) => (
+      <li class={`ix-row ${p.accent}`} data-cat={p.cat} data-i={i}>
+        <a href={`${b}projects/${p.slug}/`}>
+          <span class="ix-n">{String(i + 1).padStart(2, '0')}</span>
+          <span class="ix-title" style={`view-transition-name: pt-${p.slug}`} translate="no">{p.name.en === p.name.zh ? p.name.en : <><span data-l="en">{p.name.en}</span><span data-l="zh">{p.name.zh}</span></>}</span>
+          <span class="ix-meta">
+            <span class="ix-cat"><span data-l="en">{catName(p.cat).en}</span><span data-l="zh">{catName(p.cat).zh}</span>{p.group && <> · <span translate="no">{p.group.en}</span></>}</span>
+            {p.repo && <code class="repo" translate="no">{p.repo}</code>}
+            <span class="ix-kick"><span data-l="en">{p.kicker.en}</span><span data-l="zh">{p.kicker.zh}</span></span>
+          </span>
+          <span class="ix-thumb" aria-hidden="true">
+            {p.preview.kind === 'concept' ? <Concept kind={p.preview.name as any} /> :
+             p.preview.kind === 'img' ? <Pic name={p.preview.name} en="" zh="" sizes="120px" /> :
+             <img src={`${v}${p.preview.name}.webp`} alt="" loading="lazy" decoding="async" />}
+          </span>
+          <svg class="ix-arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+    ))}
+  </ol>
+  <div class="ix-pv" aria-hidden="true">
+    <div class="ix-pv-in">
+      {projects.map((p, i) => (
+        <div class={`ix-pv-item ${p.preview.tall ? 'tall' : ''} k-${p.preview.kind}`} data-pv={i}>
+          {p.preview.kind === 'concept' ? <Concept kind={p.preview.name as any} /> :
+           p.preview.kind === 'img' ? <Pic name={p.preview.name} en="" zh="" sizes="480px" /> :
+           <video muted playsinline loop preload="none" data-poster={`${v}${p.preview.name}.webp`} disablepictureinpicture tabindex="-1">
+             <source src={`${v}${p.preview.name}-sm.webm`} type='video/webm; codecs="vp9"' />
+             <source src={`${v}${p.preview.name}-sm.mp4`} type="video/mp4" />
+           </video>}
+        </div>
+      ))}
+      <span class="ix-open lg lg-pill" data-lg="pill"><span data-l="en">Open</span><span data-l="zh">打开</span> <span aria-hidden="true">→</span></span>
+    </div>
+  </div>
+</div>
