@@ -31,7 +31,9 @@ import ArchGateway from '../../components/ArchGateway.astro';
       <li><T en="43 transform modules: prompt-cache breakpoints, reasoning mapping, role repair, SSE frame splitting, image compression (JPEG, PNG, WebP, JPEG XL)." zh="43 个变换模块：提示缓存断点、推理映射、角色修复、SSE 分帧、图片压缩（JPEG、PNG、WebP、JPEG XL）。" /></li>
       <li><T en="Usage is counted per request in integer units and rounded once, so totals never drift." zh="用量按请求以整数单位计量，只舍入一次，合计不会漂移。" /></li>
       <li><T en="A React console (keys, request logs with a capture viewer, a Playground, provider health) in 4 UI languages." zh="React 控制台（密钥、带抓包查看器的请求日志、Playground、服务商健康状态），界面有 4 种语言。" /></li>
-      <li><T en="Public docs: a Next.js static site with 240 MDX pages in 4 locales, including one page per transform." zh="公开文档：Next.js 静态站，4 种语言、240 个 MDX 页面，每个变换都有单独一页。" /></li>
+      <li><T en="Public docs: a Next.js static site with 104 MDX pages in 4 locales, written for the people calling the API: one page per endpoint and feature, and a setup page per coding agent." zh="公开文档：Next.js 静态站，4 种语言、104 个 MDX 页面，写给调用 API 的人：每个接口和功能一页，每个编程智能体一页接入说明。" /></li>
+      <li><T en="Remote access for the desktop app goes through the account: the gateway lists a user’s computers and signs short-lived Ed25519 relay tokens, which the relay checks offline with the gateway’s public key." zh="桌面端的远程访问按账号来：网关列出用户名下的电脑，并签发短期的 Ed25519 中继令牌；中继用网关的公钥在本地校验，不用回头问网关。" /></li>
+      <li><T en="Email codes are guarded by a proof-of-work CAPTCHA and limits per address, domain, IP and in total, so the sign-up form cannot be used to flood mailboxes." zh="邮箱验证码有工作量证明式的人机验证，并按邮箱、域名、IP 和全局分别限流，注册表单没法被拿来轰炸别人的邮箱。" /></li>
     </ul>
   </div>
 
@@ -80,10 +82,10 @@ import ArchGateway from '../../components/ArchGateway.astro';
 
   <dl slot="stack" class="stack">
     <dt><T en="Server" zh="服务端" /></dt><dd><ul class="chips" translate="no"><li>Rust 2024</li><li>axum 0.8</li><li>tokio</li><li>reqwest + rustls</li><li>tokio-tungstenite</li><li>tower-http</li></ul></dd>
-    <dt><T en="Data" zh="数据" /></dt><dd><ul class="chips" translate="no"><li>SeaORM</li><li>sqlx</li><li>SQLite</li><li>PostgreSQL</li><li>rust_decimal</li><li>Prometheus</li></ul></dd>
+    <dt><T en="Data" zh="数据" /></dt><dd><ul class="chips" translate="no"><li>PostgreSQL</li><li>SeaORM</li><li>sqlx</li><li>rust_decimal</li><li>Prometheus</li></ul></dd>
     <dt><T en="Console" zh="控制台" /></dt><dd><ul class="chips" translate="no"><li>React 19</li><li>Vite 7</li><li>TypeScript</li><li>Tailwind</li><li>shadcn/ui</li><li>SWR</li><li>i18next</li><li>Recharts</li></ul></dd>
     <dt><T en="Docs" zh="文档" /></dt><dd><ul class="chips" translate="no"><li>Next.js 16 (static export)</li><li>Fumadocs</li><li>MDX</li><li>KaTeX</li></ul></dd>
-    <dt><T en="Quality" zh="质量" /></dt><dd><ul class="chips" translate="no"><li><T en="1,500+ Rust tests added" zh="新增 1500+ Rust 测试" /></li><li><T en="~330 front-end tests" zh="约 330 个前端测试" /></li><li><T en="Playwright browser scripts" zh="Playwright 浏览器脚本" /></li><li><T en="PostgreSQL migration tests in CI" zh="CI 中的 PostgreSQL 迁移测试" /></li></ul></dd>
+    <dt><T en="Quality" zh="质量" /></dt><dd><ul class="chips" translate="no"><li><T en="1,600+ Rust tests added" zh="新增 1600+ Rust 测试" /></li><li><T en="~650 front-end tests" zh="约 650 个前端测试" /></li><li><T en="Playwright browser scripts" zh="Playwright 浏览器脚本" /></li><li><T en="Rust suite runs on PostgreSQL" zh="Rust 测试在 PostgreSQL 上跑" /></li></ul></dd>
   </dl>
 
   <Fragment slot="learned">

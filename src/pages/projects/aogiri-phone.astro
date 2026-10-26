@@ -33,7 +33,9 @@ const ps = '(max-width: 860px) 60vw, 240px';
         <li><T en="Real alarms and timers through AlarmKit (iOS 26+), calendar events, system reminders, maps hand-off, calls, SMS and mail." zh="通过 AlarmKit（iOS 26+）设置真正的闹钟和计时器，写日历、系统提醒，交给地图导航，打电话、发短信和邮件。" /></li>
         <li><T en="On Android, screen control through Shizuku: read the screen, tap, type, swipe, toggle settings, with confirmation first." zh="在 Android 上通过 Shizuku 控制屏幕：读屏、点按、输入、滑动、切换设置，先确认再执行。" /></li>
         <li><T en="Every action becomes a ledger line under the reply, with Undo." zh="每个动作都会在回复下面记成一行账本，可以撤销。" /></li>
-        <li><T en="The computer remote: QR pairing with a 6-digit check code, live sessions, the plan sheet, approvals with Face ID, and push with Allow/Deny actions." zh="电脑遥控：扫码配对加 6 位校验码，实时会话、计划面板、需要 Face ID 的审批，以及带「允许 / 拒绝」按钮的推送。" /></li>
+        <li><T en="The computer remote: the computers on your account are listed, and “Request to connect” waits for the computer to allow it (QR pairing with a 6-digit check code still works). Live sessions with the message queue, the agent’s terminal view and the images and videos it delivers, the plan sheet, approvals with Face ID, and push with Allow/Deny actions." zh="电脑遥控：账号下的电脑会自动列出，点「请求连接」，等电脑那边允许（扫码配对加 6 位校验码仍然可用）。实时会话里能看到排队的消息、智能体的终端画面，以及它交付的图片和视频；还有计划面板、需要 Face ID 的审批，以及带「允许 / 拒绝」按钮的推送。" /></li>
+        <li><T en="On iPhone, the Dynamic Island and Live Activities show a computer waiting for approval, a task in progress, a focus timer and what is next." zh="在 iPhone 上，灵动岛和实时活动会显示等你批准的电脑、正在进行的任务、专注计时，以及接下来要做的事。" /></li>
+        <li><T en="The companion can look at a photo you send (shrunk on the phone by its own native module first), and you can hold the mic to talk." zh="伙伴能看懂你发的照片（先由应用自己的原生模块在手机上缩小），也可以按住麦克风说话。" /></li>
       </ul>
     </div>
     <div class="lumen-stage" data-rv aria-hidden="true">
@@ -129,10 +131,11 @@ const ps = '(max-width: 860px) 60vw, 240px';
 
   <dl slot="stack" class="stack">
     <dt><T en="App" zh="应用" /></dt><dd><ul class="chips" translate="no"><li>Expo 57</li><li>React Native 0.86</li><li>React 19</li><li>Expo Router</li><li>Reanimated 4</li><li>react-native-svg</li><li>zustand 5</li><li>TypeScript 6</li></ul></dd>
-    <dt><T en="Native" zh="原生" /></dt><dd><ul class="chips" translate="no"><li>Swift · AlarmKit</li><li>App Intents</li><li>Kotlin · Shizuku</li><li><T en="5 config plugins" zh="5 个配置插件" /></li></ul></dd>
-    <dt><T en="Security" zh="安全" /></dt><dd><ul class="chips" translate="no"><li>Noise IK (@noble)</li><li>Keychain</li><li>Face ID / passcode</li><li>APNs · FCM</li></ul></dd>
+    <dt><T en="Native" zh="原生" /></dt><dd><ul class="chips" translate="no"><li>Swift · AlarmKit</li><li>ActivityKit · WidgetKit</li><li>App Intents</li><li>Kotlin · Shizuku</li><li><T en="5 native modules" zh="5 个原生模块" /></li><li><T en="6 config plugins" zh="6 个配置插件" /></li></ul></dd>
+    <dt><T en="Security" zh="安全" /></dt><dd><ul class="chips" translate="no"><li>Noise IK (@noble)</li><li><T en="account relay tokens" zh="账号中继令牌" /></li><li>Keychain</li><li>Face ID / passcode</li><li>APNs · FCM</li></ul></dd>
     <dt><T en="Design" zh="设计" /></dt><dd><ul class="chips" translate="no"><li><T en="Night Lamp design system" zh="「夜灯」设计规范" /></li><li><T en="3 glass materials" zh="3 种玻璃材质" /></li><li><T en="4 pt grid" zh="4pt 网格" /></li><li><T en="System fonts, 3 weights" zh="系统字体，3 种字重" /></li></ul></dd>
-    <dt><T en="Quality" zh="质量" /></dt><dd><ul class="chips" translate="no"><li><T en="312 Vitest tests" zh="312 个 Vitest 测试" /></li><li><T en="iOS simulator + Android emulator shots" zh="iOS 模拟器 + Android 模拟器截图验收" /></li></ul></dd>
+    <dt><T en="Quality" zh="质量" /></dt><dd><ul class="chips" translate="no"><li><T en="697 Vitest tests" zh="697 个 Vitest 测试" /></li><li><T en="iOS simulator + Android emulator shots" zh="iOS 模拟器 + Android 模拟器截图验收" /></li></ul></dd>
+    <dt><T en="Builds" zh="版本" /></dt><dd><ul class="chips" translate="no"><li>v0.1.0</li><li>TestFlight 2610270118</li><li>Android 261027</li></ul></dd>
   </dl>
 
   <Fragment slot="learned">

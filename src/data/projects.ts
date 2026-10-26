@@ -18,8 +18,8 @@ const s = (en: string, zh: string): L => ({ en, zh });
 // 牵星's English name. Every visible English string uses it.
 export const ARMIL_EN = 'Armil';
 const AR = ARMIL_EN;
-// armil.io is not served yet (www.armil.io has a self-signed certificate). Set to true at deploy time once
-// https://armil.io loads; until then the Armil page shows no Website row.
+// armil.io does not load yet: it redirects to www.armil.io, which still has a self-signed certificate (checked
+// 2026-10-27). Set to true at deploy time once https://armil.io loads; until then the Armil page shows no Website row.
 export const ARMIL_SITE_LIVE = false;
 // Old slugs → current slug. src/pages/projects/[old].astro builds a forwarding page for each.
 export const moved: Record<string, string> = { 'md-reader': 'zaji', pane: 'zaji', qianxing: 'armil', lodestar: 'armil' };
@@ -54,7 +54,7 @@ export const projects: Project[] = [
     cover: { kind: 'mark', name: 'code', frame: 'none' },
     facts: [
       { v: s('3', '3'), k: s('wire protocols, one event type', '种协议，一种事件') },
-      { v: s('95', '95'), k: s('unit tests', '个单元测试') },
+      { v: s('126', '126'), k: s('unit tests', '个单元测试') },
       { v: s('0', '0'), k: s('async runtime dependencies', '个异步运行时依赖') },
     ],
   },
@@ -105,8 +105,8 @@ export const projects: Project[] = [
     cover: { kind: 'img', name: 'g-logs', frame: 'browser' },
     facts: [
       { v: s('3 → 6', '3 → 6'), k: s('client protocols → upstream channel types', '客户端协议 → 上游渠道类型') },
-      { v: s('1,500+', '1500+'), k: s('Rust tests added in this codebase', '这个代码库里新增的 Rust 测试') },
-      { v: s('4', '4'), k: s('docs locales, 240 MDX pages', '种文档语言，240 个 MDX 页面') },
+      { v: s('1,600+', '1600+'), k: s('Rust tests added in this codebase', '这个代码库里新增的 Rust 测试') },
+      { v: s('4', '4'), k: s('docs locales, 104 MDX pages', '种文档语言，104 个 MDX 页面') },
     ],
   },
   {
@@ -115,15 +115,15 @@ export const projects: Project[] = [
     preview: { kind: 'video', name: 'desk-eco-dark' },
     name: s('Aogiri Desktop + CLI', 'Aogiri 桌面端 + CLI'),
     kicker: s('Tauri + Svelte · Rust engine', 'Tauri + Svelte · Rust 引擎'),
-    oneLine: s('A desktop workbench for coding agents and the Rust engine behind it: plans, subagents, approvals, and a phone that can answer them.',
-      '给编程智能体用的桌面工作台，以及背后的 Rust 引擎：计划、子智能体、审批，还能在手机上回复审批。'),
-    tags: ['Tauri 2', 'Svelte 5', 'Rust', 'Go', 'Noise IK'],
-    status: s('Shipped · desktop v0.10.4 · CLI v0.7.8', '已发布 · 桌面端 v0.10.4 · CLI v0.7.8'),
+    oneLine: s('A desktop workbench for coding agents and the Rust engine behind it: plans, subagents, approvals, and a phone signed in to the same account that can follow the work and answer them.',
+      '给编程智能体用的桌面工作台，以及背后的 Rust 引擎：计划、子智能体、审批；登录同一个账号的手机能跟进进度，也能回复审批。'),
+    tags: ['Tauri 2', 'Svelte 5', 'Rust', 'Go', 'Noise IK', 'Ed25519'],
+    status: s('Shipped · desktop v0.11.0 · CLI v0.8.0', '已发布 · 桌面端 v0.11.0 · CLI v0.8.0'),
     cover: { kind: 'video', name: 'desk-eco', frame: 'laptop' },
     facts: [
-      { v: s('v0.10.4', 'v0.10.4'), k: s('desktop release · CLI v0.7.8', '桌面端版本 · CLI v0.7.8') },
-      { v: s('1,267', '1267'), k: s('Rust tests in the CLI engine', 'CLI 引擎里的 Rust 测试') },
-      { v: s('~1,500', '约 1500'), k: s('front-end test cases in the desktop app', '桌面端前端测试用例') },
+      { v: s('v0.11.0', 'v0.11.0'), k: s('desktop release · CLI v0.8.0', '桌面端版本 · CLI v0.8.0') },
+      { v: s('1,472', '1472'), k: s('Rust tests in the CLI engine', 'CLI 引擎里的 Rust 测试') },
+      { v: s('~1,700', '约 1700'), k: s('front-end test cases in the desktop app', '桌面端前端测试用例') },
     ],
   },
   {
@@ -135,11 +135,11 @@ export const projects: Project[] = [
     oneLine: s('A pocket companion called Lumen that sets real alarms, writes to your calendar, and approves your computer’s next step.',
       '口袋里的伙伴 Lumen：能定真的闹钟、写日历，也能替你批准电脑的下一步。'),
     tags: ['Expo', 'React Native', 'Swift · AlarmKit', 'Kotlin · Shizuku', 'Reanimated'],
-    status: s('In development · v0.1.0', '开发中 · v0.1.0'),
+    status: s('In development · v0.1.0 · test builds', '开发中 · v0.1.0 · 测试版'),
     cover: { kind: 'video', name: 'phone-glass', frame: 'phone' },
     facts: [
-      { v: s('2', '2'), k: s('native modules (Swift, Kotlin)', '个原生模块（Swift、Kotlin）') },
-      { v: s('312', '312'), k: s('unit tests (Vitest)', '个单元测试（Vitest）') },
+      { v: s('5', '5'), k: s('native modules in Swift and Kotlin', '个原生模块（Swift、Kotlin）') },
+      { v: s('697', '697'), k: s('unit tests (Vitest)', '个单元测试（Vitest）') },
       { v: s('10', '10'), k: s('design changes in the glass redesign', '项「通透」改版改动') },
     ],
   },
@@ -165,14 +165,14 @@ export const projects: Project[] = [
     cat: 'apps', role: s('Sole author. I designed and built it end to end.', '独立作者。从设计到实现，都由我一个人完成。'),
     preview: { kind: 'img', name: 'qx-chart', tall: true },
     name: s(AR, '牵星'), site: ARMIL_SITE_LIVE ? 'https://armil.io' : undefined,
-    kicker: s('Phone app · TypeScript + Capacitor', '手机应用 · TypeScript + Capacitor'),
-    oneLine: s(`${AR} is a phone app that computes traditional Chinese and Western charts the way a calculator would: the same input always gives the same result, each line of the plain-language reading cites where it comes from, and the engine works offline.`,
-      '牵星是一个手机应用，像计算器一样排传统历法和星盘：同样的输入永远得到同样的结果，白话解读的每一句都写明出处，排盘引擎离线也能用。'),
-    tags: ['TypeScript', 'Web Worker', 'lunar-javascript', 'astronomy-engine', 'React 19', 'Capacitor', 'Vitest'],
-    status: s('In development · private repo', '开发中 · 私有仓库'),
+    kicker: s('Phone app · TypeScript + Capacitor · Go', '手机应用 · TypeScript + Capacitor · Go'),
+    oneLine: s(`${AR} is a phone app that computes traditional Chinese and Western charts the way a calculator would: the same input always gives the same result, each line of the plain-language reading cites where it comes from, and the charts are computed on the phone. Friends, a feed and messages now sit around the calculator.`,
+      '牵星是一个手机应用，像计算器一样排传统历法和星盘：同样的输入永远得到同样的结果，白话解读的每一句都写明出处，盘在手机上算。计算器之外，现在还有好友、圈子和私信。'),
+    tags: ['TypeScript', 'Web Worker', 'lunar-javascript', 'astronomy-engine', 'React 19', 'Capacitor', 'Go', 'PostgreSQL', 'Vitest'],
+    status: s('In development · TestFlight · private repo', '开发中 · TestFlight 测试中 · 私有仓库'),
     cover: { kind: 'img', name: 'qx-chart', frame: 'phone' },
     facts: [
-      { v: s('167', '167'), k: s('accuracy, regression and reading tests', '项准确性、回归与解读测试') },
+      { v: s('179', '179'), k: s('accuracy, regression and reading tests', '项准确性、回归与解读测试') },
       { v: s('0.1°', '0.1°'), k: s('tolerance against Swiss Ephemeris', '与 Swiss Ephemeris 对照的容差') },
       { v: s('128', '128'), k: s('golden inputs matched field by field after the port to TypeScript', '组金标准输入，移植到 TypeScript 后逐字段一致') },
     ],
